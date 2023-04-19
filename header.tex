@@ -1,0 +1,90 @@
+% Colors
+\definecolor{shadecolor}{RGB}{225,225,225}
+\definecolor{DarkBrown}{RGB}{80,70,60}
+\setbeamercolor{description item}{fg=Orange}
+\setbeamercolor{block title alerted}{fg=white,bg=DarkBrown}
+\setbeamercolor{block title}{fg=white,bg=DarkBrown}
+\setbeamercolor{frametitle}{bg=DarkBrown,fg=white}
+
+% Packages
+\usepackage{amsmath, bm, amssymb, amsthm, mathrsfs,pifont}
+%\usepackage{enumitem,calc}
+\usepackage[bb=boondox]{mathalfa}
+\usepackage{url}
+\usepackage{multirow, booktabs, float, textcmds, siunitx}
+\usepackage{bm,booktabs,animate,ragged2e,multicol,microtype,hyperref}
+\DeclareUnicodeCharacter{03BC}{$\mu$}
+\usepackage{tikz}
+
+% Figures
+\graphicspath{{figs/}{tourism/}{energy/}}
+\def\full#1{\vspace*{0.05cm}\centerline{\includegraphics[width=15cm,height=7.5cm,keepaspectratio=true]{#1}}}
+
+% Fonts
+\fontsize{13}{15}\sf
+\usepackage[scale=0.85]{sourcecodepro}
+\DisableLigatures{encoding = T1, family = tt*}
+\usepackage{fontawesome}
+
+% Monash title page
+\setbeamertemplate{title page}
+{\placefig{-0.01}{-0.01}{width=1.01\paperwidth,height=1.01\paperheight}{figs/stones.png}
+\placefig{0.2}{8}{width=4cm}{monash_bw}
+\begin{textblock}{10.5}(.5,0.3)
+\fontsize{28}{40}\selectfont\bfseries\sffamily\textcolor[RGB]{204,89,0}{\inserttitle}\\[0.3cm]
+\fontsize{13}{13}\selectfont\bfseries\sffamily\textcolor[RGB]{204,89,0}{\insertsubtitle}
+\end{textblock}
+\begin{textblock}{7.5}(.5,2.5)
+\fontsize{13}{13}\selectfont\sffamily\textcolor[RGB]{80,70,60}{\insertauthor}
+\end{textblock}
+\begin{textblock}{4.2}(11.6,8.3)\pgfsetfillopacity{0.75}
+\begin{beamercolorbox}[wd=4.3cm,ht=0.35cm,dp=0.2cm]{block body}
+\fontsize{10}{10}\sf\color[RGB]{80,70,60}~~\texttt{\href{https://robjhyndman.com/}{robjhyndman.com/fr2023}}
+\end{beamercolorbox}
+%\begin{beamerboxesrounded}[lower=block body, upper=block body]{}
+%\fontsize{10}{10}\sf\color[RGB]{72,45,34}~\texttt{robjhyndman.com/isf2020}
+%\end{beamerboxesrounded}
+\end{textblock}
+\begin{textblock}{6.2}(0,8.8)\pgfsetfillopacity{0.65}
+\begin{beamercolorbox}[wd=4.2cm]{block body}
+\fontsize{6}{6}\sf\color[RGB]{72,45,34}~Photo by \href{https://unsplash.com/@edvardr?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText}{Edvard Alexander Rølvaag} on \href{https://unsplash.com/s/photos/hierarchy?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText}{Unsplash}
+\end{beamercolorbox}
+\end{textblock}}
+
+%\renewenvironment{Shaded}{\color{black}\begin{snugshade}\color{black}}{\end{snugshade}\columnbreak}
+
+% Tikz plots
+\usetikzlibrary{trees,shapes,arrows,matrix,shadows,positioning}
+\tikzstyle{decision} = [diamond, draw, fill=blue!20,
+    text width=4.5em, text badly centered, node distance=4cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20,
+    text width=5cm, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, thick, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
+    minimum height=2em, text centered]
+\tikzstyle{connector} = [->,thick]
+
+\tikzset{
+  basic/.style  = {draw, text width=2cm, font=\sffamily, rectangle},
+  root/.style   = {basic, text width=3cm, rounded corners=2pt, thin, align=center, fill=red!30},
+  level 2a/.style = {basic, rounded corners=2pt, thin,align=center, fill=blue!50, text width=7em},
+  level 2b/.style = {basic, rounded corners=2pt, thin,align=center, fill=green!50, text width=7em},
+  level 3a/.style = {basic, rounded corners=2pt, thin, align=center, fill=blue!30, text width=4em},
+  level 3b/.style = {basic, rounded corners=2pt, thin, align=center, fill=green!30, text width=4em},
+  level 4a/.style = {basic, rounded corners=2pt, thin, align=left, fill=blue!10, text width=3.5em},
+  level 4b/.style = {basic, rounded corners=2pt, thin, align=left, fill=green!10, text width=3.5em}
+}
+
+% My definitions
+
+\def\E{\text{E}}
+\def\V{\text{Var}}
+\def\bY{\bm{y}}
+\def\by{\bm{y}}
+\def\bS{\bm{S}}
+\def\bG{\bm{G}}
+\def\bSigma{\bm{\Sigma}}
+\def\Var{\text{Var}}
+\def\var{\text{Var}}
+\newcommand{\btwocol}{\begin{multicols}{2}}
+\newcommand{\etwocol}{\end{multicols}}
