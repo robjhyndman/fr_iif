@@ -1482,4 +1482,6 @@ Again, the calculations can be done in such a way that we never store any of the
 \end{textblock}}
 \only<2>{\placefig{10.1}{6.7}{width=1cm}{smiley}}
 
-\nocite{hierarchical, fasthts, mint}\fontsize{11}{12}\sf
+## Fast forecast reconciliation using linear model
+
+\nocite{hierarchical, fasthts, mint, lhf}
