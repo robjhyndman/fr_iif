@@ -1457,9 +1457,10 @@ $n=$ number of columns
 \centerline{$\displaystyle
 (\bS\bLambda\bS)^{-1} = \bm{A} - \frac{\bm{A}\bm{1}_{mn}\bm{1}_{mn}'\bm{A}}
   {1/\lambda_{00} + \bm{1}_{mn}'\bm{A}\bm{1}_{mn}}$}
-\end{block}\fontsize{13.5}{15.5}\sf
-$\bm{A} = \bLambda_U^{-1} - \bLambda_U^{-1}(\bm{J}_m\otimes \bm{D})\bLambda_U^{-1} - \bm{E}\bm{M}^{-1}\bm{E}'.$\\
-$\bm{D}$ is diagonal with elements \rlap{$d_j=\lambda_{0j}/(1+\lambda_{0j}\sum_i \lambda_{ij}^{-1})$.}\\
+\end{block}\fontsize{12.5}{14}\sf\vspace*{-0.4cm}
+
+$\bm{A} = \bLambda_U^{-1} - \bLambda_U^{-1}(\bm{J}_m\otimes \bm{D})\bLambda_U^{-1} - \bm{E}\bm{M}^{-1}\bm{E}'.$\newline
+$\bm{D}$ is diagonal with elements \rlap{$d_j=\lambda_{0j}/(1+\lambda_{0j}\sum_i \lambda_{ij}^{-1})$.}\newline
 $\bm{E}$ has $m\times m$ blocks where $\bm{e}_{ij}$ has $k$th element
 $$
 (\bm{e}_{ij})_k = \left \{ \begin{array}{lr}
@@ -1475,13 +1476,57 @@ $$ (\bm{M})_{ij} =
 \end{array}\right .
 $$
 
-\only<2>{\begin{textblock}{8}(2.4,5)\fontsize{14}{17}\sf
+\only<2>{\begin{textblock}{4}(11.8,4)\fontsize{12}{13}\sf
 \begin{alertblock}{}
 Again, the calculations can be done in such a way that we never store any of the large matrices involved.
 \end{alertblock}
 \end{textblock}}
-\only<2>{\placefig{10.1}{6.7}{width=1cm}{smiley}}
+\only<2>{\placefig{15}{6.7}{width=1cm}{smiley}}
 
-## Fast forecast reconciliation using linear model
+## Fast forecast reconciliation using linear models
+
+Suppose $\hat{y}_{t,i} = \hat{\bm{\beta}}_{i}' \bm{x}_{t,i}$
+with $\bm{x}_{t,i}= (1, x_{t,1,i},\dots,x_{t,p,i})$&nbsp; & &nbsp;\rlap{$\hat{\bm{y}}_i = (\hat{y}_{1,i}, \dots, \hat{y}_{T,i})$.}
+\pause
+\begin{align*}
+\textcolor{blue}{\begin{pmatrix}
+  \hat{\bm{y}}_1\\
+  \hat{\bm{y}}_2\\
+  \vdots\\
+  \hat{\bm{y}}_n
+  \end{pmatrix}} &=
+  \textcolor{red}{\begin{pmatrix}
+  \bm{X}_1 & 0        & \dots  & 0\\
+  0        & \bm{X}_2 & \ddots & \vdots \\
+  \vdots   & \ddots   & \ddots & 0\\
+  0        & \dots    & 0      & \bm{X}_n
+  \end{pmatrix}}
+  \begin{pmatrix}
+  \hat{\bm{\beta}}_1\\
+  \hat{\bm{\beta}}_2\\
+  \vdots\\
+  \hat{\bm{\beta}}_n
+\end{pmatrix},
+&&\quad
+  \bm{X}_i = \begin{pmatrix}
+  1 & x_{1,i,1} & x_{1,i,2} & \dots & x_{1,i,p}\\
+  1 & x_{2,i,1} & x_{2,i,2} & \dots & x_{2,i,p}\\
+  \vdots & \vdots & \vdots & & \vdots \\
+  1 & x_{T,i,1} & x_{T,i,2} & \dots & x_{T,i,p}
+\end{pmatrix}
+\end{align*}\pause
+Then $\hat{\bm{B}} = (\textcolor{red}{\bm{X}}'\textcolor{red}{\bm{X}})^{-1} \textcolor{red}{\bm{X}}'\textcolor{blue}{\bm{Y}}$,\pause and\newline
+$\hat{\bm{y}}_{t+h} = \bm{X}_{t+h}^* \hat{\bm{B}}$ with $\bm{X}^*_{t+h} =\text{diag}(\bm{x}_{t+h,i}', \dots, \bm{x}_{t+h,n}')$.\pause So
+\begin{alertblock}{}
+\centerline{$
+    \tilde{\bm{y}}_{t+h} = \bm{S}(\bm{S}'\bm{W}_h\bm{S})^{-1}\bm{S}'\bm{W}_h
+                            \hat{\bm{y}}_{t+h}
+                         = \bm{S}(\bm{S}'\bm{W}_h\bm{S})^{-1}\bm{S}'\bm{W}_h
+                            \bm{X}_{t+h}^* (\textcolor{red}{\bm{X}}'\textcolor{red}{\bm{X}})^{-1} \textcolor{red}{\bm{X}}'\textcolor{blue}{\bm{Y}}
+$}
+\end{alertblock}
+
+\vspace*{10cm}
+
 
 \nocite{hierarchical, fasthts, mint, lhf}
