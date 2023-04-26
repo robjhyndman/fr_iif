@@ -1,0 +1,61 @@
+---
+title: Forecast reconciliation
+subtitle: 2. The geometry of forecast reconciliation
+author: Rob J Hyndman
+pdf-engine: pdflatex
+fig-width: 9
+fig-height: 4.5
+format:
+  beamer:
+    theme: monash
+    aspectratio: 169
+    fontsize: 14pt
+    section-titles: false
+include-in-header: header.tex
+cite-method: biblatex
+bibliography: hts.bib
+biblio-title: References
+keep-tex: true
+execute:
+  echo: false
+  message: false
+  warning: false
+  cache: true
+---
+
+```{r}
+#| label: setup
+#| include: false
+options(digits = 3, width = 88)
+library(fpp3)
+library(patchwork)
+```
+
+## Outline
+
+\vspace*{0.4cm}\tableofcontents
+
+## Notation reminder
+
+* Data: $\bm{y}_t = \bm{S}\bm{b}_t$ where $\bm{S}$ is a summing matrix and $\bm{b}_t$ is a vector of disaggregated time series
+* Base forecasts: $\hat{\bm{y}}_{T+h|T}$
+* Reconciled forecasts: $\tilde{\bm{y}}_{T+h|T}=\bS\bm{G}\hat{\bm{y}}_{T+h|T}$
+* MinT: $\bG = (\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$ where $\bm{W}_h$ is covariance matrix of base forecast errors.
+
+## Zero-constraint representation
+
+## The coherent subspaces
+
+## Least squares reconciliation of data
+
+## Game theory perspectives
+
+## Adding optimization constraints
+
+## ML and regularization
+
+## Bayesian versions
+
+## In-built coherence
+
+\nocite{htsgeometry, nonnegmint, Di_FonGir2022b,swissexports,Van_ErvCug2015}
