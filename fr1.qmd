@@ -12,6 +12,10 @@ format:
     fontsize: 14pt
     section-titles: false
 include-in-header: header.tex
+cite-method: biblatex
+bibliography: hts.bib
+biblio-title: References
+keep-tex: true
 execute:
   echo: false
   message: false
@@ -87,7 +91,6 @@ S &Sensory organs\\
 V &Various
 \end{tabular}
 
-
 ## PBS sales
 \alert{ATC drug classification}\fontsize{11}{11}\sffamily
 
@@ -158,9 +161,6 @@ read_sf("tourism/Tourism_Regions_2020.shp") |>
 \end{block}
 \end{textblock}}
 
-## Australian tourism data
-\fontsize{11}{12}\sf
-
 ```{r}
 #| label: tourism
 # Read csv file of monthly data
@@ -226,8 +226,6 @@ tourism <- hts::hts(
     )
   ) |>
   select(month, everything())
-# Show first 10 rows of data
-tourism
 ```
 
 ## Australian tourism data
@@ -376,8 +374,6 @@ A \alert{\textbf{grouped time series}} is a collection of time series that can b
 
  * Tourism by state and purpose of travel
  * Retail sales by product groups/sub groups, and by countries/regions
-
-
 
 ## Hierarchical and grouped time series
 
@@ -563,6 +559,12 @@ $t$.
 
 \vspace*{10cm}
 
+## The hierarchical forecasting problem
+
+* We want forecasts at all levels of aggregation.
+* If we model and forecast each series independently, the forecasts will almost certainly not add up.
+* We need to impose constraints on the forecasts to ensure they are "coherent".
+* We need to do this in a way that is computationally efficient.
 
 # Hierarchical forecasting using single-level approaches
 
@@ -590,7 +592,6 @@ system("pdfcrop figs/pyramid.pdf figs/pyramid.pdf")
 \placefig{0.3}{4.}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism2}
 \placefig{0.3}{6.5}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism4}
 \placefig{6}{1.4}{width=7.8cm, height=7.8cm}{pyramid}
-
 
 ## Top-down forecasting
 
@@ -631,27 +632,26 @@ system("pdfcrop figs/pyramid.pdf figs/pyramid.pdf")
 \end{itemize}
 \end{textblock}
 
-
 ## Forecasting notation
 
-Let $\hat{\by}_n(h)$ be vector of initial $h$-step forecasts, made at time $n$, stacked in same order as $\by_t$. \pause\\  (In general, they will not ``add up''.)\pause
+Let $\hat{\bm{y}}_{T+h|T}$ be vector of initial $h$-step forecasts, made at time $T$, stacked in same order as $\by_t$. (In general, they will not "add up".)\pause
 
 \begin{block}{}
-Reconciled forecasts must be of the form:
+Coherent linear forecasts are of the form:
 
-\centerline{$ \tilde{\by}_{n}(h)=\bS\bm{G}\hat{\by}_{n}(h)$}
+\centerline{$\tilde{\bm{y}}_{T+h|T}=\bS\bm{G}\hat{\bm{y}}_{T+h|T}$}
 
 for some matrix $\bm{G}$.
 \end{block}\pause
 
-* $\bm{G}$ extracts and combines base forecasts $\hat{\by}_{n}(h)$ to get bottom-level forecasts.
+* $\bm{G}$ extracts and combines base forecasts $\hat{\bm{y}}_{T+h|T}$ to get bottom-level forecasts.
 * $\bS$ adds them up
 
 ## Bottom-up forecasting
 
 \vspace*{0.2cm}\begin{block}{}
-\centerline{$ \tilde{\by}_{n}(h)=\bS\bm{G}\hat{\by}_{n}(h)$}
-\end{block}\pause
+\centerline{$\tilde{\bm{y}}_{T+h|T}=\bS\bm{G}\hat{\bm{y}}_{T+h|T}$}
+\end{block}
 
 Bottom-up forecasts are obtained using
 $$
@@ -659,7 +659,7 @@ $$
 $$
 where $\bm{0}$ is null matrix and $\bm{I}$ is identity matrix.
 \begin{itemize}\tightlist
-\item $\bm{G}$ matrix extracts only bottom-level forecasts from $\hat{\by}_{n}(h)$
+\item $\bm{G}$ matrix extracts only bottom-level forecasts from $\hat{\bm{y}}_{T+h|T}$
 \item $\bS$ adds them up to give the bottom-up forecasts.
 \end{itemize}
 \vspace*{10cm}
@@ -667,33 +667,65 @@ where $\bm{0}$ is null matrix and $\bm{I}$ is identity matrix.
 ## Top-down forecasting
 
 \vspace*{0.2cm}\begin{block}{}
-\centerline{$\tilde{\by}_{n}(h)=\bS\bm{G}\hat{\by}_{n}(h)$}
-\end{block}\pause
+\centerline{$\tilde{\bm{y}}_{T+h|T}=\bS\bm{G}\hat{\bm{y}}_{T+h|T}$}
+\end{block}
 
 Top-down forecasts are obtained using
 $$
 \bm{G}= \left[\bm{p}\mid\bm{0}\right]
 $$
-where $\bm{p}=[p_{1},p_{2},\dots,p_{m_{K}}]'$ is a vector of proportions that sum to one.
+where $\bm{p}=[p_{1},p_{2},\dots,p_{n_b}]'$ and $\displaystyle\sum_{k=1}^{n_b} p_k = 1$.
 \begin{itemize}\tightlist
-\item $\bm{G}$ distributes forecasts of the aggregate to the lowest level series.
+\item $\bm{G}$ distributes forecasts of aggregate to lowest level series.
 \item Different methods of top-down forecasting lead to different proportionality vectors $\bm{p}$.
 \end{itemize}
 \vspace*{10cm}
 
-## Forecast reconciliation
+## Properties of single-level methods
 
-\begin{textblock}{15.4}(0.3,1.2)
-\begin{alertblock}{}
-\begin{itemize}
-\item Forecast all series at all levels of aggregation.
-\item Reconcile forecasts using least squares optimization.
-\end{itemize}
-\end{alertblock}
-\end{textblock}
+\vspace*{0.2cm}\begin{block}{}
+\centerline{$\tilde{\bm{y}}_{t+h|t}=\bS\bG\hat{\bm{y}}_{t+h|t}$}
+\end{block}
 
-\begin{textblock}{15.4}(0.3,2.8)
-\begin{block}{History}\fontsize{11.5}{12}\sf
+\begin{block}{Mean}\vspace*{-0.8cm}
+\begin{align*}
+\E[\tilde{\by}_{T+h|T} \mid \by_1,\dots,\by_T]
+ & = \bm{S}\bm{G}\E[\hat{\by}_{T+h|T} \mid \by_1,\dots,\by_T] \\
+ & = \bm{S}\E[\bm{b}_{T+h|T} \mid \by_1,\dots,\by_T]\\[-1.2cm]
+\end{align*}
+provided $\bS\bG\bS = \bS$
+and $\E[\hat{\by}_{T+h|T} \mid \by_1,\dots,\by_T] = \bm{S}\E[\bm{b}_{T+h|T} \mid \by_1,\dots,\by_T]$.
+i.e., forecasts $\tilde{\bm{y}}_{T+h|T}$ are unbiased iff base forecasts $\hat{\bm{y}}_{T+h|T}$ are unbiased and $\bS\bG\bS=\bS$.
+\end{block}\pause
+
+* $\bS\bG\bS = \bS$ for bottom-up method
+* $\bS\bG\bS \ne \bS$ for any top-down or middle-out method.
+
+## Properties of single-level methods
+
+\vspace*{0.2cm}\begin{block}{}
+\centerline{$\tilde{\bm{y}}_{t+h|t}=\bS\bG\hat{\bm{y}}_{t+h|t}$}
+\end{block}
+
+\begin{block}{Variance}\vspace*{-0.8cm}
+\begin{align*}
+\bm{V}_h &= \var[\by_{T+h} - \tilde{\by}_{T+h|T}  \mid \by_1,\dots,\by_T] \\
+& = \bS\bG\bm{W}_{h}\bG'\bS'\\[-1.2cm]
+\end{align*}
+where $\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_T]$
+\end{block}\pause
+
+* $\bm{W}_h$ is hard to estimate for $h>1$.
+* This suggests we should choose $\bm{G}$ to minimise $\bm{V}_h$.
+
+\vspace*{10cm}
+
+# Linear forecast reconciliation
+
+## Early history of forecast reconciliation
+
+\begin{textblock}{15.4}(0.3,1.5)
+\begin{block}{History}\fontsize{12}{13}\sf
 \begin{multicols}{2}
 \begin{description}[0000:]\parskip=0cm\itemsep=0.05cm
 \item[2001:] Idea to use all available series to forecast Australia's labour market by occupation.
@@ -799,73 +831,37 @@ isf |>
   labs(x = "Year")
 ```
 
-## Definitions
+## Linear forecast reconciliation
 
-\begin{textblock}{9}(.2,1.2)\fontsize{13}{14}\sf
-\begin{block}{Coherent subspace}
-$m$-dimensional linear subspace $\mathfrak{s}\subset \mathbb{R}^n$ for which linear constraints hold for all $\bm{y}\in\mathfrak{s}$.
-\end{block}\vspace*{-0.28cm}
-\begin{block}{Hierarchical time series}
-An $n$-dimensional multivariate time series such that $\bm{y}_t\in\mathfrak{s}\quad\forall t$.
-\end{block}\vspace*{-0.28cm}
-\begin{block}{Coherent point forecasts}
-$\tilde{\bm{y}}_{t+h|t}$ is \emph{coherent} if $\tilde{\bm{y}}_{t+h|t} \in \mathfrak{s}$.
-\end{block}
-\end{textblock}
-\only<2-3>{\begin{textblock}{7.5}(.2,6.6)
-\begin{alertblock}{Base forecasts}
-Let $\hat{\bm{y}}_{t+h|t}$ be vector of \emph{incoherent} initial $h$-step forecasts.$\phantom{y_{t|h}}$
-\end{alertblock}
-\end{textblock}}
-\only<3>{\begin{textblock}{7.5}(8.3,6.6)
-\begin{alertblock}{Reconciled forecasts}
-Let $\psi$ be a mapping, $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$.  $\tilde{\bm{y}}_{t+h|t}=\psi(\hat{\bm{y}}_{t+h|t})$ ``reconciles'' $\hat{\bm{y}}_{t+h|t}$.
-\end{alertblock}
-\end{textblock}}
-
-\placefig{9.4}{.0}{width=6.6cm}{3D_hierarchy}
-\begin{textblock}{3}(11.4,5.6)
-\begin{block}{}
-\centerline{$ y_{Tot} = y_A + y_B$}
-\end{block}
-\end{textblock}
-
-## Linear reconciliation
-
-\begin{textblock}{8}(0.2,1.25)\fontsize{13}{14}\sf
-\begin{block}{}
-If $\psi$ is a linear function, then $\tilde{\bm{y}}_{t+h|t}=\bS\bG\hat{\bm{y}}_{t+h|t}$
+\vspace*{0.2cm}\begin{block}{}
+\centerline{$\tilde{\bm{y}}_{T+h|T}=\bS\bG\hat{\bm{y}}_{T+h|T}$}
 \end{block}\vspace*{-0.4cm}
 \begin{itemize}\tightlist
 \item $\bG$ combines base forecasts $\hat{\by}_{T+h|T}$ to get bottom-level forecasts.
 \item $\bS$ creates linear combinations.
+\item Bottom-up and top-down can be seen as special cases.
+\item $\bS\bG$ is a projection matrix iff $\bS\bG\bS'=\bS$.
+\item Reconciled forecasts are unbiased iff base forecasts are unbiased and $\bS\bG$ is a projection.
+\item $\bm{V}_h = \var[\by_{T+h} - \tilde{\by}_{T+h|T}  \mid \by_1,\dots,\by_T] = \bS\bG\bm{W}_{h}\bG'\bS'$
+\item How to choose $\bm{G}$ to create optimal forecasts?
 \end{itemize}
-\only<2->{\begin{block}{Mean}\vspace*{-0.3cm}
-$\E[\tilde{\by}_{T+h|T} \mid \by_1,\dots,\by_n]
-            = \E[\by_{T+h|T} \mid \by_1,\dots,\by_n]
-$
-provided $\bS\bG\bS' = \bS$
-and\\
-$\E[\hat{\by}_{T+h|T} \mid \by_1,\dots,\by_n] = \E[\by_{T+h|T} \mid \by_1,\dots,\by_n]$
-i.e., reconciled forecasts are unbiased if base forecasts are unbiased and $\bS\bG$ is a projection.
-\end{block}}
-\end{textblock}
 
-\only<3->{\begin{textblock}{7.1}(8.7,1.25)\fontsize{13}{14}\sf
-\begin{block}{Variance}\vspace*{-0.3cm}
-\begin{align*}
-\bm{V}_h &= \var[\by_{T+h} - \tilde{\by}_{T+h|T}  \mid \by_1,\dots,\by_n] \\
-& = \bS\bG\bm{W}_{h}\bG'\bS'
-\end{align*}
-where $\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_n]$
-\end{block}\vspace*{-0.2cm}
-\only<4>{\begin{alertblock}{Minimum trace (MinT) reconciliation}
+## Minimum trace reconciliation
+
+\vspace*{0.2cm}\begin{alertblock}{Minimum trace (MinT) reconciliation}
 If $\bS\bG$ is a projection, then the trace of $\bm{V}_h$ is minimized when
-$$
-  \bG = (\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}
-$$
-\end{alertblock}}
-\end{textblock}}
+\centerline{$\bG = (\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$}
+\end{alertblock}
+\begin{block}{}
+\centerline{$\displaystyle\textcolor{red}{\tilde{\by}_{T+h|T}}
+=\bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}\textcolor{blue}{\hat{\by}_{T+h|T}}$}
+\end{block}
+\centerline{\hspace*{1cm}\textcolor{red}{Reconciled forecasts}\hfill\textcolor{blue}{Base forecasts}\hspace*{2cm}}
+
+* Trace of $\bm{V}_h$ is sum of forecast variances.
+* MinT solution is $L_2$ optimal amongst linear unbiased forecasts.
+* How to estimate $\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_T]$?
+* Is $\bm{W}_h \approx k_h \bm{W}_1$ a reasonable approximation?
 
 ## Linear projections
 
@@ -891,6 +887,7 @@ $$
 \item $\bm{\Lambda}_v = \text{diag}(\bm{W}_1)^{-1}$
 \item $\hat{\bm{W}}_{\text{sam}}$ is sample estimate of the residual covariance matrix
 \item $\hat{\bm{W}}_{\text{shr}}$ is shrinkage estimator $\tau \text{diag}(\hat{\bm{W}}_{\text{sam}})+(1-\tau)\hat{\bm{W}}_{\text{sam}}$\\ where $\tau$ selected optimally.
+\item Still need a good estimate of $\bm{W}_h$ for forecast variance.
 \end{itemize}
 \end{textblock}
 \begin{textblock}{14}(4.5,5.7)\fontsize{13}{15}\sf
@@ -904,9 +901,20 @@ These approximate MinT by assuming $\bm{W}_h = k_h \bm{W}_1$.
 \end{block}
 \end{textblock}
 
-# First OLS attempt at reconciliation
-# WLS reconciliation
-# MinT reconciliation
+## OLS is not as bad as you might think
+
+* If all base forecasts come from the same model, then forecast errors are coherent.
+* So $\hat{\bm{y}}_{T+h|T} = \bm{S}\hat{\bm{b}}_{T+h|T} + \bm{S}\hat{\bm{\varepsilon}}_{T+h}$ and
+$$
+  \bm{W}_h = \var(\bm{y}_{T+h} - \hat{\bm{y}}_{T+h|T}) = \bm{S}\bm{\Sigma}_h\bm{S}'
+$$
+where $\bm{\Sigma}_h = \var(\hat{\bm{\varepsilon}}_{T+h})$. So
+\begin{align*}
+\bG &= \big[\bS'\bm{W}_h^{-1}\bS\big]^{-1}\bS'\bm{W}_h^{-1} \\
+    &= \big[\bS'(\bm{S}\bm{\Sigma}_h\bm{S}')^{-1}\bS\big]^{-1}\bS'(\bm{S}\bm{\Sigma}_h\bm{S}')^{-1} \\
+    &= (\bm{S}'\bm{S})^{-1}\bS'\\[-0.9cm]
+\end{align*}
+\rightline{(Proof: Hyndman et al, \emph{CSDA} 2011)\hspace*{1cm}}
 
 # Example: Australian tourism
 
@@ -1068,3 +1076,410 @@ fc |>
 \end{itemize}
 \end{block}
 \end{textblock}}
+
+# Fast computational tricks
+
+## Fast computation: hierarchical data
+
+\begin{block}{}\hspace*{.6cm}{\centering\small
+\begin{tikzpicture}[level distance=1cm]
+\tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
+\tikzstyle[level distance=.01cm]
+\tikzstyle[sibling distance=12cm]
+\tikzstyle{level 2}=[sibling distance=10mm,font=\scriptsize,set style={{every node}+=[fill=yellow]}]
+\tikzstyle{level 1}=[sibling distance=40mm,font=\footnotesize,set style={{every node}+=[fill=blue!15]}]
+\node{Total}[edge from parent fork down]
+ child {node {A}
+   child {node {AX}}
+   child {node {AY}}
+   child {node {AZ}}
+ }
+ child {node {B}
+   child {node {BX}}
+   child {node {BY}}
+   child {node {BZ}}
+ }
+ child {node {C}
+   child {node {CX}}
+   child {node {CY}}
+   child {node {CZ}}
+ };
+\end{tikzpicture}}
+\end{block}\vspace*{0.1cm}\fontsize{8}{8}\sf
+
+\hbox{$\by_{t}= \begin{pmatrix}
+    y_t\\
+    y_{A,t}\\
+    y_{B,t}\\
+    y_{C,t}\\
+    y_{AX,t}\\
+    y_{AY,t}\\
+    y_{AZ,t}\\
+    y_{BX,t}\\
+    y_{BY,t}\\
+    y_{BZ,t}\\
+    y_{CX,t}\\
+    y_{CY,t}\\
+    y_{CZ,t}\end{pmatrix}=
+    {\color{red}{\begin{pmatrix}
+                1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+                1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
+                0 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0\\
+                0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 1\\
+                1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+                0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+                0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
+                0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0\\
+                0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
+                0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0\\
+                0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
+                0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0\\
+                0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
+             \end{pmatrix}}}{\color{blue}{\begin{pmatrix}
+    y_{AX,t}\\
+    y_{AY,t}\\
+    y_{AZ,t}\\
+    y_{BX,t}\\
+    y_{BY,t}\\
+    y_{BZ,t}\\
+    y_{CX,t}\\
+    y_{CY,t}\\
+    y_{CZ,t}\end{pmatrix}}}$}
+
+\vspace*{10cm}
+
+\begin{textblock}{3}(10.5,8)\fontsize{14}{15}\sf\colorbox[gray]{.8}{$\by_{t}=\color{red}\bS\color{blue}\bm{b}_{t}$}\end{textblock}
+
+## Fast computation: hierarchical data
+
+\begin{block}{}\hspace*{.6cm}{\centering\small
+\begin{tikzpicture}[level distance=1cm]
+\tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
+\tikzstyle[level distance=.01cm]
+\tikzstyle[sibling distance=12cm]
+\tikzstyle{level 2}=[sibling distance=10mm,font=\scriptsize,set style={{every node}+=[fill=yellow]}]
+\tikzstyle{level 1}=[sibling distance=40mm,font=\footnotesize,set style={{every node}+=[fill=blue!15]}]
+\node{Total}[edge from parent fork down]
+ child {node {A}
+   child {node {AX}}
+   child {node {AY}}
+   child {node {AZ}}
+ }
+ child {node {B}
+   child {node {BX}}
+   child {node {BY}}
+   child {node {BZ}}
+ }
+ child {node {C}
+   child {node {CX}}
+   child {node {CY}}
+   child {node {CZ}}
+ };
+\end{tikzpicture}}
+\end{block}\vspace*{0.1cm}\fontsize{8}{8}\sf
+
+\hbox{$\by_{t}= \begin{pmatrix}
+    y_t\\
+    y_{A,t}\\
+    y_{AX,t}\\
+    y_{AY,t}\\
+    y_{AZ,t}\\
+    y_{B,t}\\
+    y_{BX,t}\\
+    y_{BY,t}\\
+    y_{BZ,t}\\
+    y_{C,t}\\
+    y_{CX,t}\\
+    y_{CY,t}\\
+    y_{CZ,t}\end{pmatrix}=
+    {\color{red}{\begin{pmatrix}
+      1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      0 & 0 & 0 & 0 & 0 & 0\\
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      0 & 0 & 0 & 0 & 0 & 0\\
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      0 & 0 & 0 & 0 & 0 & 0\\
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      0 & 0 & 0 & 0 & 0 & 0\\
+      0 & 0 & 0 &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      0 & 0 & 0 \\
+      0 & 0 & 0 &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      0 & 0 & 0 \\
+      0 & 0 & 0 &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      0 & 0 & 0 \\
+      0 & 0 & 0 &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      0 & 0 & 0 \\
+      0 & 0 & 0 & 0 & 0 & 0 &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1}\\
+      0 & 0 & 0 & 0 & 0 & 0 &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0}\\
+      0 & 0 & 0 & 0 & 0 & 0 &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0}\\
+      0 & 0 & 0 & 0 & 0 & 0 &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      \only<2>{\textcolor[rgb]{0,0.6,0}}{1}\\
+   \end{pmatrix}}}{\color{blue}{\begin{pmatrix}
+    y_{AX,t}\\
+    y_{AY,t}\\
+    y_{AZ,t}\\
+    y_{BX,t}\\
+    y_{BY,t}\\
+    y_{BZ,t}\\
+    y_{CX,t}\\
+    y_{CY,t}\\
+    y_{CZ,t}\end{pmatrix}}}$}
+
+\vspace*{10cm}
+
+\begin{textblock}{3}(10.5,8)\fontsize{14}{15}\sf\colorbox[gray]{.8}{$\by_{t}=\color{red}\bS\color{blue}\bm{b}_{t}$}\end{textblock}
+
+## Fast computation: hierarchies
+
+\fontsize{13.6}{15}\sf
+Think of the hierarchy as a tree of trees:
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+%\tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,fill=red!15]
+\tikzstyle[level distance=.1cm]
+\tikzstyle[sibling distance=7cm]
+%\tikzstyle{level 1}=[sibling distance=33mm,set style={{every node}+=[fill=blue!15]}]
+\tikzstyle{level 1}=[sibling distance=33mm]
+\node[ellipse,draw,inner sep=0.2pt,fill=red!15]{Total}[edge from parent fork down]
+ child {node[ellipse,draw,inner sep=0.2pt,fill=blue!15] {$T_1$}
+ }
+ child {node[ellipse,draw,inner sep=0.2pt,fill=blue!15] {$T_2$}
+ }
+ child {node {\dots}
+ }
+ child {node[ellipse,draw,inner sep=0.2pt,fill=blue!15] {$T_K$}
+ };
+\end{tikzpicture}
+\end{center}\pause
+Then the summing matrix contains $k$ smaller summing matrices:
+
+\begin{multicols}{2}
+$\displaystyle
+\bS = \left[\begin{array}{cccc}
+{\bf1}'_{n_1}&{\bf1}'_{n_2}&\cdots&{\bf1}'_{n_K}\\
+\bS_1&{{\bf0}}&\cdots&{\bf0}\\
+{\bf0}&\bS_2&\cdots&{\bf0}\\
+\vdots&\vdots&\ddots&\vdots\\
+{\bf0}&{\bf0}&\cdots&\bS_K
+\end{array}\right]$
+
+\columnbreak
+
+where ${\bf1}_n$ is an $n$-vector of ones and tree $T_i$ has $n_i$ terminal nodes.
+\end{multicols}
+
+\vspace*{10cm}
+
+## Fast computation: hierarchies
+\vspace*{-0.4cm}\fontsize{13}{15}\sf
+$$
+\!\bS'\!\bLambda\bS = \left[\begin{array}{cccc}
+\bS_1'\bLambda_1\bS_1&{\bf0}&\cdots&{\bf0}\\
+{\bf0}&\bS'_2\bLambda_2\bS_2&\cdots&{\bf0}\\
+\vdots&\vdots&\ddots&\vdots\\
+{\bf0}&{\bf0}&\cdots&\bS_K'\bLambda_K\bS_K
+\end{array}\right] + \lambda_0\,\bJ_n
+$$
+
+* $\lambda_0$ is the top left element of $\bLambda$
+* $\bLambda_k$ is a block of $\bLambda$, corresponding to tree $T_k$
+* $\bJ_n$ is a matrix of ones
+* $n=\sum_k n_k$
+
+\pause
+\alert{Now apply the Sherman-Morrison formula \dots}
+
+\vspace*{10cm}
+
+## Fast computation: hierarchies
+\vspace*{-0.4cm}\fontsize{13}{15}\sf
+$$\arraycolsep=0.1cm
+\!(\bS'\!\bLambda\bS)^{-1} = \left[\begin{array}{cccc}
+(\bS_1'\bLambda_1\bS_1)^{-1}&{\bf0}&\cdots&{\bf0}\\
+{\bf0}&(\bS'_2\bLambda_2\bS_2)^{-1}&\cdots&{\bf0}\\
+\vdots&\vdots&\ddots&\vdots\\
+{\bf0}&{\bf0}&\cdots&(\bS_K'\bLambda_K\bS_K)^{-1}
+\end{array}\right] - c\bS_0
+$$
+
+* $\bS_0$ can be partitioned into $K^2$ blocks, with the $(k,\ell)$ block
+(of dimension $n_k\times n_\ell$) being
+$(\bS_k'\bLambda_k\bS_k)^{-1}\bJ_{n_k,n_\ell} (\bS_\ell'\bLambda_\ell\bS_\ell)^{-1}$
+* $\bJ_{n_k,n_\ell}$ is a $n_k\times n_\ell$ matrix of ones
+* $\displaystyle c^{-1}=\lambda_0^{-1}+\sum_k {\bf1}_{n_k}' (\bS_k'\bLambda_k\bS_k)^{-1}{\bf1}_{n_k}$
+* Each $\bS_k'\bLambda_k\bS_k$ can be inverted similarly
+* $\bS'\!\bLambda\by$ can also be computed recursively
+
+\only<2>{\begin{textblock}{6}(9.8,6)\fontsize{14}{15}\sf
+\begin{alertblock}{}
+The recursive calculations can be done in such a way that we never store any of the large matrices involved.
+\end{alertblock}
+\end{textblock}}
+\only<2>{\placefig{15}{5.4}{width=1cm}{smiley}}
+
+\vspace*{10cm}
+
+## Fast computation: grouped data
+
+\begin{block}{}
+\begin{center}\small
+\tikzstyle{every node}=[inner sep=2pt]\vspace*{-0.2cm}
+\begin{tikzpicture}
+    \matrix[ampersand replacement=\&,column sep=0.2cm] {
+        \node[ellipse,draw,fill=yellow,font=\scriptsize,distance=1cm] {AX};~ \&
+        \node[ellipse,draw,fill=yellow,font=\scriptsize] {AY};~ \&
+        \node[ellipse,draw,fill=yellow,font=\scriptsize] {AZ};~ \&
+        \node[ellipse,draw,fill=blue!15] {A}; \\[0.cm]
+        \node[ellipse,draw,fill=yellow,font=\scriptsize] {BX};~ \&
+        \node[ellipse,draw,fill=yellow,font=\scriptsize] {BY};~ \&
+        \node[ellipse,draw,fill=yellow,font=\scriptsize] {BZ};~ \&
+        \node[ellipse,draw,fill=blue!15] {B}; \\[0.cm]
+        \node[ellipse,draw,fill=yellow,font=\scriptsize] {CX};~ \&
+        \node[ellipse,draw,fill=yellow,font=\scriptsize] {CY};~ \&
+        \node[ellipse,draw,fill=yellow,font=\scriptsize] {CZ};~ \&
+        \node[ellipse,draw,fill=blue!15] {C}; \\[0.05cm]
+        \node[ellipse,draw,fill=blue!15] {X};~ \&
+        \node[ellipse,draw,fill=blue!15] {Y};~ \&
+        \node[ellipse,draw,fill=blue!15] {Z};~ \&
+        \node[ellipse,draw,fill=red!15] {Total}; \\
+};
+\end{tikzpicture}
+\end{center}
+\end{block}\vspace*{0.0cm}\fontsize{8}{7}\sf
+
+\hbox{$\by_{t}= \begin{pmatrix}
+    y_t\\
+    y_{A,t}\\
+    y_{B,t}\\
+    y_{C,t}\\
+    y_{X,t}\\
+    y_{Y,t}\\
+    y_{Z,t}\\
+    y_{AX,t}\\
+    y_{AY,t}\\
+    y_{AZ,t}\\
+    y_{BX,t}\\
+    y_{BY,t}\\
+    y_{BZ,t}\\
+    y_{CX,t}\\
+    y_{CY,t}\\
+    y_{CZ,t}
+    \end{pmatrix}=
+    \color{red}\begin{pmatrix}
+                1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\
+                1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+                0 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 \\
+                0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 1\\
+                1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 \\
+                0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 \\
+                0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 \\
+                1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+                0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+                0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+                0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+                0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+                0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+                0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+                0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0\\
+                0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1
+             \end{pmatrix}\color{blue}\begin{pmatrix}
+    y_{AX,t}\\
+    y_{AY,t}\\
+    y_{AZ,t}\\
+    y_{BX,t}\\
+    y_{BY,t}\\
+    y_{BZ,t}\\
+    y_{CX,t}\\
+    y_{CY,t}\\
+    y_{CZ,t}
+    \end{pmatrix}$}
+
+\begin{textblock}{3}(10.5,8)\fontsize{12}{13}\sf\colorbox[gray]{.8}{$\by_{t}=\color{red}\bS\color{blue}\bm{b}_{t}$}\end{textblock}
+
+\vspace*{10cm}
+
+## Fast computation: grouped data
+
+$\displaystyle \bS=\begin{bmatrix}
+\bm{1}_m'\otimes \bm{1}_n'\\
+\bm{1}_m'\otimes \bI_n\\
+\bI_m\otimes \bm{1}_n'\\
+\bI_m\otimes \bI_n\\
+\end{bmatrix}$\pause
+\begin{block}{}
+\centerline{$\bS'\!\bLambda\bS = \lambda_{00}\, \bm{J}_{mn} + (\bLambda_R\otimes  \bm{J}_{n}) + (\bm{J}_{m}\otimes \bLambda_C) +  \bLambda_U$}
+\end{block}
+\begin{itemize}
+\item $\bLambda_R$, $\bLambda_C$ and $\bLambda_U$ are diagonal matrices corresponding to rows, columns and unaggregated series;
+\item $\lambda_{00}$ corresponds to aggregate.
+\end{itemize}
+
+\begin{textblock}{7}(6,2.4)
+$m=$ number of rows\\
+$n=$ number of columns
+\end{textblock}
+
+## Fast computation: grouped data
+
+\begin{block}{}
+\centerline{$\displaystyle
+(\bS\bLambda\bS)^{-1} = \bm{A} - \frac{\bm{A}\bm{1}_{mn}\bm{1}_{mn}'\bm{A}}
+  {1/\lambda_{00} + \bm{1}_{mn}'\bm{A}\bm{1}_{mn}}$}
+\end{block}\fontsize{13.5}{15.5}\sf
+$\bm{A} = \bLambda_U^{-1} - \bLambda_U^{-1}(\bm{J}_m\otimes \bm{D})\bLambda_U^{-1} - \bm{E}\bm{M}^{-1}\bm{E}'.$\\
+$\bm{D}$ is diagonal with elements \rlap{$d_j=\lambda_{0j}/(1+\lambda_{0j}\sum_i \lambda_{ij}^{-1})$.}\\
+$\bm{E}$ has $m\times m$ blocks where $\bm{e}_{ij}$ has $k$th element
+$$
+(\bm{e}_{ij})_k = \left \{ \begin{array}{lr}
+\lambda_{i0}^{1/2} \lambda_{ik}^{-1} - \lambda_{i0}^{1/2} \lambda_{ik}^{-2}d_k,& i=j,\\
+- \lambda_{j0}^{1/2}\lambda_{ik}^{-1}\lambda_{jk}^{-1}d_k,& i\neq j.
+\end{array}\right .
+$$
+$\bm{M}$ is $m\times m$ with $(i,j)$ element
+$$ (\bm{M})_{ij} =
+\left \{ \begin{array}{lr}
+1+\lambda_{i0}\sum_k \lambda_{ik}^{-1} - \lambda_{i0}\sum_k \lambda_{ik}^{-2}d_k,& i=j,\\
+- \lambda_{i0}^{1/2}\lambda_{j0}^{1/2}\sum_k \lambda_{ik}^{-1}\lambda_{jk}^{-1}d_k,& i\neq j.
+\end{array}\right .
+$$
+
+\only<2>{\begin{textblock}{8}(2.4,5)\fontsize{14}{17}\sf
+\begin{alertblock}{}
+Again, the calculations can be done in such a way that we never store any of the large matrices involved.
+\end{alertblock}
+\end{textblock}}
+\only<2>{\placefig{10.1}{6.7}{width=1cm}{smiley}}
+
+\nocite{hierarchical, fasthts, mint}\fontsize{11}{12}\sf
