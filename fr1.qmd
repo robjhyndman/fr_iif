@@ -11,6 +11,9 @@ format:
     aspectratio: 169
     fontsize: 14pt
     section-titles: false
+    knitr:
+      opts_chunk:
+        dev: "cairo_pdf"
 include-in-header: header.tex
 cite-method: biblatex
 bibliography: hts.bib
@@ -279,7 +282,7 @@ p4 <- tourism |>
   ggtitle("Total domestic travel: South NSW by region")
 aligned_plots <- align_patches(p1, p2, p3, p4)
 for (i in seq_along(aligned_plots)) {
-  pdf(paste0("./figs/tourism", i, ".pdf"), width = 12 * .8, height = 5 * .8)
+  cairo_pdf(paste0("./figs/tourism", i, ".pdf"), width = 12 * .8, height = 5 * .8)
   print(aligned_plots[[i]])
   crop::dev.off.crop()
 }
