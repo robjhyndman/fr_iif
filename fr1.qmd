@@ -142,6 +142,7 @@ read_sf("tourism/Tourism_Regions_2020.shp") |>
   ggplot() +
   geom_sf(aes(fill = State), alpha = 0.8) +
   theme_void() +
+  theme(text = ggplot2::element_text(family = 'Fira Sans')) +
   scale_fill_manual(values = state_colors)
 ```
 
@@ -571,7 +572,8 @@ $t$.
 
 ```{r}
 #| label: pyramid
-pdf("figs/pyramid.pdf", width = 15 / 2.54, height = 15 / 2.54)
+cairo_pdf("figs/pyramid.pdf", width = 15 / 2.54, height = 15 / 2.54)
+par(family = "firasans")
 plot(c(-1, 1), c(0.1, 1), type = "n", bty = "n", xlab = "", ylab = "", xaxt = "n", yaxt = "n")
 polygon(c(-1, 1, 0, -1), c(0, 0, 1, 0), col = rgb(230, 172, 0, max = 255), border = FALSE)
 abline(a = 0.666, b = 0, col = "white", lwd = 5)
