@@ -24,11 +24,7 @@ execute:
 ---
 
 ```{r}
-#| label: setup
-#| include: false
-options(digits = 3, width = 88)
-library(fpp3)
-library(patchwork)
+source("setup.R")
 ```
 
 ## Outline

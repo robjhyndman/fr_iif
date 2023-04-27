@@ -5,7 +5,7 @@ TARGETS=$(SOURCES:%.qmd=%.pdf)
 	@echo "$< -> $@"
 	quarto render '$<'
 
-default: $(TARGETS)
+all: $(TARGETS)
 
 clean:
 	rm -rf $(TARGETS)
