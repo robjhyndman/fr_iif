@@ -13,7 +13,7 @@ format:
     section-titles: false
     knitr:
       opts_chunk:
-        dev: "cairo_pdf"
+        dev: "CairoPDF"
 include-in-header: header.tex
 cite-method: biblatex
 bibliography: hts.bib

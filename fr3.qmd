@@ -1,6 +1,6 @@
 ---
 title: Forecast reconciliation
-subtitle: 3. Temporal and cross-temporal forecast reconcilation
+subtitle: 3. Temporal & cross-temporal forecast reconcilation
 author: Rob J Hyndman
 pdf-engine: pdflatex
 fig-width: 9
@@ -13,7 +13,7 @@ format:
     section-titles: false
     knitr:
       opts_chunk:
-        dev: "cairo_pdf"
+        dev: "CairoPDF"
 include-in-header: header.tex
 cite-method: biblatex
 bibliography: hts.bib

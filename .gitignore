@@ -1,6 +1,58 @@
-*_cache
-*_files
-.Rproj.user
 fr[1-4].tex
 
 /.quarto/
+
+########################################################
+# R output                                             #
+########################################################
+
+*.Rout
+*_Rout.txt
+.RData
+.Rhistory
+.Rproj.user
+.Ruserdata
+Rplots.pdf
+
+**/*_cache/*
+**/cache/*
+**/*_files/*
+
+*.knit.md
+*.utf8.md
+
+## Core latex/pdflatex auxiliary files:
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+
+## Bibliography auxiliary files (bibtex/biblatex/biber):
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+## Build tool auxiliary files:
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+
+# beamer
+*.nav
+*.pre
+*.snm
+*.vrb
