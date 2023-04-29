@@ -1,6 +1,6 @@
 ---
 title: Forecast reconciliation
-subtitle: 2. The geometry of forecast reconciliation
+subtitle: 2. Perspectives on forecast reconciliation
 author: Rob J Hyndman
 pdf-engine: pdflatex
 fig-width: 9
@@ -34,22 +34,300 @@ source("setup.R")
 
 \vspace*{0.4cm}\tableofcontents
 
+# Reconciliation via constraints
+
 ## Notation reminder
 
-* Data: $\bm{y}_t = \bm{S}\bm{b}_t$ where $\bm{S}$ is a summing matrix and $\bm{b}_t$ is a vector of disaggregated time series
-* Base forecasts: $\hat{\bm{y}}_{T+h|T}$
-* Reconciled forecasts: $\tilde{\bm{y}}_{T+h|T}=\bS\bm{G}\hat{\bm{y}}_{T+h|T}$
-* MinT: $\bG = (\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$ where $\bm{W}_h$ is covariance matrix of base forecast errors.
+\begin{textblock}{8.5}(0.2,1.5)
+Every collection of time series with linear constraints can be written as
+\centerline{\colorbox[RGB]{210,210,210}{$\bY_{t}=\color{blue}\bS\color{red}\bm{b}_{t}$}}
+\vspace*{-0.9cm}\begin{itemize}\parskip=0cm\itemsep=0cm
+\item $\by_t=$ vector of all series at time $t$
+\item $ y_{t}= $ aggregate of all series at time
+$t$.
+\item $ y_{X,t}= $ value of series $X$ at time $t$.
+\item $\color{red}{\bm{b}_t}=$ vector of most disaggregated series at time $t$
+\item $\color{blue}{\bS}=$ ``summing matrix'' containing the linear constraints.
+\end{itemize}
+\end{textblock}
+
+\begin{textblock}{5.7}(11.4,0.1)
+\begin{minipage}{4cm}
+\begin{block}{}\centering
+\begin{tikzpicture}
+\tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
+\tikzstyle[level distance=.3cm]
+\tikzstyle[sibling distance=12cm]
+\tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
+\node{Total}[edge from parent fork down]
+ child {node {A}
+ }
+ child {node {B}
+ }
+ child {node {C}
+ };
+\end{tikzpicture}
+\end{block}
+\end{minipage}
+\end{textblock}
+
+\only<1>{\begin{textblock}{5.7}(9.4,2.8)\fontsize{14}{15}\sf
+\begin{align*}
+\bY_{t}&= \begin{pmatrix}
+  y_{t}\\
+  y_{A,t}\\
+  y_{B,t}\\
+  y_{C,t}
+  \end{pmatrix}  \\
+  &= {\color{blue}\underbrace{\begin{pmatrix}
+                1 & 1 & 1 \\
+                1 & 0 & 0 \\
+                0 & 1 & 0\\
+                0 & 0 & 1
+                \end{pmatrix}}_{\bS}}
+     {\color{red}\underbrace{\begin{pmatrix}
+       y_{A,t}\\y_{B,t}\\y_{C,t}
+       \end{pmatrix}}_{\bm{b}_{t}}}
+\end{align*}
+\end{textblock}}
+\only<2>{\begin{textblock}{5.7}(9.4,3.2)\fontsize{14}{15}\sf
+\begin{alertblock}{}
+\begin{itemize}\itemsep=0.1cm
+\item Base forecasts: $\hat{\bm{y}}_{T+h|T}$
+\item Reconciled forecasts: $\tilde{\bm{y}}_{T+h|T}=\bS\bm{G}\hat{\bm{y}}_{T+h|T}$
+\item MinT: $\bG = (\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$ where $\bm{W}_h$ is covariance matrix of base forecast errors.
+\end{itemize}
+\end{alertblock}
+\end{textblock}}
+
+## Zero-constraint representation
+\vspace*{0.2cm}
+
+\begin{block}{Aggregation matrix $\bm{A}$}
+$$\bm{y}_t
+    = \begin{bmatrix}\bm{a}_t\\\bm{b}_t\end{bmatrix}
+    = \begin{bmatrix}\bm{A}\\\bm{I}_{n_b}\end{bmatrix}\bm{b}_t
+    = \bm{S}\bm{b}_t
+$$
+\end{block}\pause
+
+\begin{block}{Constraint matrix $\bm{C}$}
+\centerline{$\bm{C}\bm{y}_t = \bm{0}$}
+\end{block}\vspace*{-0.3cm}
+
+* Constraint matrix approach more general & more parsimonious.
+* $\bm{C} = [\bm{I}_{n_a} ~~~ {-\bm{A}}]$.
+* $\bm{S}$, $\bm{A}$ and $\bm{C}$ may contain any real values (not just 0s and 1s).
 
 ## Zero-constraint representation
 
-## The coherent subspaces
+Assuming $\bm{C}$ is full rank
+\begin{block}{}
+\centerline{$\tilde{\bm{y}}_{T+h|T} = \bm{M}\hat{\bm{y}}_{T+h|T}$}
+\centerline{where\qquad $\bm{M} = \bm{I} - \bm{W}_h\bm{C}'(\bm{C}\bm{W}_h\bm{C}')^{-1}\bm{C}$}
+\end{block}\vspace*{-0.3cm}
 
-## Least squares reconciliation of data
+* Originally proved by Byron (1978, 1979) for reconciling data.
+* Re-discovered by @mint for reconciling forecasts.
+* $\bm{M} = \bm{S}\bm{G}$.
+* Leads to more efficient reconciliation than using $\bm{G}$.
+
+# The geometry of forecast reconciliation
+
+## The coherent subspace
+
+\begin{textblock}{9}(.2,1.25)\fontsize{13}{13}\sf
+\begin{block}{Coherent subspace}
+$m$-dimensional linear subspace $\mathfrak{s}\subset \mathbb{R}^n$ for which linear constraints hold for all $\bm{y}\in\mathfrak{s}$.
+\end{block}\vspace*{-0.3cm}
+\begin{block}{Hierarchical time series}
+An $n$-dimensional multivariate time series such that $\bm{y}_t\in\mathfrak{s}\quad\forall t$.
+\end{block}\vspace*{-0.3cm}
+\begin{block}{Coherent point forecasts}
+$\tilde{\bm{y}}_{t+h|t}$ is \emph{coherent} if $\tilde{\bm{y}}_{t+h|t} \in \mathfrak{s}$.
+\end{block}\vspace*{-0.2cm}
+\end{textblock}
+\only<2-3>{\begin{textblock}{7.5}(.2,6.75)\fontsize{13}{13}\sf
+\begin{alertblock}{Base forecasts}
+Let $\hat{\bm{y}}_{t+h|t}$ be vector of \emph{incoherent} initial $h$-step forecasts.$\phantom{y_{t|h}}$
+\end{alertblock}
+\end{textblock}}
+\only<3>{\begin{textblock}{7.5}(8.3,6.75)\fontsize{13}{13}\sf
+\begin{alertblock}{Reconciled forecasts}
+Let $\psi$ be a mapping, $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$.  $\tilde{\bm{y}}_{t+h|t}=\psi(\hat{\bm{y}}_{t+h|t})$ ``reconciles'' $\hat{\bm{y}}_{t+h|t}$.
+\end{alertblock}
+\end{textblock}}
+
+\placefig{9.4}{.0}{width=6.6cm}{3D_hierarchy}
+\begin{textblock}{3}(11.4,5.6)\fontsize{13}{13}\sf
+\begin{block}{}
+\centerline{$ y_{Tot} = y_A + y_B$}
+\end{block}
+\end{textblock}
+
+## Linear reconciliation
+
+\begin{textblock}{9}(0.2,1.25)\fontsize{13}{14}\sf
+\begin{alertblock}{}
+If $\psi(\bm{u}) = \bm{M}\bm{u}$ is a linear function, then
+\centerline{$\tilde{\bm{y}}_{t+h|t}=\bm{M}\hat{\bm{y}}_{t+h|t}$}
+\end{alertblock}\vspace*{-1.4cm}
+\begin{align*}
+\text{OLS:}  && \bm{M} & = \bm{S}(\bm{S}'\bm{S})^{-1}\bm{S}'\\
+             &&        & = \bm{I} - \bm{C}'(\bm{C}\bm{C}')^{-1}\bm{C} \\
+\text{MinT:} && \bm{M} & = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}\\
+             &&        & = \bm{I} - \bm{W}_h\bm{C}'(\bm{C}\bm{W}_h\bm{C}')^{-1}\bm{C}
+\end{align*}
+\end{textblock}
+
+\only<2->{
+\placefig{9.4}{-0.5}{width=6.6cm}{fig3}
+}
+
+\only<3>{
+  \begin{textblock}{9}(0.2,6.)
+  \begin{block}{Projections}
+  Suppose $\bm{M}$ is a projection onto $\mathfrak{s}$, then\fontsize{12}{13}\sf
+  \begin{itemize}
+  \item Coherent base forecasts are unchanged.
+  \item Unbiased base forecasts remain unbiased.
+  \end{itemize}
+  \end{block}
+  \end{textblock}
+}
+\only<3>{
+  \begin{textblock}{6.6}(9.2,6.5)\fontsize{12}{12}\sf
+  \begin{itemize}
+  \item Orthogonal projections (i.e., OLS) lead to smallest possible adjustments of base forecasts.
+  \end{itemize}
+  \end{textblock}
+}
+
+\only<4>{
+  \begin{textblock}{9}(0.2,6)
+  \begin{block}{Distance reducing property}
+  If $\bm{M}$ is an orthogonal projection onto $\mathfrak{s}$:
+  \centerline{$\|\bm{y}_{t+h}-\tilde{\bm{y}}_{t+h|t}\|\le\|\bm{y}_{t+h}-\hat{\bm{y}}_{t+h|t}\|$}
+  \end{block}
+  \end{textblock}
+}
+
+\only<4>{
+  \begin{textblock}{6.6}(9.2,5.3)\fontsize{12}{12}\sf
+  \begin{itemize}\tightlist
+  \item Distance reduction holds for any realisation and any forecast.
+  \item Other measures of forecast accuracy may be worse.
+  \item Not necessarily the optimal reconciliation.
+  \end{itemize}
+  \end{textblock}
+}
+
+## Linear projections
+
+\begin{textblock}{5}(6,0)
+\begin{block}{}
+\centerline{$\tilde{\by}_{T+h|T}=\bm{M}\hat{\by}_{T+h|T}$}
+\end{block}
+\end{textblock}
+
+\begin{textblock}{9}(0.2,1.25)\fontsize{13}{14}\sf
+\begin{block}{Variance}
+\centerline{$\bm{V}_h = \var[\by_{T+h} - \tilde{\by}_{T+h|T}  \mid \by_1,\dots,\by_n]  = \bm{M}\bm{W}_{h}\bm{M}'$}
+where $\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_n]$.
+\end{block}\vspace*{-0.2cm}
+\begin{alertblock}{Minimum trace (MinT) reconciliation}
+If $\bm{M}$ is a projection, then the trace of $\bm{V}_h$ is minimized when
+
+\centerline{$\bm{M} = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}
+  = \bm{I} - \bm{W}_h\bm{C}'(\bm{C}\bm{W}_h\bm{C}')^{-1}\bm{C}$}
+\end{alertblock}
+\end{textblock}
+
+\only<2>{\placefig{9.7}{1.5}{width=6.2cm}{InsampDir_1_George}}
+\only<3>{\placefig{9.7}{1.5}{width=6.2cm}{InsampDir_2_George}}
+\only<4>{\placefig{9.7}{1.5}{width=6.2cm}{OrthProj_George}}
+\only<5>{\placefig{9.7}{1.5}{width=6.2cm}{ObliqProj_George}}
+
+\only<2->{
+  \begin{textblock}{9}(.3,6.6)
+  \begin{itemize}\tightlist
+  \item $R$ is the most likely direction of deviations from $\mathfrak{s}$.
+  \only<2>{\item Orange: in-sample errors}
+  \only<3->{\item Grey: potential base forecasts}
+  \only<4->{\item Red: reconciled forecsts}
+  \end{itemize}
+  \end{textblock}
+}
+
+\only<4->{
+  \begin{textblock}{5.1}(10,7.6)
+  \begin{block}{}
+  \only<4>{Orthogonal projection}
+  \only<5>{Oblique projection}
+  \end{block}
+  \end{textblock}
+}
+
+# Game theory perspectives
 
 ## Game theory perspectives
+\fontsize{14}{16}\sf
+
+Find the solution to the minimax problem
+$$
+V = \mathop{min}_{\tilde{\bm{y}} \in \mathfrak{s}}
+\mathop{max}_{\bm{y}\in \mathfrak{s}}
+\left\{\ell(\bm{y},\tilde{\bm{y}}) -
+\ell(\bm{y},\hat{\bm{y}})
+\right\},
+$$
+where $\ell$ is a loss function, and $\mathfrak{s}$ is the coherent subspace.
+
+* $V\le0$: reconciliation guaranteed to reduce loss.
+* If $\ell(\bm{y},\tilde{\bm{y}}) = (\bm{y}-\tilde{\bm{y}})'\bm{\Psi}(\bm{y}-\tilde{\bm{y}})$, where $\bm{\Psi}$ is any symmetric pd matrix, then:
+
+  1. $\tilde{\bm{y}}=\bm{S}(\bm{S}'\bm{\Psi}\bm{S})^{-1}\bm{S}'\bm{\Psi}\hat{\bm{y}}$ will always improve upon the base forecasts;
+  2. The MinT solution $\tilde{\bm{y}}=\bm{S}(\bm{S}'\bm{W}_h^{-1}\bm{S})^{-1}\bm{S}'\bm{W}_h^{-1}\hat{\bm{y}}$ will optimise loss in expectation over any choice of $\bm{\Psi}$.
+
+Estimation uncertainty may violate this result.
+
+## Biased reconciliation
+
+Regularized empirical risk minimization problem:
+$$\min_{\bm{G}} \frac{1}{Nn}\|\bm{Y} - \hat{\bm{Y}}\bm{G}'\bm{S}'\|_F + \lambda \|\text{vec}{\bm{G}}\|_1,
+$$
+
+* $N=T-T_1-h+1$, $T_1$ is minimum training sample size
+* $\|\cdot\|_F$ is the Frobenius norm
+* $\bm{Y} = [\bm{y}_{T_1+h}, \dots, \bm{y}_{T}]'$
+* $\hat{\bm{Y}} = [\hat{\bm{y}}_{T_1+h|T_1}, \dots, \hat{\bm{y}}_{T|T-h}]'$
+* $\lambda$ is a regularization parameter.
+
+When $\lambda=0$, $\hat{\bm{G}} = \bm{B}'\hat{\bm{Y}}(\hat{\bm{Y}}'\hat{\bm{Y}})^{-1}$
+where $\bm{B} = [\bm{b}_{T_1+h}, \dots, \bm{b}_{T}]'$.
+
+Reference: @Ben_TaiEtAl2019
+
+
+# Adding optimization constraints
 
 ## Adding optimization constraints
+
+Any approach to reconciliation based on optimisation uses a form of constrained optimisation since reconciled forecasts must lie on the coherent subspace. However, at times additional constraints may be implemented. The first is the case where reconciled forecasts must be non-negative. In general, even if base forecasts are constrained to be positive (which can be achieved by modelling on the log scale and back-transforming), there is no guarantee that the usual reconciliation approaches such as OLS and MinT will maintain the non-negativity of forecasts. To address this issue, the usual optimisation problem can be augmented with non-negativity constraints on the reconciled forecasts. Such optimisation problems can be solved using quadratic programming, with @WicEtAl2020 providing an early example for forecast reconciliation, and @di2023spatio a more recent example.
+
+@KouAth2021 also consider the case of non-negative reconciled forecasts. However, instead of using a constrained optimisation approach, they propose a heuristic to iteratively adjust the reconciled predictions to be non-negative. Although this does not guarantee optimal solutions, their proposed algorithm has the interesting feature that it distributes adjustments of forecasts across the hierarchy, which can be useful in a variety of situations, such as the application of judgemental adjustments on specific nodes of the hierarchy.
+
+@di2023spatio also discuss an effective nonnegative heuristic called "set-negative-to-zero", whereby the negative reconciled forecasts at the bottom level are set to zero, and the remaining forecasts computed via aggregation.
+
+Another constraint of interest is where some particular base forecasts remain unchanged.  For instance, @HolEtAl2021 consider the case of reconciliation where the top-level base forecast is retained. This differs from truly top-down approaches in that it can be done while also preserving the unbiasedness of base forecasts. To briefly illustrate the main idea, for a three variable hierarchy where $y_{Tot,t}=y_{A,t}+y_{B,t}$, either setting
+$$
+  \begin{pmatrix}\tilde{y}_{Tot,t}\\\tilde{y}_{A,t}\\\tilde{y}_{B,t}\end{pmatrix} =
+  \begin{pmatrix}\hat{y}_{Tot,t}\\\hat{y}_{A,t}\\\hat{y}_{Tot,t}-\hat{y}_{A,t}\end{pmatrix}
+  \qquad\textrm{or}\qquad
+  \begin{pmatrix}\tilde{y}_{Tot,t}\\\tilde{y}_{A,t}\\\tilde{y}_{B,t}\end{pmatrix} =
+  \begin{pmatrix}\hat{y}_{Tot,t}\\\hat{y}_{Tot,t}-\hat{y}_{B,t}\\\hat{y}_{B,t}\end{pmatrix}
+$$
+will lead to coherent forecasts that preserve unbiasedness. Any average between these two solutions will have the same properties. @HolEtAl2021 generalise this idea to more complex hierarchies, and the properties of their methods are investigated by @Di_FonGir2022b. @ZhaEtAl2022 further generalise this idea to a setting where reconciliation can be carried out while keeping a subset of base forecasts unchanged and not just the top level. Conditions on how a set of such "immutable" series can be selected are also provided by @ZhaEtAl2022.
 
 ## ML and regularization
 
