@@ -382,7 +382,7 @@ Every collection of time series with linear constraints can be written as
 \centerline{\colorbox[RGB]{210,210,210}{$\bY_{t}=\color{blue}\bS\color{red}\bm{b}_{t}$}}
 \vspace*{-0.9cm}\begin{itemize}\parskip=0cm\itemsep=0cm
 \item $\by_t=$ vector of all series at time $t$
-\item $ y_{t}= $ aggregate of all series at time
+\item $ y_{\text{Total},t}= $ aggregate of all series at time
 $t$.
 \item $ y_{X,t}= $ value of series $X$ at time $t$.
 \item $\color{red}{\bm{b}_t}=$ vector of most disaggregated series at time $t$
@@ -413,7 +413,7 @@ $t$.
 \begin{textblock}{5.7}(9.4,2.8)\fontsize{14}{15}\sf
 \begin{align*}
 \bY_{t}&= \begin{pmatrix}
-  y_{t}\\
+  y_{\text{Total},t}\\
   y_{A,t}\\
   y_{B,t}\\
   y_{C,t}
@@ -461,7 +461,7 @@ $t$.
 \end{block}\vspace*{0.1cm}\pause\fontsize{8}{8}\sf
 
 \hbox{$\by_{t}= \begin{pmatrix}
-    y_t\\
+    y_{\text{Total},t}\\
     y_{A,t}\\
     y_{B,t}\\
     y_{C,t}\\
@@ -525,7 +525,7 @@ $t$.
 \end{block}\pause\fontsize{10}{11}\sf
 
 \hbox{$\by_{t}= \begin{pmatrix}
-    y_t\\
+    y_{\text{Total},t}\\
     y_{A,t}\\
     y_{B,t}\\
     y_{X,t}\\
@@ -1109,7 +1109,7 @@ fc |>
 \end{block}\vspace*{0.1cm}\fontsize{8}{8}\sf
 
 \hbox{$\by_{t}= \begin{pmatrix}
-    y_t\\
+    y_{\text{Total},t}\\
     y_{A,t}\\
     y_{B,t}\\
     y_{C,t}\\
@@ -1180,7 +1180,7 @@ fc |>
 \end{block}\vspace*{0.1cm}\fontsize{8}{8}\sf
 
 \hbox{$\by_{t}= \begin{pmatrix}
-    y_t\\
+    y_{\text{Total},t}\\
     y_{A,t}\\
     y_{AX,t}\\
     y_{AY,t}\\
@@ -1195,58 +1195,58 @@ fc |>
     y_{CZ,t}\end{pmatrix}=
     {\color{red}{\begin{pmatrix}
       1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{1} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{1} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{1} &
       0 & 0 & 0 & 0 & 0 & 0\\
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{1} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{0} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{0} &
       0 & 0 & 0 & 0 & 0 & 0\\
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{0} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{1} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{0} &
       0 & 0 & 0 & 0 & 0 & 0\\
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{0} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{0} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{1} &
       0 & 0 & 0 & 0 & 0 & 0\\
       0 & 0 & 0 &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{1} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{1} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{1} &
       0 & 0 & 0 \\
       0 & 0 & 0 &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{1} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{0} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{0} &
       0 & 0 & 0 \\
       0 & 0 & 0 &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{0} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{1} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{0} &
       0 & 0 & 0 \\
       0 & 0 & 0 &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{0} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{0} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{1} &
       0 & 0 & 0 \\
       0 & 0 & 0 & 0 & 0 & 0 &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1}\\
+      \only<2>{\textcolor[RGB]{128,0,128}}{1} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{1} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{1}\\
       0 & 0 & 0 & 0 & 0 & 0 &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0}\\
+      \only<2>{\textcolor[RGB]{128,0,128}}{1} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{0} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{0}\\
       0 & 0 & 0 & 0 & 0 & 0 &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0}\\
+      \only<2>{\textcolor[RGB]{128,0,128}}{0} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{1} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{0}\\
       0 & 0 & 0 & 0 & 0 & 0 &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{0} &
-      \only<2>{\textcolor[rgb]{0,0.6,0}}{1}\\
+      \only<2>{\textcolor[RGB]{128,0,128}}{0} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{0} &
+      \only<2>{\textcolor[RGB]{128,0,128}}{1}\\
    \end{pmatrix}}}{\color{blue}{\begin{pmatrix}
     y_{AX,t}\\
     y_{AY,t}\\
