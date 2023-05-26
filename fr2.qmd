@@ -195,12 +195,44 @@ Assuming $\bm{C}$ is full rank
 
 ## Projections in linear algebra
 
+\begin{tikzpicture}
+  % Define coordinates
+  \coordinate (O) at (0,0);
+  \coordinate (A) at (4,2);
+  \coordinate (B) at (2,3);
+
+  % Draw axes
+  \draw[->,thick] (0,0) -- (5,0) node[anchor=north] {$x$};
+  \draw[->,thick] (0,0) -- (0,4) node[anchor=east] {$y$};
+
+  % Draw vectors
+  \draw[->,thick,blue] (O) -- (A) node[midway,anchor=south] {$\vec{a}$};
+  \draw[->,thick,blue] (O) -- (B) node[midway,anchor=north west] {$\vec{b}$};
+
+  % Draw projection
+  \coordinate (P) at ($(A)!(B)!(O)$);
+  \draw[->,thick,red,dashed] (B) -- (P) node[midway,anchor=south] {$\vec{p}$};
+  \draw[dashed] (P) -- (A);
+
+  % Draw angle
+  \draw[->,thick,gray] (0.7,0) arc (0:26.565:0.7) node[midway,anchor=west] {$\theta$};
+\end{tikzpicture}
+
+## Projections in linear algebra
+
 * A projection is a linear transformation $\bm{M}$ such that $\bm{M}^2=\bm{M}$.
+
 * i.e., $M$ is idempotent --- it leaves its image unchanged.
+
 * $\bm{M}$ projects onto $\mathfrak{s}$ if $\bm{M}\bm{y}=\bm{y}$ for all $\bm{y}\in\mathfrak{s}$.
+
 * A projection is *orthogonal* if $\bm{M}'=\bm{M}$.
+
 * If a projection is not orthogonal, it is called *oblique*.
+
 * In regression, OLS is an orthogonal projection onto space spanned by predictors.
+
+
 
 ## The coherent subspace
 
