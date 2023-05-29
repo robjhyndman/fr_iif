@@ -488,15 +488,39 @@ Include?
 
 # Adding optimization constraints
 
-## Adding optimization constraints
+## Non-negative forecasts
 
-Any approach to reconciliation based on optimisation uses a form of constrained optimisation since reconciled forecasts must lie on the coherent subspace. However, at times additional constraints may be implemented. The first is the case where reconciled forecasts must be non-negative. In general, even if base forecasts are constrained to be positive (which can be achieved by modelling on the log scale and back-transforming), there is no guarantee that the usual reconciliation approaches such as OLS and MinT will maintain the non-negativity of forecasts. To address this issue, the usual optimisation problem can be augmented with non-negativity constraints on the reconciled forecasts. Such optimisation problems can be solved using quadratic programming, with @WicEtAl2020 providing an early example for forecast reconciliation, and @di2023spatio a more recent example.
+\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\citet{nonnegmint}
+\end{block}\end{textblock}
 
-@KouAth2021 also consider the case of non-negative reconciled forecasts. However, instead of using a constrained optimisation approach, they propose a heuristic to iteratively adjust the reconciled predictions to be non-negative. Although this does not guarantee optimal solutions, their proposed algorithm has the interesting feature that it distributes adjustments of forecasts across the hierarchy, which can be useful in a variety of situations, such as the application of judgemental adjustments on specific nodes of the hierarchy.
+* How to ensure all forecasts are positive?
+
+\pause\begin{block}{}
+\centerline{$\min_{\bm{G}_h}\text{tr}\Big(\E[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]'[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]\Big)$}
+\centerline{such that $\bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t} \ge 0$}
+\end{block}
+
+with @WicEtAl2020 providing an early example for forecast reconciliation, and @di2023spatio a more recent example.
 
 @di2023spatio also discuss an effective nonnegative heuristic called "set-negative-to-zero", whereby the negative reconciled forecasts at the bottom level are set to zero, and the remaining forecasts computed via aggregation.
 
-Another constraint of interest is where some particular base forecasts remain unchanged.  For instance, @HolEtAl2021 consider the case of reconciliation where the top-level base forecast is retained. This differs from truly top-down approaches in that it can be done while also preserving the unbiasedness of base forecasts. To briefly illustrate the main idea, for a three variable hierarchy where $y_{Tot,t}=y_{A,t}+y_{B,t}$, either setting
+## Immutable forecasts
+
+\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\citet{HolEtAl2021}
+\end{block}\end{textblock}
+
+* How to ensure some forecasts are unchanged?
+
+\pause\begin{block}{}
+\centerline{$\min_{\bm{G}_h}\text{tr}\Big(\E[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]'[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]\Big)$}
+\centerline{such that $\bm{C}\bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t} = \bm{d}$}
+\end{block}
+
+* Differs from top-down approaches in that it can be done while also preserving the unbiasedness of base forecasts.
+
+* To briefly illustrate the main idea, for a three variable hierarchy where $y_{Tot,t}=y_{A,t}+y_{B,t}$, either setting
 $$
   \begin{pmatrix}\tilde{y}_{Tot,t}\\\tilde{y}_{A,t}\\\tilde{y}_{B,t}\end{pmatrix} =
   \begin{pmatrix}\hat{y}_{Tot,t}\\\hat{y}_{A,t}\\\hat{y}_{Tot,t}-\hat{y}_{A,t}\end{pmatrix}
@@ -504,11 +528,18 @@ $$
   \begin{pmatrix}\tilde{y}_{Tot,t}\\\tilde{y}_{A,t}\\\tilde{y}_{B,t}\end{pmatrix} =
   \begin{pmatrix}\hat{y}_{Tot,t}\\\hat{y}_{Tot,t}-\hat{y}_{B,t}\\\hat{y}_{B,t}\end{pmatrix}
 $$
-will lead to coherent forecasts that preserve unbiasedness. Any average between these two solutions will have the same properties. @HolEtAl2021 generalise this idea to more complex hierarchies, and the properties of their methods are investigated by @Di_FonGir2022b. @ZhaEtAl2022 further generalise this idea to a setting where reconciliation can be carried out while keeping a subset of base forecasts unchanged and not just the top level. Conditions on how a set of such "immutable" series can be selected are also provided by @ZhaEtAl2022.
 
+* Average between these two solutions will have the same properties.
+
+* @HolEtAl2021 generalise this idea to more complex hierarchies, and the properties of their methods are investigated by @Di_FonGir2022b. @ZhaEtAl2022 further generalise this idea to a setting where reconciliation can be carried out while keeping a subset of base forecasts unchanged and not just the top level. Conditions on how a set of such "immutable" series can be selected are also provided by @ZhaEtAl2022.
+
+# ML and regularization
 ## ML and regularization
 
+# Bayesian versions
 ## Bayesian versions
+
+# In-built coherence
 
 ## In-built coherence
 
