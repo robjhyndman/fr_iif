@@ -16,6 +16,18 @@
       "Repository": "CRAN",
       "Hash": "68122010f01c4dcfbe58ce7112f2433d"
     },
+    "Cairo": {
+      "Package": "Cairo",
+      "Version": "1.6-0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "grDevices",
+        "graphics"
+      ],
+      "Hash": "60aada7beac23aa3e9b219485d6b2da8"
+    },
     "DBI": {
       "Package": "DBI",
       "Version": "1.1.3",
@@ -466,11 +478,11 @@
       "Version": "0.3.3.9000",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "fabletools",
       "RemoteUsername": "tidyverts",
+      "RemoteRepo": "fabletools",
       "RemoteRef": "HEAD",
       "RemoteSha": "e09af0caa2ef032a69efe34a522edc8d6e36b595",
+      "RemoteHost": "api.github.com",
       "Requirements": [
         "R",
         "R6",
@@ -1257,6 +1269,19 @@
         "viridisLite"
       ],
       "Hash": "906cb23d2f1c5680b8ce439b44c6fa63"
+    },
+    "scatterplot3d": {
+      "Package": "scatterplot3d",
+      "Version": "0.3-44",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "grDevices",
+        "graphics",
+        "stats"
+      ],
+      "Hash": "10ee4b91ec812690bd55d9bf51edccee"
     },
     "sf": {
       "Package": "sf",

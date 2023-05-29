@@ -195,34 +195,92 @@ Assuming $\bm{C}$ is full rank
 
 ## Projections in linear algebra
 
+\begin{textblock}{9}(.2,1.25)
 \begin{tikzpicture}
   % Define coordinates
   \coordinate (O) at (0,0);
   \coordinate (A) at (4,2);
   \coordinate (B) at (2,3);
+  \coordinate (L) at (1,5);
 
   % Draw axes
   \draw[->,thick] (0,0) -- (5,0) node[anchor=north] {$x$};
   \draw[->,thick] (0,0) -- (0,4) node[anchor=east] {$y$};
 
+  % Draw light
+  \path [fill = yellow!30!white] (L) circle (.9cm);
+  \path [fill = yellow!60!white] (L) circle (.6cm);
+  \path [fill = yellow!90!white] (L) circle (.3cm);
+
   % Draw vectors
-  \draw[->,thick,blue] (O) -- (A) node[midway,anchor=south] {$\vec{a}$};
-  \draw[->,thick,blue] (O) -- (B) node[midway,anchor=north west] {$\vec{b}$};
+  \draw[->,thick,red] (O) -- (A);
+  \draw[->,thick,blue] (O) -- (B);
 
   % Draw projection
   \coordinate (P) at ($(A)!(B)!(O)$);
-  \draw[->,thick,red,dashed] (B) -- (P) node[midway,anchor=south] {$\vec{p}$};
-  \draw[dashed] (P) -- (A);
-
-  % Draw angle
-  \draw[->,thick,gray] (0.7,0) arc (0:26.565:0.7) node[midway,anchor=west] {$\theta$};
+  \only<2->{\draw[->,thick,blue,dashed] (B) -- (P);}
+  \only<2->{\draw[->,thick,blue, dashed] (O) -- (P);}
 \end{tikzpicture}
+\end{textblock}
+
+```{r}
+#| include: false
+library(scatterplot3d)
+Cairo::CairoPDF(file="figs/scatterplot1.pdf", width=7, height=7)
+s3d <- scatterplot3d(trees, type = "p", color = "blue",
+    angle=55, pch = 16)
+crop::dev.off.crop()
+Cairo::CairoPDF(file="figs/scatterplot2.pdf", width=7, height=7)
+s3d <- scatterplot3d(trees, type = "h", color = "blue",
+    angle=55, pch = 16)
+for(i in seq(NROW(trees))) {
+  s3d$points3d(trees$Girth[i], trees$Height[i], 10,
+    col = "red", type = "p", pch=16, cex=.75)
+}
+crop::dev.off.crop()
+Cairo::CairoPDF(file="figs/scatterplot3.pdf", width=7, height=7)
+s3d <- scatterplot3d(trees, type = "p", color = "blue",
+    angle=55, pch = 16)
+# Add regression plane
+my.lm <- lm(trees$Volume ~ trees$Girth + trees$Height)
+s3d$plane3d(my.lm, col='red')
+crop::dev.off.crop()
+Cairo::CairoPDF(file="figs/scatterplot4.pdf", width=7, height=7)
+s3d <- scatterplot3d(trees, type = "p", color = "blue",
+    angle=55, pch = 16)
+# Add regression plane
+my.lm <- lm(trees$Volume ~ trees$Girth + trees$Height)
+s3d$plane3d(my.lm, col='red')
+fits <- fitted(my.lm)
+for(i in seq(NROW(trees))) {
+  s3d$points3d(
+    rep(trees$Girth[i], 2),
+    rep(trees$Height[i], 2),
+    c(fits[i], trees$Volume[i]),
+    col = "blue", type = "l")
+  s3d$points3d(
+    trees$Girth[i], trees$Height[i], fits[i],
+    col = "red", type = "p", cex=.75, pch=16)
+}
+crop::dev.off.crop()
+system("pdfcrop figs/scatterplot1.pdf figs/scatterplot1.pdf")
+system("pdfcrop figs/scatterplot2.pdf figs/scatterplot2.pdf")
+system("pdfcrop figs/scatterplot3.pdf figs/scatterplot3.pdf")
+system("pdfcrop figs/scatterplot4.pdf figs/scatterplot4.pdf")
+```
+
+\begin{textblock}{10}(7,1.6)
+\only<3>{\includegraphics[width=8.8cm]{scatterplot1}}
+\only<4>{\includegraphics[width=8.8cm]{scatterplot2}}
+\only<5>{\includegraphics[width=8.8cm]{scatterplot3}}
+\only<6>{\includegraphics[width=8.8cm]{scatterplot4}}
+\end{textblock}
 
 ## Projections in linear algebra
 
 * A projection is a linear transformation $\bm{M}$ such that $\bm{M}^2=\bm{M}$.
 
-* i.e., $M$ is idempotent --- it leaves its image unchanged.
+* i.e., $M$ is idempotent: it leaves its image unchanged.
 
 * $\bm{M}$ projects onto $\mathfrak{s}$ if $\bm{M}\bm{y}=\bm{y}$ for all $\bm{y}\in\mathfrak{s}$.
 
@@ -231,7 +289,6 @@ Assuming $\bm{C}$ is full rank
 * If a projection is not orthogonal, it is called *oblique*.
 
 * In regression, OLS is an orthogonal projection onto space spanned by predictors.
-
 
 
 ## The coherent subspace
@@ -265,43 +322,98 @@ Let $\psi$ be a mapping, $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$.  $\tilde{\b
 \end{block}
 \end{textblock}
 
-## Linear reconciliation
+## Linear projection reconciliation
 
-\begin{textblock}{9}(0.2,1.25)\fontsize{13}{14}\sf
-\begin{alertblock}{}
-If $\psi(\bm{u}) = \bm{M}\bm{u}$ is a linear function, then
-\centerline{$\tilde{\bm{y}}_{t+h|t}=\bm{M}\hat{\bm{y}}_{t+h|t}$}
-\end{alertblock}\vspace*{-1.4cm}
-\begin{align*}
-\text{OLS:}  && \bm{M} & = \bm{S}(\bm{S}'\bm{S})^{-1}\bm{S}'\\
-             &&        & = \bm{I} - \bm{C}'(\bm{C}\bm{C}')^{-1}\bm{C} \\
-\text{MinT:} && \bm{M} & = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}\\
-             &&        & = \bm{I} - \bm{W}_h\bm{C}'(\bm{C}\bm{W}_h\bm{C}')^{-1}\bm{C}
-\end{align*}
+\only<1>{\placefig{9.5}{1.5}{width=6.2cm}{InsampDir_2_George}}
+\only<2>{\placefig{9.5}{1.5}{width=6.2cm}{OrthProj_George}}
+\only<3->{\placefig{9.5}{1.5}{width=6.2cm}{ObliqProj_George}}
+
+\begin{textblock}{9}(.5,1.5)
+  \begin{itemize}\tightlist
+  \item $R$ is the most likely direction of deviations from $\mathfrak{s}$.
+  \only<1->{\item Grey: potential base forecasts}
+  \only<2->{\item Red: reconciled forecasts}
+  \only<2->{\item Orthogonal projections (i.e., OLS) lead to smallest possible adjustments of base forecasts.}
+  \only<3->{\item Oblique projections (i.e., MinT) give reconciled forecasts with smallest variance.}
+  \end{itemize}
 \end{textblock}
 
 \only<2->{
-\placefig{9.4}{-0.5}{width=6.6cm}{fig3}
-}
-
-\only<3>{
-  \begin{textblock}{9}(0.2,6.)
-  \begin{block}{Projections}
-  Suppose $\bm{M}$ is a projection onto $\mathfrak{s}$, then\fontsize{12}{13}\sf
-  \begin{itemize}
-  \item Coherent base forecasts are unchanged.
-  \item Unbiased base forecasts remain unbiased.
-  \end{itemize}
+  \begin{textblock}{4.5}(11.2,7.6)\fontsize{13}{14}\sf
+  \begin{block}{}
+  \only<2>{Orthogonal projection}
+  \only<3>{Oblique projection}
   \end{block}
   \end{textblock}
 }
-\only<3>{
-  \begin{textblock}{6.6}(9.2,6.5)\fontsize{12}{12}\sf
-  \begin{itemize}
-  \item Orthogonal projections (i.e., OLS) lead to smallest possible adjustments of base forecasts.
-  \end{itemize}
-  \end{textblock}
-}
+
+## Linear projection reconciliation
+\fontsize{14}{16}\sf
+\vspace*{0.2cm}\begin{alertblock}{}
+\centerline{$\tilde{\bm{y}}_{t+h|t}= \psi(\hat{\bm{y}}_{t+h|t}) = \bm{M}\hat{\bm{y}}_{t+h|t}$}
+\end{alertblock}\vspace*{-0.5cm}
+
+* $\bm{M}$ is a projection onto $\mathfrak{s}$ if and only if $\bm{M}\bm{y}=\bm{y}$ for all $\bm{y}\in\mathfrak{s}$.
+* Coherent base forecasts are unchanged since $\bm{M}\hat{\bm{y}}=\hat{\bm{y}}$
+* If $\hat{\bm{y}}$ is unbiased, then $\tilde{\bm{y}}$ is also unbiased since
+$$
+  \E(\tilde{\bm{y}}_{t+h|t}) = \E(\bm{M}\hat{\bm{y}}_{t+h|t}) = \bm{M} \E(\hat{\bm{y}}_{t+h|t}) = \E(\hat{\bm{y}}_{t+h|t}),
+$$
+and unbiased estimates must lie on $\mathfrak{s}$.
+* The projection is orthogonal if and only if $\bm{M}'=\bm{M}$.
+* $\bm{S}$ forms a basis set for $\mathfrak{s}$.
+* Projections are of the form $\bm{M} = \bS(\bS'\bm{\Psi}\bS)^{-1}\bS'\bm{\Psi}$ where $\bm{\Psi}$ is a positive definite matrix.
+
+\vspace*{10cm}
+
+## Linear projection reconciliation
+
+\vspace*{0.2cm}\begin{alertblock}{}
+\centerline{$\tilde{\bm{y}}_{t+h|t}= \psi(\hat{\bm{y}}_{t+h|t}) = \bm{M}\hat{\bm{y}}_{t+h|t},\qquad\text{where}\quad \bm{M} = \bS(\bS'\bm{\Psi}\bS)^{-1}\bS'\bm{\Psi}$}
+\end{alertblock}\vspace*{-0.99cm}
+
+\begin{align*}
+\text{OLS:}  && \bm{M} & = \bm{S}(\bm{S}'\bm{S})^{-1}\bm{S}' && = \bm{I} - \bm{C}'(\bm{C}\bm{C}')^{-1}\bm{C} \\
+\text{MinT:} && \bm{M} & = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1} && = \bm{I} - \bm{W}_h\bm{C}'(\bm{C}\bm{W}_h\bm{C}')^{-1}\bm{C}
+\end{align*}
+
+* $\bm{\Psi}$ is any positive definite matrix.
+* $\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_n]$ is the covariance matrix of the base forecast errors.
+* $\bm{M}$ is orthogonal iff $\bm{\Psi}=\bm{I}$.
+
+\vspace*{10cm}
+
+## Linear projection reconciliation
+
+\vspace*{0.2cm}\begin{alertblock}{}
+\centerline{$\tilde{\bm{y}}_{t+h|t}= \psi(\hat{\bm{y}}_{t+h|t}) = \bm{M}\hat{\bm{y}}_{t+h|t},\qquad\text{where}\quad \bm{M} = \bS(\bS'\bm{\Psi}\bS)^{-1}\bS'\bm{\Psi}$}
+\end{alertblock}
+
+\begin{block}{Variance}
+\centerline{$\bm{V}_h = \var[\by_{T+h} - \tilde{\by}_{T+h|T}  \mid \by_1,\dots,\by_n]  = \bm{M}\bm{\Psi}\bm{M}'$}
+\end{block}
+
+\begin{alertblock}{Minimum trace (MinT) reconciliation}
+If $\bm{M}$ is a projection, then the trace of $\bm{V}_h$ is minimized when $\bm{\Psi} = \bm{W}_h$ (MinT).
+\end{alertblock}
+
+\vspace*{10cm}
+
+
+# Mean square error bounds
+
+## Mean square error bounds
+
+MinT forecasts compared to Base forecasts:
+\begin{align*}
+\|\bm{y}_{t+h}-\tilde{\bm{y}}_{t+h|t}\|\le\|\bm{y}_{t+h}-\hat{\bm{y}}_{t+h|t}\|
+\end{align*}
+
+\begin{align*}
+(\bm{y}_{t+h}-\tilde{\bm{y}}_{t+h|t})'\bm{W}_h^{-1}(\bm{y}_{t+h}-\tilde{\bm{y}}_{t+h|t})
+\le
+(\bm{y}_{t+h}-\hat{\bm{y}}_{t+h|t})'\bm{W}_h^{-1}(\bm{y}_{t+h}-\hat{\bm{y}}_{t+h|t})
+\end{align*}
 
 \only<4>{
   \begin{textblock}{9}(0.2,6)
@@ -322,56 +434,28 @@ If $\psi(\bm{u}) = \bm{M}\bm{u}$ is a linear function, then
   \end{textblock}
 }
 
-## Linear projections
+## Mean square error bounds
 
-\begin{textblock}{5}(6,0)
-\begin{block}{}
-\centerline{$\tilde{\by}_{T+h|T}=\bm{M}\hat{\by}_{T+h|T}$}
-\end{block}
-\end{textblock}
+\begin{align*}
+\|\bm{y}_{t+h} - \tilde{\bm{y}_{t+h}}\|_2^2
+ &= \|\bm{S}\bm{G}_h(\bm{y}_{t+h} - \tilde{\hat{y}_{t+h}})\|_2^2 \\
+ &\le \|\bm{S}\bm{G}_h\|_2^2 \|(\bm{y}_{t+h} - \tilde{\hat{y}_{t+h}})\|_2^2 \\
+ & = \sigma_{\text{max}}^2\|(\bm{y}_{t+h} - \tilde{\hat{y}_{t+h}})\|_2^2
+\end{align*}
 
-\begin{textblock}{9}(0.2,1.25)\fontsize{13}{14}\sf
-\begin{block}{Variance}
-\centerline{$\bm{V}_h = \var[\by_{T+h} - \tilde{\by}_{T+h|T}  \mid \by_1,\dots,\by_n]  = \bm{M}\bm{W}_{h}\bm{M}'$}
-where $\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_n]$.
-\end{block}\vspace*{-0.2cm}
-\begin{alertblock}{Minimum trace (MinT) reconciliation}
-If $\bm{M}$ is a projection, then the trace of $\bm{V}_h$ is minimized when
+ * $\sigma_{\text{max}}^2$ is the largest singular value of $\bm{S}\bm{G}_h$
+ * $\sigma_{\text{max}}\ge1$ as $\bm{S}\bm{G}_h$ is a projection matrix.
 
-\centerline{$\bm{M} = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}
-  = \bm{I} - \bm{W}_h\bm{C}'(\bm{C}\bm{W}_h\bm{C}')^{-1}\bm{C}$}
-\end{alertblock}
-\end{textblock}
 
-\only<2>{\placefig{9.7}{1.5}{width=6.2cm}{InsampDir_1_George}}
-\only<3>{\placefig{9.7}{1.5}{width=6.2cm}{InsampDir_2_George}}
-\only<4>{\placefig{9.7}{1.5}{width=6.2cm}{OrthProj_George}}
-\only<5>{\placefig{9.7}{1.5}{width=6.2cm}{ObliqProj_George}}
 
-\only<2->{
-  \begin{textblock}{9}(.3,6.3)\fontsize{13}{14}\sf
-  \begin{itemize}\tightlist
-  \item $R$ is the most likely direction of deviations from $\mathfrak{s}$.
-  \only<2>{\item Orange: in-sample errors}
-  \only<3->{\item Grey: potential base forecasts}
-  \only<4->{\item Red: reconciled forecsts}
-  \end{itemize}
-  \end{textblock}
-}
+# Other optimization approaches
 
-\only<4->{
-  \begin{textblock}{5.1}(10,7.6)\fontsize{13}{14}\sf
-  \begin{block}{}
-  \only<4>{Orthogonal projection}
-  \only<5>{Oblique projection}
-  \end{block}
-  \end{textblock}
-}
-
-# Game theory perspectives
-
-## Game theory perspectives
+## A game theoretic perspective
 \fontsize{14}{16}\sf
+
+\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\citet{Van_ErvCug2015}
+\end{block}\end{textblock}
 
 Find the solution to the minimax problem
 $$
@@ -393,11 +477,15 @@ Estimation uncertainty may violate this result.
 
 ## Biased reconciliation
 
+\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\citet{Ben_TaiEtAl2019}
+\end{block}\end{textblock}
+
 Regularized empirical risk minimization problem:
 $$\min_{\bm{G}} \frac{1}{Nn}\|\bm{Y} - \hat{\bm{Y}}\bm{G}'\bm{S}'\|_F + \lambda \|\text{vec}{\bm{G}}\|_1,
 $$
 
-* $N=T-T_1-h+1$, $T_1$ is minimum training sample size
+* $N=T-T_1-h+1$,\quad $T_1$ is minimum training sample size
 * $\|\cdot\|_F$ is the Frobenius norm
 * $\bm{Y} = [\bm{y}_{T_1+h}, \dots, \bm{y}_{T}]'$
 * $\hat{\bm{Y}} = [\hat{\bm{y}}_{T_1+h|T_1}, \dots, \hat{\bm{y}}_{T|T-h}]'$
@@ -407,6 +495,14 @@ When $\lambda=0$, $\hat{\bm{G}} = \bm{B}'\hat{\bm{Y}}(\hat{\bm{Y}}'\hat{\bm{Y}})
 where $\bm{B} = [\bm{b}_{T_1+h}, \dots, \bm{b}_{T}]'$.
 
 Reference: @Ben_TaiEtAl2019
+
+# Unconstrained MinT
+
+## Unconstrained MinT
+
+\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\citet{Wickramasuriya (2022)}
+\end{block}\end{textblock}
 
 
 # Adding optimization constraints
