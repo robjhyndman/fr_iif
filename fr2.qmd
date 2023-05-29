@@ -279,17 +279,13 @@ system("pdfcrop figs/scatterplot4.pdf figs/scatterplot4.pdf")
 ## Projections in linear algebra
 
 * A projection is a linear transformation $\bm{M}$ such that $\bm{M}^2=\bm{M}$.
-
 * i.e., $M$ is idempotent: it leaves its image unchanged.
-
 * $\bm{M}$ projects onto $\mathfrak{s}$ if $\bm{M}\bm{y}=\bm{y}$ for all $\bm{y}\in\mathfrak{s}$.
-
+* All eigenvalues of $\bm{M}$ are either 0 or 1.
+* All singular values of $\bm{M}$ are greater than or equal to 1 (with equality iff $\bm{M}$ is orthogonal).
 * A projection is *orthogonal* if $\bm{M}'=\bm{M}$.
-
 * If a projection is not orthogonal, it is called *oblique*.
-
 * In regression, OLS is an orthogonal projection onto space spanned by predictors.
-
 
 ## The coherent subspace
 
@@ -370,83 +366,70 @@ and unbiased estimates must lie on $\mathfrak{s}$.
 
 \vspace*{0.2cm}\begin{alertblock}{}
 \centerline{$\tilde{\bm{y}}_{t+h|t}= \psi(\hat{\bm{y}}_{t+h|t}) = \bm{M}\hat{\bm{y}}_{t+h|t},\qquad\text{where}\quad \bm{M} = \bS(\bS'\bm{\Psi}\bS)^{-1}\bS'\bm{\Psi}$}
-\end{alertblock}\vspace*{-0.99cm}
-
+\end{alertblock}\vspace*{.01cm}
+\begin{block}{}\vspace*{-0.6cm}
 \begin{align*}
-\text{OLS:}  && \bm{M} & = \bm{S}(\bm{S}'\bm{S})^{-1}\bm{S}' && = \bm{I} - \bm{C}'(\bm{C}\bm{C}')^{-1}\bm{C} \\
-\text{MinT:} && \bm{M} & = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1} && = \bm{I} - \bm{W}_h\bm{C}'(\bm{C}\bm{W}_h\bm{C}')^{-1}\bm{C}
+&\text{OLS:}  && \bm{\Psi}=\bm{I} &&& \bm{M} & = \bm{S}(\bm{S}'\bm{S})^{-1}\bm{S}' && = \bm{I} - \bm{C}'(\bm{C}\bm{C}')^{-1}\bm{C} \\
+&\text{MinT:} && \bm{\Psi}=\bm{W}_h &&&\bm{M} & = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1} && = \bm{I} - \bm{W}_h\bm{C}'(\bm{C}\bm{W}_h\bm{C}')^{-1}\bm{C}
 \end{align*}
+\end{block}\vspace*{-0.3cm}
 
-* $\bm{\Psi}$ is any positive definite matrix.
-* $\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_n]$ is the covariance matrix of the base forecast errors.
 * $\bm{M}$ is orthogonal iff $\bm{\Psi}=\bm{I}$.
+* $\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_T]$ is the covariance matrix of the base forecast errors.
+* $\bm{V}_h = \var[\by_{T+h} - \tilde{\by}_{T+h|T}  \mid \by_1,\dots,\by_T]  = \bm{M}\bm{W}_h\bm{M}'$ is minimized when  $\bm{\Psi} = \bm{W}_h$.
 
 \vspace*{10cm}
-
-## Linear projection reconciliation
-
-\vspace*{0.2cm}\begin{alertblock}{}
-\centerline{$\tilde{\bm{y}}_{t+h|t}= \psi(\hat{\bm{y}}_{t+h|t}) = \bm{M}\hat{\bm{y}}_{t+h|t},\qquad\text{where}\quad \bm{M} = \bS(\bS'\bm{\Psi}\bS)^{-1}\bS'\bm{\Psi}$}
-\end{alertblock}
-
-\begin{block}{Variance}
-\centerline{$\bm{V}_h = \var[\by_{T+h} - \tilde{\by}_{T+h|T}  \mid \by_1,\dots,\by_n]  = \bm{M}\bm{\Psi}\bm{M}'$}
-\end{block}
-
-\begin{alertblock}{Minimum trace (MinT) reconciliation}
-If $\bm{M}$ is a projection, then the trace of $\bm{V}_h$ is minimized when $\bm{\Psi} = \bm{W}_h$ (MinT).
-\end{alertblock}
-
-\vspace*{10cm}
-
 
 # Mean square error bounds
 
 ## Mean square error bounds
 
-MinT forecasts compared to Base forecasts:
-\begin{align*}
-\|\bm{y}_{t+h}-\tilde{\bm{y}}_{t+h|t}\|\le\|\bm{y}_{t+h}-\hat{\bm{y}}_{t+h|t}\|
-\end{align*}
+\vspace*{0.2cm}\begin{block}{Distance reducing property}
+Let $\|\bm{u}\|_{\bm{\Psi}} = \bm{u}'\bm{\Psi}\bm{u}$. Then
+  \centerline{$\|\bm{y}_{t+h}-\tilde{\bm{y}}_{t+h|t}\|_{\bm{\Psi}}\le\|\bm{y}_{t+h}-\hat{\bm{y}}_{t+h|t}\|_{\bm{\Psi}}$}
+\end{block}
 
-\begin{align*}
-(\bm{y}_{t+h}-\tilde{\bm{y}}_{t+h|t})'\bm{W}_h^{-1}(\bm{y}_{t+h}-\tilde{\bm{y}}_{t+h|t})
-\le
-(\bm{y}_{t+h}-\hat{\bm{y}}_{t+h|t})'\bm{W}_h^{-1}(\bm{y}_{t+h}-\hat{\bm{y}}_{t+h|t})
-\end{align*}
-
-\only<4>{
-  \begin{textblock}{9}(0.2,6)
-  \begin{block}{Distance reducing property}
-  If $\bm{M}$ is an orthogonal projection onto $\mathfrak{s}$:
-  \centerline{$\|\bm{y}_{t+h}-\tilde{\bm{y}}_{t+h|t}\|\le\|\bm{y}_{t+h}-\hat{\bm{y}}_{t+h|t}\|$}
-  \end{block}
-  \end{textblock}
-}
-
-\only<4>{
-  \begin{textblock}{6.6}(9.2,5.3)\fontsize{12}{12}\sf
-  \begin{itemize}\tightlist
-  \item Distance reduction holds for any realisation and any forecast.
-  \item Other measures of forecast accuracy may be worse.
-  \item Not necessarily the optimal reconciliation.
-  \end{itemize}
-  \end{textblock}
-}
+ * $\bm{\Psi}$-projection is guaranteed to improve forecast accuracy over base forecasts *using this distance measure*.
+ * Distance reduction holds for any realisation and any forecast.
+ * OLS reconciliation minimizes Euclidean distance.
+ * Other measures of forecast accuracy may be worse.
 
 ## Mean square error bounds
 
+\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\citet{wickramasuriya2021properties}
+\end{block}\end{textblock}
+
+\begin{block}{}\vspace*{-0.6cm}
 \begin{align*}
-\|\bm{y}_{t+h} - \tilde{\bm{y}_{t+h}}\|_2^2
- &= \|\bm{S}\bm{G}_h(\bm{y}_{t+h} - \tilde{\hat{y}_{t+h}})\|_2^2 \\
- &\le \|\bm{S}\bm{G}_h\|_2^2 \|(\bm{y}_{t+h} - \tilde{\hat{y}_{t+h}})\|_2^2 \\
- & = \sigma_{\text{max}}^2\|(\bm{y}_{t+h} - \tilde{\hat{y}_{t+h}})\|_2^2
+\|\bm{y}_{t+h} - \tilde{\bm{y}}_{t+h}\|_2^2
+ &= \|\bm{M}(\bm{y}_{t+h} - \hat{\bm{y}}_{t+h})\|_2^2 \\
+ &\le \|\bm{M}\|_2^2 \|\bm{y}_{t+h} - \hat{\bm{y}}_{t+h}\|_2^2 \\
+ & = \sigma_{\text{max}}^2\|\bm{y}_{t+h} - \hat{\bm{y}}_{t+h}\|_2^2
 \end{align*}
+\end{block}
 
- * $\sigma_{\text{max}}^2$ is the largest singular value of $\bm{S}\bm{G}_h$
- * $\sigma_{\text{max}}\ge1$ as $\bm{S}\bm{G}_h$ is a projection matrix.
+ * $\sigma_{\text{max}}$ is the largest eigenvalue of $\bm{M}$
+ * $\sigma_{\text{max}}\ge1$ as $\bm{M}$ is a projection matrix.
+ * Every projection reconciliation is better than base forecasts using Euclidean distance.
 
+## Mean square error bounds
 
+\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\citet{wickramasuriya2021properties}
+\end{block}\end{textblock}
+\vspace*{0.2cm}\begin{block}{}\vspace*{-0.6cm}
+\begin{align*}
+    & \text{tr}\Big(\E[\bm{y}_{t+h} - \tilde{\bm{y}}^{\text{MinT}}_{t+h|t}]'[\bm{y}_{t+h} - \tilde{\bm{y}}^{\text{MinT}}_{t+h|t}]\Big) \\
+\le~ & \text{tr}\Big(\E[\bm{y}_{t+h} - \tilde{\bm{y}}^{\text{OLS}}_{t+h|t}]'[\bm{y}_{t+h} - \tilde{\bm{y}}^{\text{OLS}}_{t+h|t}]\Big) \\
+\le~ & \text{tr}\Big(\E[\bm{y}_{t+h} - \hat{\bm{y}}_{t+h|t}]'[\bm{y}_{t+h} - \hat{\bm{y}}_{t+h|t}]\Big)
+\end{align*}
+\end{block}
+
+Using sums of variances:
+
+* MinT reconciliation is better than OLS reconciliation
+* OLS reconciliation is better than base forecasts
 
 # Other optimization approaches
 
@@ -468,12 +451,10 @@ $$
 where $\ell$ is a loss function, and $\mathfrak{s}$ is the coherent subspace.
 
 * $V\le0$: reconciliation guaranteed to reduce loss.
-* If $\ell(\bm{y},\tilde{\bm{y}}) = (\bm{y}-\tilde{\bm{y}})'\bm{\Psi}(\bm{y}-\tilde{\bm{y}})$, where $\bm{\Psi}$ is any symmetric pd matrix, then:
+* If $\ell(\bm{y},\tilde{\bm{y}}) = \|\bm{y}- \tilde{\bm{y}}\|_{\bm{\Psi}} = (\bm{y}-\tilde{\bm{y}})'\bm{\Psi}(\bm{y}-\tilde{\bm{y}})$, where $\bm{\Psi}$ is any symmetric pd matrix, then:
 
   1. $\tilde{\bm{y}}=\bm{S}(\bm{S}'\bm{\Psi}\bm{S})^{-1}\bm{S}'\bm{\Psi}\hat{\bm{y}}$ will always improve upon the base forecasts;
   2. The MinT solution $\tilde{\bm{y}}=\bm{S}(\bm{S}'\bm{W}_h^{-1}\bm{S})^{-1}\bm{S}'\bm{W}_h^{-1}\hat{\bm{y}}$ will optimise loss in expectation over any choice of $\bm{\Psi}$.
-
-Estimation uncertainty may violate this result.
 
 ## Biased reconciliation
 
@@ -491,18 +472,18 @@ $$
 * $\hat{\bm{Y}} = [\hat{\bm{y}}_{T_1+h|T_1}, \dots, \hat{\bm{y}}_{T|T-h}]'$
 * $\lambda$ is a regularization parameter.
 
-When $\lambda=0$, $\hat{\bm{G}} = \bm{B}'\hat{\bm{Y}}(\hat{\bm{Y}}'\hat{\bm{Y}})^{-1}$
+When $\lambda=0$:\qquad  $\hat{\bm{G}} = \bm{B}'\hat{\bm{Y}}(\hat{\bm{Y}}'\hat{\bm{Y}})^{-1}$
 where $\bm{B} = [\bm{b}_{T_1+h}, \dots, \bm{b}_{T}]'$.
 
 Reference: @Ben_TaiEtAl2019
 
-# Unconstrained MinT
-
 ## Unconstrained MinT
 
 \begin{textblock}{6.4}(9,0.)\begin{block}{}
-\citet{Wickramasuriya (2022)}
+\citet{wickramasuriya2021properties}
 \end{block}\end{textblock}
+
+Include?
 
 
 # Adding optimization constraints
