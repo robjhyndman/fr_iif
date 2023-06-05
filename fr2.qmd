@@ -601,6 +601,32 @@ Two-step approach: compute base forecasts $\hat{\bm{y}}_h$, and then reconcile t
 
 as shown by @AshEtAl2021, if the base forecasts $\hat{\bm{y}}$ are produced using a linear regression model, the base forecasts and reconciliation can be combined, giving coherent forecasts directly in a single closed form equation. Further, the computation is extremely fast provided sparse matrix algebra is used.
 
+## Reconciled linear regression forecasts
+
+If the base forecasts are from a linear regression model, then we can produce coherent forecasts in one step:
+\begin{block}{}
+\only<1>{\centerline{$\tilde{\bm{y}}_{T+h|T} = \bm{S}(\bm{S}'\bm{\Lambda}_s\bm{S})^{-1}\bm{S}'\bm{\Lambda}_s \hat{\bm{y}}_{T+h|T} \qquad
+  \hat{\bm{y}}_{T+h|T} = \bm{X}_{T+h}^* (\bm{X}'\bm{X})^{-1} \bm{X}'\bm{Y}$}}
+\only<2->{\centerline{$\tilde{\bm{y}}_{T+h|T} = \bm{S}(\bm{S}'\bm{\Lambda}_s\bm{S})^{-1}\bm{S}'\bm{\Lambda}_s
+                            \bm{X}_{T+h}^* (\bm{X}'\bm{X})^{-1} \bm{X}'\bm{Y}$}}
+\begin{itemize}\tightlist
+\item $\bm{X}$ is matrix of predictors for training set
+\item $\bm{X}^*_{T+h}$ is vector of predictors for time $T+h$
+\end{itemize}
+\end{block}
+
+\only<3->{\begin{block}{}
+\centerline{$\bm{V}_h = \sigma^2\bm{S}(\bm{S}'\bm{\Lambda}_s\bm{S})^{-1}\bm{S}'\bm{\Lambda}_s\left[1 + \bm{X}_{T+h}^*(\bm{X}'\bm{X})^{-1}(\bm{X}_{T+h}^*)'\right] \bm{\Lambda}_s\bm{S}'(\bm{S}'\bm{\Lambda}_s\bm{S})^{-1}\bm{S}'$}
+\begin{itemize}\tightlist
+\item $\sigma^2$ is variance of base model residuals.
+\end{itemize}
+\end{block}}
+
+\only<4->{\begin{alertblock}{}
+Reference: Ashouri, Hyndman, and Shmueli (2019). \url{robjhyndman.com/publications/lhf/}
+\end{alertblock}}
+
+\vspace*{10cm}
 ## In-built coherence
 
 @PenvanDal2017 propose the state space model

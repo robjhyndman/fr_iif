@@ -1484,50 +1484,5 @@ Again, the calculations can be done in such a way that we never store any of the
 \end{textblock}}
 \only<2>{\placefig{15}{6.7}{width=1cm}{smiley}}
 
-## Fast forecast reconciliation using linear models
 
-Suppose $\hat{y}_{t,i} = \hat{\bm{\beta}}_{i}' \bm{x}_{t,i}$
-with $\bm{x}_{t,i}= (1, x_{t,1,i},\dots,x_{t,p,i})$&nbsp; & &nbsp;\rlap{$\hat{\bm{y}}_i = (\hat{y}_{1,i}, \dots, \hat{y}_{T,i})$.}
-\pause
-\begin{align*}
-\textcolor{blue}{\begin{pmatrix}
-  \hat{\bm{y}}_1\\
-  \hat{\bm{y}}_2\\
-  \vdots\\
-  \hat{\bm{y}}_n
-  \end{pmatrix}} &=
-  \textcolor{red}{\begin{pmatrix}
-  \bm{X}_1 & 0        & \dots  & 0\\
-  0        & \bm{X}_2 & \ddots & \vdots \\
-  \vdots   & \ddots   & \ddots & 0\\
-  0        & \dots    & 0      & \bm{X}_n
-  \end{pmatrix}}
-  \begin{pmatrix}
-  \hat{\bm{\beta}}_1\\
-  \hat{\bm{\beta}}_2\\
-  \vdots\\
-  \hat{\bm{\beta}}_n
-\end{pmatrix},
-&&\quad
-  \bm{X}_i = \begin{pmatrix}
-  1 & x_{1,i,1} & x_{1,i,2} & \dots & x_{1,i,p}\\
-  1 & x_{2,i,1} & x_{2,i,2} & \dots & x_{2,i,p}\\
-  \vdots & \vdots & \vdots & & \vdots \\
-  1 & x_{T,i,1} & x_{T,i,2} & \dots & x_{T,i,p}
-\end{pmatrix}
-\end{align*}\pause
-Then $\hat{\bm{B}} = (\textcolor{red}{\bm{X}}'\textcolor{red}{\bm{X}})^{-1} \textcolor{red}{\bm{X}}'\textcolor{blue}{\bm{Y}}$,\pause and\newline
-$\hat{\bm{y}}_{t+h} = \bm{X}_{t+h}^* \hat{\bm{B}}$ with $\bm{X}^*_{t+h} =\text{diag}(\bm{x}_{t+h,i}', \dots, \bm{x}_{t+h,n}')$.\pause So
-\begin{alertblock}{}
-\centerline{$
-    \tilde{\bm{y}}_{t+h} = \bm{S}(\bm{S}'\bm{W}_h\bm{S})^{-1}\bm{S}'\bm{W}_h
-                            \hat{\bm{y}}_{t+h}
-                         = \bm{S}(\bm{S}'\bm{W}_h\bm{S})^{-1}\bm{S}'\bm{W}_h
-                            \bm{X}_{t+h}^* (\textcolor{red}{\bm{X}}'\textcolor{red}{\bm{X}})^{-1} \textcolor{red}{\bm{X}}'\textcolor{blue}{\bm{Y}}
-$}
-\end{alertblock}
-
-\vspace*{10cm}
-
-
-\nocite{hierarchical, fasthts, mint, lhf}
+\nocite{hierarchical, fasthts, mint}
