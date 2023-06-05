@@ -1,3 +1,31 @@
+@article{AshEtAl2021,
+  abstract = {Forecasting hierarchical or grouped time series using a reconciliation approach involves two steps: computing base forecasts and reconciling the forecasts. Base forecasts can be computed by popular time series forecasting methods such as exponential smoothing (ETS) and Autoregressive Integrated Moving Average (ARIMA) models. The reconciliation step is a linear process that adjusts the base forecasts to ensure they are coherent. However, using ETS or ARIMA for base forecasts can be computationally challenging when there are a large number of series to forecast, as each model must be numerically optimized for each series. We propose a linear model that avoids this computational problem and handles the forecasting and reconciliation in a single step. The proposed method is very flexible in incorporating external data. We illustrate our approach using a dataset on monthly Australian domestic tourism, as well as a simulated dataset. We compare our approach to reconciliation using ETS and ARIMA, and show that our approach is much faster while providing similar levels of forecast accuracy. Supplementary files for this article are available online.},
+  author   = {Ashouri, Mahsa and Hyndman, Rob J. and Shmueli, Galit},
+  doi      = {10.1080/10618600.2021.1939038},
+  title    = {Fast forecast reconciliation using linear models},
+  year     = 2022,
+  journal  = {Journal of Computational \& Graphical Statistics},
+  volume   = 31,
+  number   = 1,
+  pages    = {263-282}
+}
+
+@inproceedings{Ben_TaiEtAl2019,
+  title     = {Regularized regression for hierarchical forecasting without
+               unbiasedness conditions},
+  booktitle = {Proceedings of the 25th {ACM} {SIGKDD} International Conference
+               on Knowledge Discovery \& Data Mining},
+  author    = {Souhaib {Ben Taieb} and Bonsoo Koo},
+  publisher = {Association for Computing Machinery},
+  pages     = {1337--1347},
+  series    = {KDD '19},
+  year      = {2019},
+  doi       = {10.1145/3292500.3330976},
+  address   = {New York, NY, USA},
+  keywords  = {regularization, sparsity, time series, hierarchical forecasting},
+  location  = {Anchorage, AK, USA}
+}
+
 @article{coherentprob,
   author  = {Anastasios Panagiotelis and Puwasala Gamakumara and George Athanasopoulos and Rob J Hyndman},
   year    = 2023,
@@ -7,6 +35,46 @@
   number  = 2,
   pages   = {693-706},
   url     = {robjhyndman.com/publications/coherentprob/}
+}
+
+@inproceedings{CorEtAl2021,
+  author    = {Corani, Giorgio
+               and Azzimonti, Dario
+               and Augusto, Jo{\~a}o P. S. C.
+               and Zaffalon, Marco},
+  editor    = {Hutter, Frank
+               and Kersting, Kristian
+               and Lijffijt, Jefrey
+               and Valera, Isabel},
+  title     = {Probabilistic reconciliation of hierarchical forecast via Bayes' rule},
+  booktitle = {Machine Learning and Knowledge Discovery in Databases},
+  year      = {2021},
+  publisher = {Springer International Publishing},
+  address   = {Cham},
+  pages     = {211--226},
+  abstract  = {We present a novel approach for reconciling hierarchical forecasts, based on Bayes' rule. We define a prior distribution for the bottom time series of the hierarchy, based on the bottom base forecasts. Then we update their distribution via Bayes' rule, based on the base forecasts for the upper time series. Under the Gaussian assumption, we derive the updating in closed-form. We derive two algorithms, which differ as for the assumed independencies. We discuss their relation with the MinT reconciliation algorithm and with the Kalman filter, and we compare them experimentally.},
+  doi       = {10.1007/978-3-030-67664-3_13}
+}
+
+@unpublished{CorEtAl2022,
+  doi       = {10.48550/ARXIV.2207.09322},
+  url       = {https://arxiv.org/abs/2207.09322},
+  author    = {Corani, Giorgio and Rubattu, Nicolo and Azzimonti, Dario and Antonucci, Alessandro},
+  keywords  = {Methodology (stat.ME), Machine Learning (stat.ML), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  title     = {Probabilistic reconciliation of count time series},
+  year      = {2022},
+  copyright = {Creative Commons Attribution 4.0 International}
+}
+
+@article{corona2021optimal,
+  title     = {Optimal Reconciliation of Seasonally Adjusted Disaggregates Taking Into Account the Difference Between Direct and Indirect Adjustment of the Aggregate},
+  author    = {Corona, Francisco and Guerrero, Victor M and L{\'o}pez-Per{\'e}z, Jes{\'u}s},
+  journal   = {Journal of Official Statistics},
+  volume    = {37},
+  number    = {1},
+  pages     = {31--51},
+  year      = {2021},
+  publisher = {Statistics Sweden (SCB)}
 }
 
 @unpublished{ctprob,
@@ -40,6 +108,16 @@
   year      = {2022}
 }
 
+@article{di2023spatio,
+  title     = {Spatio-temporal reconciliation of solar forecasts},
+  author    = {{Di Fonzo}, Tommaso and Girolimetto, Daniele},
+  journal   = {Solar Energy},
+  volume    = {251},
+  pages     = {13--29},
+  year      = {2023},
+  publisher = {Elsevier}
+}
+
 @article{fasthts,
   title   = {Fast computation of reconciled forecasts for hierarchical and grouped time series},
   author  = {Rob J Hyndman and Alan Lee and Earo Wang},
@@ -47,6 +125,16 @@
   pages   = {16--32},
   volume  = {97},
   journal = {Computational Statistics \& Data Analysis}
+}
+
+@inproceedings{Gle2020,
+  address   = {San Diego, California, USA},
+  author    = {Gleason, Jeffrey L.},
+  url       = {https://kdd-milets.github.io/milets2020/papers/MiLeTS2020_paper_13.pdf},
+  booktitle = {MileTS '20: 6th KDD Workshop on Mining and Learning from Time Series 2020},
+  pages     = {883--894},
+  title     = {Forecasting hierarchical time series with a regularized embedding space},
+  year      = {2020}
 }
 
 @article{hierarchical,
@@ -58,6 +146,22 @@
   volume    = {55},
   journal   = {Computational Statistics \& Data Analysis},
   publisher = {Citeseer}
+}
+
+@article{HolEtAl2021,
+  abstract  = {A series of recent papers introduce the concept of Forecast Reconciliation, a process by which independently generated forecasts of a collection of linearly related time series are reconciled via the introduction of accounting aggregations that naturally apply to the data. Aside from its clear presentational and operational virtues, the reconciliation approach generally improves the accuracy of the combined forecasts. In this paper, we examine the mechanisms by which this improvement is generated by re-formulating the reconciliation problem as a combination of direct forecasts of each time series with additional indirect forecasts derived from the linear constraints. Our work establishes a direct link between the nascent Forecast Reconciliation literature and the extensive work on Forecast Combination. In the original hierarchical setting, our approach clarifies for the first time how unbiased forecasts for the entire collection can be generated from base forecasts made at any level of the hierarchy, and we illustrate more generally how simple robust combined forecasts can be generated in any multivariate setting subject to linear constraints. In an empirical example, we show that simple combinations of such forecasts generate significant improvements in forecast accuracy where it matters most: where noise levels are highest and the forecasting task is at its most challenging.},
+  author    = {Hollyman, Ross and Petropoulos, Fotios and Tipping, Michael E.},
+  doi       = {10.1016/j.ejor.2021.01.017},
+  issn      = {03772217},
+  journal   = {European Journal of Operational Research},
+  keywords  = {Forecast combinations,Forecasting,Hierarchies,Top-down,Unbiasedness},
+  number    = {1},
+  pages     = {149--160},
+  publisher = {Elsevier B.V.},
+  title     = {Understanding forecast reconciliation},
+  doi       = {10.1016/j.ejor.2021.01.017},
+  volume    = {294},
+  year      = {2021}
 }
 
 @article{htsgeometry,
@@ -103,6 +207,29 @@
   pages   = {1167-1182}
 }
 
+@unpublished{novetal2017,
+  title  = {A Bayesian model for forecasting hierarchically structured time series},
+  author = {Julie Novak and Scott McGarvie and Beatriz Etchegaray Garcia},
+  year   = {2017},
+  url    = {https://arxiv.org/abs/1711.04738}
+}
+
+@article{PenvanDal2017,
+  abstract        = {Forecasts are often made at various levels of aggregation of individual products, which combine into groups at higher hierarchical levels. We provide an alternative to the traditional discussion of bottom-up versus top-down forecasting by examining how the hierarchy of products can be exploited when forecasts are generated. Instead of selecting series from parts of the hierarchy for forecasting, we explore the possibility of using all the series. Moreover, instead of using the hierarchy after the initial forecasts are generated, we consider the hierarchical structure as a defining feature of the data-generating process and use it to instantaneously generate forecasts for all levels of the hierarchy. This integrated approach uses a state space model and the Kalman filter to explicitly incorporate product dependencies, such as complementarity of products and product substitution, which are otherwise ignored. An empirical study shows the substantial gain in forecast and inventory performance of generalizing the bottom-up and top-down forecast approaches to an integrated approach. The integrated approach is applicable to hierarchical forecasting in general, and extends beyond the current application of demand forecasting for manufacturers.},
+  author          = {Pennings, Clint L.P. and van Dalen, Jan},
+  issn            = {03772217},
+  journal         = {European Journal of Operational Research},
+  keywords        = {Bottom-up,Decision-making,Forecasting,Hierarchical,Top-down},
+  mendeley-groups = {HierarchicalPDFs},
+  number          = {2},
+  pages           = {412--418},
+  publisher       = {Elsevier B.V.},
+  title           = {Integrated hierarchical forecasting},
+  doi             = {10.1016/j.ejor.2017.04.047},
+  volume          = {263},
+  year            = {2017}
+}
+
 @inproceedings{probhts,
   title     = {Coherent probabilistic forecasts for hierarchical time series},
   author    = {Souhaib {Ben~Taieb} and James W Taylor and Rob J Hyndman},
@@ -143,7 +270,6 @@
   volume  = {262},
   journal = {European J Operational Research}
 }
-
 @incollection{Van_ErvCug2015,
   title     = {Game-theoretically optimal reconciliation of contemporaneous
                hierarchical time series forecasts},
@@ -158,26 +284,27 @@
   url       = {https://hal.inria.fr/hal-00920559}
 }
 
-
-@inproceedings{Ben_TaiEtAl2019,
-  title     = {Regularized regression for hierarchical forecasting without
-               unbiasedness conditions},
-  booktitle = {Proceedings of the 25th {ACM} {SIGKDD} International Conference
-               on Knowledge Discovery \& Data Mining},
-  author    = {Souhaib {Ben Taieb} and Bonsoo Koo},
-  publisher = {Association for Computing Machinery},
-  pages     = {1337--1347},
-  series    = {KDD '19},
-  year      = {2019},
-  doi       = {10.1145/3292500.3330976},
-  address   = {New York, NY, USA},
-  keywords  = {regularization, sparsity, time series, hierarchical forecasting},
-  location  = {Anchorage, AK, USA}
+@article{villegas2018supply,
+  title     = {Supply chain decision support systems based on a novel hierarchical forecasting approach},
+  author    = {Villegas, Marco A and Pedregal, Diego J},
+  journal   = {Decision Support Systems},
+  volume    = {114},
+  pages     = {29--36},
+  year      = {2018},
+  publisher = {Elsevier}
 }
 
 @article{wickramasuriya2021properties,
-  title={Properties of point forecast reconciliation approaches},
-  author={Wickramasuriya, Shanika L},
-  journal={arXiv preprint arXiv:2103.11129},
-  year={2021}
+  title   = {Properties of point forecast reconciliation approaches},
+  author  = {Wickramasuriya, Shanika L},
+  journal = {arXiv preprint arXiv:2103.11129},
+  year    = {2021}
+}
+
+@article{ZhaEtAl2022,
+  title   = {Optimal reconciliation with immutable forecasts},
+  author  = {Zhang, Bohan and Kang, Yanfei and Panagiotelis, Anastasios and Li, Feng},
+  journal = {European Journal of Operational Research},
+  year    = {2022},
+  volume  = {forthcoming}
 }
