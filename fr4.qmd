@@ -135,35 +135,35 @@ library(gganimate)
 set.seed(2020 - 08 - 25)
 
 # Total Australian tourism numbers
-aus_tourism <- tourism %>%
+aus_tourism <- tourism |>
   summarise(Trips = sum(Trips))
 # Training data
-train <- aus_tourism %>%
+train <- aus_tourism |>
   filter(year(Quarter) <= 2016)
 # Fit ETS model
-fit <- train %>%
+fit <- train |>
   model(arima = ARIMA(Trips))
 # Future sample paths
-future <- fit %>%
-  generate(times = 200, h = "1 year") %>%
-  as_tibble() %>%
+future <- fit |>
+  generate(times = 200, h = "1 year") |>
+  as_tibble() |>
   mutate(modrep = paste0(.model, .rep))
 # Deciles
-qf <- fit %>%
-  generate(times = 1000, h = "1 year") %>%
-  as_tibble() %>%
-  group_by(Quarter) %>%
+qf <- fit |>
+  generate(times = 1000, h = "1 year") |>
+  as_tibble() |>
+  group_by(Quarter) |>
   reframe(
     qs = quantile(.sim, seq(from = 0.1, to = 0.9, by = 0.1)),
     prob = seq(from = 0.1, to = 0.9, by = 0.1)
   )
 # Colors of sample paths
-colours <- tibble(modrep = unique(future$modrep)) %>%
+colours <- tibble(modrep = unique(future$modrep)) |>
   mutate(col = sample(rainbow(200)))
-future <- future %>% left_join(colours, by = "modrep")
+future <- future |> left_join(colours, by = "modrep")
 
 # Plot of deciles
-p1 <- train %>%
+p1 <- train |>
   autoplot(Trips) +
   labs(
     x = "Quarter",
@@ -195,7 +195,7 @@ p1 +
 
 ```{r eval3, fig.width=10, fig.height=5}
 # Less data shown
-p1$data <- train %>% filter(year(Quarter) >= 2015)
+p1$data <- train |> filter(year(Quarter) >= 2015)
 p1 +
   geom_line(
     data = filter(future, as.numeric(.rep) <= 5),
@@ -243,7 +243,7 @@ p1
 
 ```{r eval7, fig.width=10, fig.height=5}
 p1 <- p1 +
-  geom_line(aes(y = Trips), data = aus_tourism %>% filter(year(Quarter) >= 2015))
+  geom_line(aes(y = Trips), data = aus_tourism |> filter(year(Quarter) >= 2015))
 p1
 Cairo::CairoPDF("./figs/deciles.pdf", height=5, width=10)
 p1
@@ -253,24 +253,30 @@ crop::dev.off.crop()
 
 ## Evaluating probabilistic forecasts
 
-```{r pinball, eval=FALSE, echo=FALSE, fig.show='animate', interval=1/10, message=FALSE, fig.height=3, fig.width=5.5}
-# Set eval=TRUE to generate the plots
-# Then set eval=FALSE as we only need to do this once.
+```{r}
+#| label: pinball
+#| eval: true
+#| echo: false
+#| message: false
+#| fig-show: animate
+#| interval: 0.1
+#| fig-height: 3
+#| fig-width: 5.5
 library(gganimate)
 prob <- seq(0.05, 0.95, by = 0.05)
 df <- expand.grid(
     error = c(-10, 0, 10),
     p = c(prob, rev(head(prob, -1)[-1]))
-  ) %>%
+  ) |>
   mutate(
     state = rep(seq(length(p) / 3), rep(3, length(p) / 3)),
     qpt = 2 * p * error * (error > 0) - 2 * (1 - p) * error * (error < 0)
   )
-labels <- df %>%
-  select(p, state) %>%
-  distinct() %>%
+labels <- df |>
+  select(p, state) |>
+  distinct() |>
   mutate(label = paste0("p = ", sprintf("%.2f", p)))
-df %>% ggplot(aes(x = error, y = qpt)) +
+df |> ggplot(aes(x = error, y = qpt)) +
   geom_line(aes(group = state), colour = "red") +
   labs(
     x = latex2exp::TeX("Error: $y_t - q_{p,t}$"),
@@ -306,9 +312,9 @@ $$
 \end{textblock}
 \placefig{8.7}{1.4}{width=7.3cm}{deciles.pdf}
 
-\begin{textblock}{1}(8.5,5.1)
-\animategraphics[loop,autoplay,width=7.4cm]{10}{Macquarie_2020_files/figure-beamer/pinball-}{1}{100}
-\end{textblock}
+<!-- \begin{textblock}{1}(8.5,5.1) -->
+<!-- \animategraphics[loop,autoplay,width=7.4cm]{10}{fr4_files/figure-beamer/pinball-}{1}{100} -->
+<!-- \end{textblock} -->
 
 ## Evaluating probabilistic forecasts
 
@@ -373,7 +379,7 @@ tourism
 \fontsize{10}{11}\sf
 
 ```{r tourismagg, echo=TRUE}
-tourism_agg <- tourism %>%
+tourism_agg <- tourism |>
   aggregate_key(State/Region * Purpose, Trips = sum(Trips))
 ```
 
@@ -386,8 +392,8 @@ tourism_agg
 \fontsize{10}{11}\sf
 
 ```{r tourismmodels, echo=TRUE}
-fit <- tourism_agg %>%
-  filter(year(Quarter) <= 2015) %>%
+fit <- tourism_agg |>
+  filter(year(Quarter) <= 2015) |>
   model(ets = ETS(Trips))
 ```
 
@@ -399,8 +405,8 @@ fit
 \fontsize{10}{11}\sf
 
 ```{r fctourism, echo=TRUE}
-fc <- fit %>%
-  reconcile(ets_adjusted = min_trace(ets)) %>%
+fc <- fit |>
+  reconcile(ets_adjusted = min_trace(ets)) |>
   forecast(h = "2 years")
 ```
 
@@ -412,8 +418,8 @@ fc
 \fontsize{10}{11}\sf
 
 ```{r fctourism2, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
-fc %>%
-  filter(is_aggregated(State) & is_aggregated(Purpose)) %>%
+fc |>
+  filter(is_aggregated(State) & is_aggregated(Purpose)) |>
   autoplot(filter(tourism_agg, year(Quarter) > 2012), level = 95)
 ```
 
@@ -421,8 +427,8 @@ fc %>%
 \fontsize{10}{11}\sf
 
 ```{r fctourism3, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
-fc %>%
-  filter(State == "New South Wales" & is_aggregated(Region) & is_aggregated(Purpose)) %>%
+fc |>
+  filter(State == "New South Wales" & is_aggregated(Region) & is_aggregated(Purpose)) |>
   autoplot(filter(tourism_agg, year(Quarter) > 2012), level = 95)
 ```
 
@@ -430,8 +436,8 @@ fc %>%
 \fontsize{10}{11}\sf
 
 ```{r fctourism4, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
-fc %>%
-  filter(Region == "Melbourne" & is_aggregated(Purpose)) %>%
+fc |>
+  filter(Region == "Melbourne" & is_aggregated(Purpose)) |>
   autoplot(filter(tourism_agg, year(Quarter) > 2012), level = 95)
 ```
 
@@ -439,8 +445,8 @@ fc %>%
 \fontsize{10}{11}\sf
 
 ```{r fctourism5, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
-fc %>%
-  filter(Region == "Snowy Mountains", Purpose == "Holiday") %>%
+fc |>
+  filter(Region == "Snowy Mountains", Purpose == "Holiday") |>
   autoplot(filter(tourism_agg, year(Quarter) > 2012), level = 95)
 ```
 
@@ -448,8 +454,8 @@ fc %>%
 \fontsize{10}{11}\sf
 
 ```{r fctourism6, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
-fc %>%
-  filter(Region == "Barossa") %>%
+fc |>
+  filter(Region == "Barossa") |>
   autoplot(filter(tourism_agg, year(Quarter) > 2012), level = 95)
 ```
 
@@ -457,8 +463,8 @@ fc %>%
 \fontsize{10}{11}\sf
 
 ```{r fctourism7, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
-fc %>%
-  filter(Region == "MacDonnell") %>%
+fc |>
+  filter(Region == "MacDonnell") |>
   autoplot(filter(tourism_agg, year(Quarter) > 2012), level = 95)
 ```
 
@@ -466,20 +472,20 @@ fc %>%
 \fontsize{10}{11}\sf
 
 ```{r fctourismcomb, echo=TRUE}
-fc <- tourism_agg %>%
-  filter(year(Quarter) <= 2015) %>%
+fc <- tourism_agg |>
+  filter(year(Quarter) <= 2015) |>
   model(
     ets = ETS(Trips),
     arima = ARIMA(Trips)
-  ) %>%
+  ) |>
   mutate(
     comb = (ets + arima) / 2
-  ) %>%
+  ) |>
   reconcile(
     ets_adj = min_trace(ets),
     arima_adj = min_trace(arima),
     comb_adj = min_trace(comb)
-  ) %>%
+  ) |>
   forecast(h = "2 years")
 ```
 
@@ -487,7 +493,7 @@ fc <- tourism_agg %>%
 \fontsize{10}{11}\sf
 
 ```{r fcaccuracy, dependson='fctourismcomb', echo=TRUE}
-fc %>%
+fc |>
   accuracy(data = tourism_agg,
            measures = list(crps = CRPS, ss=skill_score(CRPS)))
 ```
@@ -496,11 +502,11 @@ fc %>%
 \fontsize{10}{11}\sf
 
 ```{r fcaccuracy2, dependson='fctourismcomb', echo=TRUE}
-fc %>%
+fc |>
   accuracy(tourism_agg,
-           measures = list(crps = CRPS, ss=skill_score(CRPS))) %>%
-  group_by(.model) %>%
-  summarise(sspc = mean(ss) * 100) %>%
+           measures = list(crps = CRPS, ss=skill_score(CRPS))) |>
+  group_by(.model) |>
+  summarise(sspc = mean(ss) * 100) |>
   arrange(sspc)
 ```
 
@@ -530,10 +536,10 @@ $n=23$ series; $m=15$ bottom-level series.
 ## Example: Australian electricity generation
 
 ```{r include=FALSE}
-energy <- readr::read_csv('energy/daily.csv') %>%
-  head(-1)%>% #Remove last observation
-  select(date,contains(' -  GWh'))%>%
-  rename_all(~gsub(' -  GWh','',.x))%>%
+energy <- readr::read_csv('energy/daily.csv') |>
+  head(-1)|> #Remove last observation
+  select(date,contains(' -  GWh'))|>
+  rename_all(~gsub(' -  GWh','',.x))|>
   mutate(date=as.Date(date),
          Battery=rowSums(select(., contains("Battery"))),
          Gas = rowSums(select(., contains("Gas"))),
@@ -542,20 +548,20 @@ energy <- readr::read_csv('energy/daily.csv') %>%
          `Hydro (inc. Pumps)` = Hydro + Pumps,
          Renewable=Biomass+Hydro+Solar+Wind,
          `non-Renewable`=Coal+Distillate+Gas,
-         Total=Renewable+`non-Renewable`+Battery+Pumps)%>%
-  pivot_longer(cols=-date,names_to = 'Source',values_to = 'Generation') %>%
+         Total=Renewable+`non-Renewable`+Battery+Pumps)|>
+  pivot_longer(cols=-date,names_to = 'Source',values_to = 'Generation') |>
   as_tsibble(key = Source)
 ```
 
 ```{r selected, fig.width=12, fig.height=6}
-energy %>%
+energy |>
   filter(
     Source %in% c('Total', 'Wind', 'Solar', 'Distillate')
-  ) %>%
+  ) |>
   mutate(
     Source = ordered(Source,
             levels = c('Total','Wind','Solar','Distillate'))
-  ) %>%
+  ) |>
   ggplot(aes(x=date, y=Generation)) +
   geom_line() +
   facet_wrap(~Source, nrow = 4,  ncol = 1, scales = 'free_y')
@@ -788,10 +794,10 @@ Algorithm proposed by Panagiotelis et al (2020) for optimizing $\bG$ using stoch
 ## Example: Australian electricity generation
 
 ```{r include=FALSE}
-energy <- readr::read_csv('energy/daily.csv') %>%
-  head(-1)%>% #Remove last observation
-  select(date,contains(' -  GWh'))%>%
-  rename_all(~gsub(' -  GWh','',.x))%>%
+energy <- readr::read_csv('energy/daily.csv') |>
+  head(-1)|> #Remove last observation
+  select(date,contains(' -  GWh'))|>
+  rename_all(~gsub(' -  GWh','',.x))|>
   mutate(date=as.Date(date),
          Battery=rowSums(select(., contains("Battery"))),
          Gas = rowSums(select(., contains("Gas"))),
@@ -800,20 +806,20 @@ energy <- readr::read_csv('energy/daily.csv') %>%
          `Hydro (inc. Pumps)` = Hydro + Pumps,
          Renewable=Biomass+Hydro+Solar+Wind,
          `non-Renewable`=Coal+Distillate+Gas,
-         Total=Renewable+`non-Renewable`+Battery+Pumps)%>%
-  pivot_longer(cols=-date,names_to = 'Source',values_to = 'Generation') %>%
+         Total=Renewable+`non-Renewable`+Battery+Pumps)|>
+  pivot_longer(cols=-date,names_to = 'Source',values_to = 'Generation') |>
   as_tsibble(key = Source)
 ```
 
 ```{r selected2, fig.width=12, fig.height=6}
-energy %>%
+energy |>
   filter(
     Source %in% c('Total', 'Wind', 'Solar', 'Distillate')
-  ) %>%
+  ) |>
   mutate(
     Source = ordered(Source,
             levels = c('Total','Wind','Solar','Distillate'))
-  ) %>%
+  ) |>
   ggplot(aes(x=date, y=Generation)) +
   geom_line() +
   facet_wrap(~Source, nrow = 4,  ncol = 1, scales = 'free_y')

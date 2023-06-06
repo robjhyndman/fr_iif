@@ -614,11 +614,11 @@
       "Version": "0.3.3.9000",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteUsername": "tidyverts",
+      "RemoteHost": "api.github.com",
       "RemoteRepo": "fabletools",
+      "RemoteUsername": "tidyverts",
       "RemoteRef": "HEAD",
       "RemoteSha": "e09af0caa2ef032a69efe34a522edc8d6e36b595",
-      "RemoteHost": "api.github.com",
       "Requirements": [
         "R",
         "R6",
@@ -1222,6 +1222,17 @@
       ],
       "Hash": "40401c9cf2bc2259dfe83311c9384710"
     },
+    "latex2exp": {
+      "Package": "latex2exp",
+      "Version": "0.9.6",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "magrittr",
+        "stringr"
+      ],
+      "Hash": "f0173e0120a278700d48998e5a93a000"
+    },
     "lattice": {
       "Package": "lattice",
       "Version": "0.21-8",
@@ -1295,6 +1306,13 @@
         "zoo"
       ],
       "Hash": "c6fafa6cccb1e1dfe7f7d122efd6e6a7"
+    },
+    "lpSolve": {
+      "Package": "lpSolve",
+      "Version": "5.6.18",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "12c7a918599d5700e4265dd8a21f684f"
     },
     "lubridate": {
       "Package": "lubridate",
@@ -2147,6 +2165,21 @@
         "xfun"
       ],
       "Hash": "e4e357f28c2edff493936b6cb30c3d65"
+    },
+    "transformr": {
+      "Package": "transformr",
+      "Version": "0.1.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "cpp11",
+        "lpSolve",
+        "rlang",
+        "sf",
+        "tweenr",
+        "vctrs"
+      ],
+      "Hash": "d2ddc0cd58a322008c7c60ee495a7e18"
     },
     "tseries": {
       "Package": "tseries",
