@@ -490,48 +490,30 @@ Include?
 
 ## Non-negative forecasts
 
-\begin{textblock}{6.4}(9,0.)\begin{block}{}
-\citet{nonnegmint}
-\end{block}\end{textblock}
-
-* How to ensure all forecasts are positive?
-
-\pause\begin{block}{}
+\vspace*{0.2cm}\begin{block}{}
 \centerline{$\min_{\bm{G}_h}\text{tr}\Big(\E[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]'[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]\Big)$}
 \centerline{such that $\bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t} \ge 0$}
 \end{block}
 
-with @WicEtAl2020 providing an early example for forecast reconciliation, and @di2023spatio a more recent example.
+* @nonnegmint propose an efficient quadratic programming solution.
 
-@di2023spatio also discuss an effective nonnegative heuristic called "set-negative-to-zero", whereby the negative reconciled forecasts at the bottom level are set to zero, and the remaining forecasts computed via aggregation.
+\vspace*{0.2cm}\pause\begin{alertblock}{Heuristic alternative:}
+Set bottom-level negative reconciled forecasts to zero, and then compute the remaining forecasts via aggregation\\\mbox{}\hfill\citep{Di_FonGir2022b}
+\end{alertblock}
 
 ## Immutable forecasts
 
-\begin{textblock}{6.4}(9,0.)\begin{block}{}
-\citet{HolEtAl2021}
-\end{block}\end{textblock}
-
-* How to ensure some forecasts are unchanged?
-
-\pause\begin{block}{}
+\vspace*{0.2cm}\begin{block}{}
 \centerline{$\min_{\bm{G}_h}\text{tr}\Big(\E[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]'[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]\Big)$}
 \centerline{such that $\bm{C}\bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t} = \bm{d}$}
 \end{block}
 
-* Differs from top-down approaches in that it can be done while also preserving the unbiasedness of base forecasts.
+* @zhang2023optimal: propose quadratic programming solution
+* @HPT21
 
-* To briefly illustrate the main idea, for a three variable hierarchy where $y_{Tot,t}=y_{A,t}+y_{B,t}$, either setting
-$$
-  \begin{pmatrix}\tilde{y}_{Tot,t}\\\tilde{y}_{A,t}\\\tilde{y}_{B,t}\end{pmatrix} =
-  \begin{pmatrix}\hat{y}_{Tot,t}\\\hat{y}_{A,t}\\\hat{y}_{Tot,t}-\hat{y}_{A,t}\end{pmatrix}
-  \qquad\textrm{or}\qquad
-  \begin{pmatrix}\tilde{y}_{Tot,t}\\\tilde{y}_{A,t}\\\tilde{y}_{B,t}\end{pmatrix} =
-  \begin{pmatrix}\hat{y}_{Tot,t}\\\hat{y}_{Tot,t}-\hat{y}_{B,t}\\\hat{y}_{B,t}\end{pmatrix}
-$$
-
-* Average between these two solutions will have the same properties.
-
-* @HolEtAl2021 generalise this idea to more complex hierarchies, and the properties of their methods are investigated by @Di_FonGir2022b. @ZhaEtAl2022 further generalise this idea to a setting where reconciliation can be carried out while keeping a subset of base forecasts unchanged and not just the top level. Conditions on how a set of such "immutable" series can be selected are also provided by @ZhaEtAl2022.
+* @HolEtAl2021
+* @Di_FonGir2022b
+* @ZhaEtAl2022
 
 # ML and regularization
 ## ML and regularization
