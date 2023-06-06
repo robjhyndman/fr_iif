@@ -29,6 +29,8 @@ execute:
 ```{r}
 #| cache: false
 source("setup.R")
+library(knitr)
+library(kableExtra)
 ```
 
 ## Outline
