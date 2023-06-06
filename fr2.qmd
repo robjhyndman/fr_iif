@@ -380,8 +380,6 @@ and unbiased estimates must lie on $\mathfrak{s}$.
 
 \vspace*{10cm}
 
-# Mean square error bounds
-
 ## Mean square error bounds
 
 \vspace*{0.2cm}\begin{block}{Distance reducing property}
@@ -431,7 +429,22 @@ Using sums of variances:
 * MinT reconciliation is better than OLS reconciliation
 * OLS reconciliation is better than base forecasts
 
-# Other optimization approaches
+# Optimization and reconcilation
+
+## Minimum trace reconciliation
+
+\vspace*{0.2cm}\begin{alertblock}{Minimum trace (MinT) reconciliation}
+If $\bS\bG$ is a projection, then the trace of $\bm{V}_h$ is \textbf{minimized} when
+\centerline{$\bG = (\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$}
+\end{alertblock}
+\begin{block}{}
+\centerline{$\displaystyle\textcolor{red}{\tilde{\by}_{T+h|T}}
+=\bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}\textcolor{blue}{\hat{\by}_{T+h|T}}$}
+\end{block}
+\centerline{\hspace*{1cm}\textcolor{red}{Reconciled forecasts}\hfill\textcolor{blue}{Base forecasts}\hspace*{2cm}}
+
+* Trace of $\bm{V}_h$ is sum of forecast variances.
+* MinT solution is $L_2$ **optimal** amongst linear unbiased forecasts.
 
 ## A game theoretic perspective
 \fontsize{14}{16}\sf
@@ -477,52 +490,157 @@ where $\bm{B} = [\bm{b}_{T_1+h}, \dots, \bm{b}_{T}]'$.
 
 Reference: @Ben_TaiEtAl2019
 
-## Unconstrained MinT
-
-\begin{textblock}{6.4}(9,0.)\begin{block}{}
-\citet{wickramasuriya2021properties}
-\end{block}\end{textblock}
-
-Include?
-
-
-# Adding optimization constraints
-
 ## Non-negative forecasts
 
-\vspace*{0.2cm}\begin{block}{}
+\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\citet{nonnegmint}
+\end{block}\end{textblock}
+
+* How to ensure all forecasts are positive?
+
+\pause\begin{block}{}
 \centerline{$\min_{\bm{G}_h}\text{tr}\Big(\E[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]'[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]\Big)$}
 \centerline{such that $\bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t} \ge 0$}
-\end{block}
+\end{block}\pause
 
-* @nonnegmint propose an efficient quadratic programming solution.
+## Non-negative forecast reconciliation
+\fontsize{14}{15}\sf
 
-\vspace*{0.2cm}\pause\begin{alertblock}{Heuristic alternative:}
-Set bottom-level negative reconciled forecasts to zero, and then compute the remaining forecasts via aggregation\\\mbox{}\hfill\citep{Di_FonGir2022b}
+\begin{block}{Minimum trace (MinT) reconciliation}
+The trace of $\bm{V}_h$ is minimized when
+$$
+  \tilde{\bm{b}}_{T+h|T} = (\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}\hat{\bm{y}}_{T+h|T}
+$$
+subject to unbiasedness preservation ($\bS\bG\bS=\bS$).
+\end{block}\vspace*{-0.1cm}\pause
+
+Wickramasuriya, Turlach and Hyndman (*S&C*, 2020) replace the unbiased constraint by a non-negative constraint:
+$$
+  \tilde{\bm{b}}_{T+h|T}\ge0
+$$
+and show that it can be solved via quadratic programming:
+
+\begin{alertblock}{}
+$$
+  \text{min}_{\bm{b}} \frac12 \bm{b}'\bS'\bm{W}_h^{-1}\bS\bm{b} - \bm{b}'\bS'\bm{W}_h^{-1}\hat{\bm{y}}_{T+h|T} \quad \text{s.t.~~} \bm{b} \ge 0
+$$
 \end{alertblock}
+
+@di2023spatio propose an effective nonnegative heuristic called "set-negative-to-zero"
+
+  * Negative reconciled forecasts at the bottom level are set to zero
+  * Remaining forecasts computed via aggregation
 
 ## Immutable forecasts
 
-\vspace*{0.2cm}\begin{block}{}
+\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\citet{HolEtAl2021}
+\end{block}\end{textblock}
+
+* How to ensure some forecasts are unchanged?
+
+\pause\begin{block}{}
 \centerline{$\min_{\bm{G}_h}\text{tr}\Big(\E[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]'[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]\Big)$}
 \centerline{such that $\bm{C}\bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t} = \bm{d}$}
 \end{block}
 
-* @zhang2023optimal: propose quadratic programming solution
-* @HPT21
+* Differs from top-down approaches in that it can be done while also preserving the unbiasedness of base forecasts.
 
-* @HolEtAl2021
-* @Di_FonGir2022b
-* @ZhaEtAl2022
+See also @Di_FonGir2022b. @ZhaEtAl2022.
 
 # ML and regularization
 ## ML and regularization
 
+* Replace the linear regression formulation with a less restrictive method to obtain combinations of forecasts from the various hierarchical levels.
+* Coherence is achieved via a bottom-up approach, or by embedding coherence in the ML training.
+*
+
+
+\textcite{Gle2020} attempts to overcome the lack of focus on coherence by adjusting the objective function. Using neural network forecasts, he includes a regularisation term that penalises incoherences in the generated forecasts. This follows from @mishchenko2019self who proposed a similar regularisation term to obtain reconciled forecasts directly from the base forecasts. The disadvantage of these regularisation approaches is that they result in soft constrains that do not guarantee coherence. \textcite{Gle2020} provides two alternatives for the regularisation term and shows that the resulting forecasts can outperform standard MinT reconciliation. However, when the regulisation is used in conjunction with MinT this results in both coherent and the most accurate forecasts. \textcite{HanEtAl2021} propose a similar approach, where a regularisation term is added in the loss function, again based on coherence constraints. They also consider a regularised loss for producing coherent quantile forecasts. The authors demonstrate the use of the proposed regularised loss on a variety of linear and ML models, and also empirically show the negative effect of regularisation on coherence.
+
+\textcite{ShiEtAl2020} introduces a regularisation term, based on the coherence constraints, in the objective function to push bottom-level forecasts to fit both on their target series and their aggregate counterparts. They forecast the bottom-level series but as the regularisation cannot ensure coherence, these are used in a bottom-up setting to produce coherent forecasts for the rest of the hierarchy. The authors demonstrate the efficacy of this in the context of neural networks. They find that these outperform conventionally trained networks whose forecasts are then reconciled, either with bottom-up or MinT.
+
+\textcite{ParEtAl2021} propose a regularised neural network with sequence-to-sequence architecture. Focusing on the hierarchical part of the contribution, a regularisation term is added to incorporate the coherence constraints. As with the previous work, this does not guarantee coherence, yet forces the final forecasts to be approximately coherent. The regularisation is embedded in the loss function of the network, achieving an integrated approach. In contrast to the previous work, the network outputs forecasts for all the levels.
+
+The contribution by \textcite{AndLi2021} can be seen to belong loosely in the regularisation approaches. Focusing on the M5 competition dataset, the authors produce separate forecasts for the top- and the bottom-levels of the hierarchy, using different methods (NBEATS and LightGBM respectively). To achieve coherent forecasts they modify the loss function of the bottom-level method, where positive errors can are multiplied by a factor. This factor is identified by minimising the incoherence error between the summed bottom-level forecasts and the top-level forecast. Note that this factor is calibrated by keeping the top-level forecasts fixed, and therefore any coherence is obtained by modifying the bottom-level forecasts.
+
+\textcite{RanEtAl2021} propose another way to achieve an integrated forecast-reconciliation mechanism. First, a global neural network is used to forecast the time series in the hierarchy, which with the assumption of a forecast distribution can produce sample forecasts. The sample forecasts are subsequently reconciled, obtaining distributions of coherent probabilistic forecasts. The calculation of the loss for the training of the model makes use of the reconciled forecasts, allowing an end-to-end approach that parametrises the model to achieve both accurate and coherent forecasts. Note that the methodology allows for various assumptions on the forecast distribution, and the relaxing of these. The resulting forecasts guarantee coherence, in contrast to the previous integrated approaches. The substantive difference with conventional hierarchical approaches, that post-processes base forecasts, is that the global network can model richer interconnections between the time series in the hierarchy for the generation of the forecasts. Furthermore, the authors compare the results of the proposed hierarchical model against a global learner without coherent forecasts and demonstrate on average better performance, suggesting that the integrated methodology offers gains beyond any achieved by the global learning.
+
+\textcite{WanEtAl2022} contribute with a similar formulation. The important differences are in that they use an autoregressive transformer to produce the base forecasts and that their approach does not require assuming particular predictive distributions. Instead, they rely on empirical estimation (conditional normalising flow) for the distributions. Furthermore, their approach focuses on obtaining bottom-level forecasts which are internally aggregated in a bottom-up fashion to the complete hierarchy. Similar to the \textcite{RanEtAl2021}, the errors of the final forecasts are used during training, realising an end-to-end hierarchical forecasting method. The authors demonstrate gains in performance over a non-hierarchical version of the their method, as well as over various benchmarks.
+
+Focusing on temporal hierarchies, \textcite{TheKou2021} provide an end-to-end neural network based method. Similarly to \textcite{BurChe2021} they explore a series of encoder-decoders to achieve reconciliation, considering fixed and trained decoder weights, using the complete or only the bottom-level of the hierarchy. These can be used instead of conventional hierarchical methods, demonstrating good performance in a global learning setting. To achieve an end-to-end integration, they pass the temporal hierarchy data through a convolutional layer and subsequently to an LSTM. The convolutional layer compresses the abstracts the hierarchical time series, and the LSTM models the dynamics over time. By appending an encoder-decoder to the outputs of the LSTM an end-to-end methodology is obtained. The authors demonstrate the gains due to the various components, but also investigate the amount of time series that are needed to achieve good performance in a global training setting. By modifying the training loss function, \textcite{TheKou2020} extend the method to provide quantile forecasts.
+
+\textcite{AboEtAl2022} use ML to address the challenge of selecting the best method to perform the hierarchical reconciliation. To achieve this they rely on a meta-learning classifier, which is trained to identify given the time series features of a dataset what is the best reconciliation method to employ. The approach is quite flexible in terms of features and classifiers, as well as the forecasting models and reconciliation methods.
+
+\textcite{AboEtAl2019} use ML to improve the performance of non-combination hierarchical approaches. They consider various ML methods to obtain better prorations to decompose upper-level forecasts to lower-levels. \textcite{FenZha2020} provide a standard implementation of hierarchical methods using base forecasts from ML models, and find the hierarchically reconciled forecasts to be the most accurate. \textcite{PunEtAl2020} leverage on LSTM networks to produce forecasts for the cross-temporal case. Forecasts are generated for the various temporal aggregation levels, which are reconciled first by using temporal hierarchies and then cross-sectional. \textcite{SprEtAl2021} propose a method for probabilistic gradient boosting machines, and benchmark its performance on the hierarchical M5 dataset, demonstrating good performance against other non-hierarchical ML methods. Although the proposed method can provide probabilistic predictions for all time series of the hierarchy, coherence is not established. \textcite{ManEtAl2021} use a deep neural network to directly produce reconciled forecasts. The neural network captures the structure of the hierarchy, as well links the relationship between time series features extracted at any level of the hierarchy and explanatory variables into an end-to-end neural network.
+
+
 # Bayesian versions
+
 ## Bayesian versions
+
+@novetal2017
+
+Another strain of the literature brings a Bayesian approach to the regression model interpretation of forecast reconciliation. @novetal2017 recognise that the posterior of ${\bm\beta}_{h}$ can act as a probabilistic forecast for the bottom-level series. Using Markov chain Monte Carlo to obtain a sample from this posterior, and then aggregating, gives a probabilistic forecast for the entire hierarchy.
+
+## Bayesian versions
+
+@swissexports also obtain a posterior on ${\bm\beta}_{h}$, but their focus is on augmenting the reconciliation regression equation with a vector of intercepts that allow for base forecasts to be biased and evolve according to a state space representation.
+
+Judgement can be incorporated via the prior, in the latter case via an explicit empirical example where prior information about a structural break in data classification can be exploited. Also, while both papers recognise the potential of Bayesian inference to obtain probabilistic forecasts, neither paper makes this the focus of empirical evaluation. @novetal2017 minimise loss functions over the posterior sample and then use this as a point forecast, while @swissexports use maximum a posteriori (MAP) estimates as point forecasts.
+
+## Bayesian versions
+
+@CorEtAl2021 In particular, a prior is placed on the bottom-level series with the mean set to point forecasts obtained in the first step of forecast reconciliation and a variance given by the variance-covariance matrix of one-step ahead errors. This prior is updated using the top-level forecasts obtained in the first stage of forecast reconciliation via Bayes' rule. The method generalises MinT in the sense that the posterior mean is equivalent to the usual MinT approach. The necessary updates via Bayes' rule have parallels with the Kalman filter since the reconciliation problem is recast as a linear Gaussian model. The empirical results are evaluated using scoring rules for probabilistic forecasts including the CRPS and energy score. This approach has also recently been extending to the challenging case of forecast reconciliation for discrete data by @CorEtAl2022 and @Zambon2022.
 
 # In-built coherence
 
 ## In-built coherence
+
+Two-step approach: compute base forecasts $\hat{\bm{y}}_h$, and then reconcile them to produce $\tilde{\bm{y}}_h$.
+
+as shown by @AshEtAl2021, if the base forecasts $\hat{\bm{y}}$ are produced using a linear regression model, the base forecasts and reconciliation can be combined, giving coherent forecasts directly in a single closed form equation. Further, the computation is extremely fast provided sparse matrix algebra is used.
+
+## Reconciled linear regression forecasts
+
+If the base forecasts are from a linear regression model, then we can produce coherent forecasts in one step:
+\begin{block}{}
+\only<1>{\centerline{$\tilde{\bm{y}}_{T+h|T} = \bm{S}(\bm{S}'\bm{\Lambda}_s\bm{S})^{-1}\bm{S}'\bm{\Lambda}_s \hat{\bm{y}}_{T+h|T} \qquad
+  \hat{\bm{y}}_{T+h|T} = \bm{X}_{T+h}^* (\bm{X}'\bm{X})^{-1} \bm{X}'\bm{Y}$}}
+\only<2->{\centerline{$\tilde{\bm{y}}_{T+h|T} = \bm{S}(\bm{S}'\bm{\Lambda}_s\bm{S})^{-1}\bm{S}'\bm{\Lambda}_s
+                            \bm{X}_{T+h}^* (\bm{X}'\bm{X})^{-1} \bm{X}'\bm{Y}$}}
+\begin{itemize}\tightlist
+\item $\bm{X}$ is matrix of predictors for training set
+\item $\bm{X}^*_{T+h}$ is vector of predictors for time $T+h$
+\end{itemize}
+\end{block}
+
+\only<3->{\begin{block}{}
+\centerline{$\bm{V}_h = \sigma^2\bm{S}(\bm{S}'\bm{\Lambda}_s\bm{S})^{-1}\bm{S}'\bm{\Lambda}_s\left[1 + \bm{X}_{T+h}^*(\bm{X}'\bm{X})^{-1}(\bm{X}_{T+h}^*)'\right] \bm{\Lambda}_s\bm{S}'(\bm{S}'\bm{\Lambda}_s\bm{S})^{-1}\bm{S}'$}
+\begin{itemize}\tightlist
+\item $\sigma^2$ is variance of base model residuals.
+\end{itemize}
+\end{block}}
+
+\only<4->{\begin{alertblock}{}
+Reference: Ashouri, Hyndman, and Shmueli (2019). \url{robjhyndman.com/publications/lhf/}
+\end{alertblock}}
+
+\vspace*{10cm}
+## In-built coherence
+
+@PenvanDal2017 propose the state space model
+\begin{align}\label{eq:measurement}
+\bm{y}_t &= \bm{S}\bm{\mu}_t + \bm{Z}_t\bm{\beta} + \bm{\varepsilon}_t, && \bm{\varepsilon}_t \sim N(\bm{0}, \bm{\Sigma}_{\bm{\varepsilon}}),\\
+\bm{\mu}_t &= \bm{\mu}_{t-1} + \bm{\eta}_t, && \bm{\eta}_t \sim N(\bm{0}, \bm{\Sigma}_{\bm{\eta}}).
+\end{align}
+
+* Coherent forecasts arise naturally using the Kalman filter
+* Covariance matrices difficult to estimate except for small hierarchies.
+
+## In-build coherence
+
+A related state space approach was proposed by @villegas2018supply, who show that their formulation subsumes bottom-up, top-down, and some forms of forecast reconciliation and combination forecasting.
+
 
 \nocite{htsgeometry, nonnegmint, Di_FonGir2022b,swissexports,Van_ErvCug2015}

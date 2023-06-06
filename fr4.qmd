@@ -49,3 +49,309 @@ source("setup.R")
 * Count
 
 \nocite{coherentprob,smartmeterhts}
+
+
+## Probabilistic forecast reconciliation
+
+\begin{block}{Key papers}
+\begin{itemize}
+\item Ben Taieb, Taylor, Hyndman (\emph{ICML}, 2017)
+\item Jeon, Panagiotelis, Petropoulos (\emph{EJOR}, 2019)
+\item Ben Taieb, Taylor, Hyndman (\emph{JASA}, 2020)
+\item Panagiotelis, Gamakumara, Athanasopoulos, Hyndman (2020). \url{robjhyndman.com/publications/coherentprob/}
+\end{itemize}
+\end{block}\pause\vspace*{-0.2cm}
+
+ * The reconciled multivariate density must lie on the coherent subspace.
+ * The univariate density at each node is a convolution of the densities of its children.
+
+## Construction of reconciled distributions
+
+\begin{block}{Reconciled density of bottom-level}
+Density of bottom-level series under reconciled distribution is
+$$
+  \tilde{f}_{\bm{b}}(\bm{b})=|\bG^*|\int \hat{f}(\bG^{-}\bm{b}+\bG_\perp \bm{a})d\bm{a}
+$$
+\vspace*{-0.5cm}\begin{itemize}
+\item $\hat{f}$ is density of incoherent base probabilistic forecast
+\item $\bm{G^-}$ is $n\times m$ generalised inverse of $\bG$ st $\bG\bG^-=\bm{I}$
+\item $\bm{G_\perp}$ is $n\times (n-m)$ orthogonal complement to $\bG$ st $\bG\bG_\perp=\bm{0}$
+\item $\bG^*=\left(\bG^-\,\vdots\,\bG_\perp\right)$, and $\bm{b}$ and $\bm{a}$ are obtained via\newline the change of variables $\bm{y}=\bG^*\begin{pmatrix}\bm{b}\\\bm{a}\end{pmatrix}$
+\end{itemize}
+\end{block}
+\vspace*{10cm}
+
+## Construction of reconciled distributions
+
+\begin{block}{Reconciled density of full hierarchy}\fontsize{14}{15}\sf
+Density of full hierarchy under reconciled distribution is
+$$
+  \tilde{f}_{\bm{y}}(\bm{y}) =
+  |\bS^*|
+  \,
+  \tilde{f}_{\bm{b}}({\bS^-\bm{y}})
+  \,
+  \mathbb{1}\!\{\bm{y}\in\mathfrak{s}\}
+$$
+\vspace*{-0.6cm}\begin{itemize}
+\item $\bS^*=\begin{pmatrix} {\bS^-}' & \bS_\perp \end{pmatrix}'$
+\item $\bm{S^-}$ is $m\times n$ generalised inverse of $\bS$ such that $\bS^-\bS=\bm{I}$,
+\item $\bm{S_\perp}$ is $n\times (n-m)$ orthogonal complement to $\bS$ such that $\bS'_\perp\bS=\bm{0}$.
+\end{itemize}
+\end{block}
+
+\begin{textblock}{7.7}(0.4,5.8)
+\begin{alertblock}{Gaussian reconciliation}
+If the incoherent base forecasts are $\text{N}(\hat{\bm{\mu}}, \hat{\bm{\Sigma}})$,
+then the reconciled density is $\text{N}(\bS\bG\hat{\bm{\mu}}, \bS\bG\hat{\bm{\Sigma}}\bG'\bS')$.
+\end{alertblock}
+\end{textblock}
+
+\begin{textblock}{6.8}(8.8,5.8)
+\begin{alertblock}{Bootstrap reconciliation}
+Reconciling sample paths from incoherent distributions works.
+\end{alertblock}
+\end{textblock}
+
+\vspace*{10cm}
+
+## Evaluating probabilistic forecasts
+
+\begin{alertblock}{Proper scoring rule}
+optimized when true forecast distribution is used.
+\end{alertblock}\pause
+
+\begin{block}{}\centering\fontsize{14}{15}\sf
+\begin{tabular}{llp{4.4cm}}
+    \bfseries Scoring Rule &
+    \bfseries Coherent v Incoherent &
+    \bfseries Coherent v Coherent\\
+    \midrule
+    Log Score & Not proper & $\bullet$ Ordering preserved\par\hspace*{0.3cm} if compared using\par\hspace*{0.3cm} bottom-level only\\
+    \midrule
+    Energy Score & Proper & $\bullet$ Full hierarchy\par\hspace*{0.3cm} should be used. \par $\bullet$ Rankings may\par\hspace*{0.3cm} change otherwise.
+\end{tabular}
+\end{block}
+
+## Score optimal reconciliation
+
+Algorithm proposed by Panagiotelis et al (2020) for optimizing $\bG$ using stochastic gradient descent to optimize Energy Score.
+
+1. Compute base forecasts over a test set.
+2. Compute OLS reconciliation: $\bG = (\bS'\bS)^{-1}\bS'$
+3. Iteratively update $\bG$ using SGD with Adam method and ES objective over a test set
+
+# Example: Australian electricity generation
+
+## Example: Australian electricity generation
+
+\hspace*{-0.8cm}\begin{minipage}{15.6cm}
+\begin{block}{Daily time series from \url{opennem.org.au}}
+\begin{tikzpicture}
+\tikzstyle{every node}=[rectangle, rounded corners=2pt,draw,inner sep=1pt,fill=red!15]
+\tikzstyle[level distance=.1cm]
+\tikzstyle[sibling distance=7cm]
+\tikzstyle{level 1}=[sibling distance=8.2cm,set style={{every node}+=[fill=blue!15]}]
+\tikzstyle{level 2}=[sibling distance=16.5mm,font=\footnotesize,set style={{every node}+=[fill=green!15]}]
+\tikzstyle{level 3}=[sibling distance=10mm,font=\footnotesize,set style={{every node}+=[fill=yellow]}]
+\node{Total generation}[edge from parent fork down]
+ child {node {Renewable}
+   child {node[xshift=0.2cm] {Batteries}
+    child {node[xshift=-0.3cm] {Discharging}}
+    child {node[xshift=0.3cm] {Charging}}
+   }
+   child {node[fill=yellow] {Wind}}
+   child {node {Hydro+Pumps}
+     child {node {Hydro}}
+     child {node {Pumps}}
+   }
+   child {node[xshift=0.2cm,fill=yellow] {Biomass}}
+   child {node[xshift=-0.2cm] {Solar}
+     child {node {Rooftop}}
+     child {node[xshift=0.1cm] {Utility}}
+   }
+ }
+ child {node {Non-renewable}
+   child {node {Gas}
+     child {node {OCGT}}
+     child {node {CCGT}}
+     child {node {Steam}}
+     child {node {Recip}}
+   }
+   child {node[fill=yellow] {Distillate}}
+   child {node {Coal}
+     child {node {Black}}
+     child {node {Brown}}
+   }
+ };
+\end{tikzpicture}
+\end{block}
+\end{minipage}
+
+\begin{textblock}{10}(3,7.8)
+\begin{block}{}\vspace*{-0.1cm}
+\centerline{$n=23$ series\qquad $m=15$ bottom-level series}
+\end{block}
+\end{textblock}
+
+## Example: Australian electricity generation
+
+```{r include=FALSE}
+energy <- readr::read_csv('energy/daily.csv') %>%
+  head(-1)%>% #Remove last observation
+  select(date,contains(' -  GWh'))%>%
+  rename_all(~gsub(' -  GWh','',.x))%>%
+  mutate(date=as.Date(date),
+         Battery=rowSums(select(., contains("Battery"))),
+         Gas = rowSums(select(., contains("Gas"))),
+         Solar = rowSums(select(., contains("Solar"))),
+         Coal = rowSums(select(., contains("Coal"))),
+         `Hydro (inc. Pumps)` = Hydro + Pumps,
+         Renewable=Biomass+Hydro+Solar+Wind,
+         `non-Renewable`=Coal+Distillate+Gas,
+         Total=Renewable+`non-Renewable`+Battery+Pumps)%>%
+  pivot_longer(cols=-date,names_to = 'Source',values_to = 'Generation') %>%
+  as_tsibble(key = Source)
+```
+
+```{r selected, fig.width=12, fig.height=6}
+energy %>%
+  filter(
+    Source %in% c('Total', 'Wind', 'Solar', 'Distillate')
+  ) %>%
+  mutate(
+    Source = ordered(Source,
+            levels = c('Total','Wind','Solar','Distillate'))
+  ) %>%
+  ggplot(aes(x=date, y=Generation)) +
+  geom_line() +
+  facet_wrap(~Source, nrow = 4,  ncol = 1, scales = 'free_y')
+```
+
+## Example: Australian electricity generation
+
+\alert{Forecast evaluation}
+
+ * Rolling window of 140 days training data, and one-step-forecasts for 170 days test data.
+ * One-layer feed-forward neural network with up to 28 lags of target variable as inputs.
+ * Implemented using `NNETAR()` function in `fable` package.
+ * Model could be improved with temperature predictor.
+
+## Example: Australian electricity generation
+
+\placefig{0.3}{1.5}{width=7.5cm, height=10cm}{densities}
+\begin{textblock}{6}(9,1.7)
+\begin{block}{Histogram of residuals:\\ 2 Oct 2019 -- 21 Jan 2020}
+Clearly non-Gaussian
+\end{block}
+\end{textblock}
+
+## Example: Australian electricity generation
+
+\placefig{0.3}{1.5}{width=7.7cm, height=10cm}{corr}
+
+\begin{textblock}{6}(9,1.7)
+\begin{block}{Correlations of residuals:\\ 2 Oct 2019 -- 21 Jan 2020}
+Blue = positive correlation. Red = negative correlation. Large = stronger correlations.
+\end{block}
+\end{textblock}
+
+## Example: Australian electricity generation
+
+\placefig{0.3}{1.5}{width=7.2cm, height=10cm}{meanenergyscore}
+
+\begin{textblock}{3.5}(2.5,1.4)\fontsize{12}{12.5}\sf
+\begin{block}{}
+Mean Energy score
+\end{block}
+\end{textblock}
+
+\begin{textblock}{7}(8.7,1.3)\fontsize{12}{12.5}\sf
+\begin{block}{Base residual assumptions}
+\begin{itemize}\itemsep=0cm\parskip=0cm
+\item Gaussian independent
+\item Gaussian dependent
+\item Non-Gaussian independent
+\item Non-Gaussian dependent
+\end{itemize}
+\end{block}\vspace*{-0.1cm}
+\begin{block}{Reconciliation methods}
+\begin{itemize}\itemsep=0cm\parskip=0cm
+\item Base
+\item BottomUp
+\item BTTH: Ben Taieb, Taylor, Hyndman
+\item JPP: Jeon, Panagiotelis, Petropoulos
+\item OLS
+\item MinT(Shrink)
+\item Score Optimal Reconciliation
+\end{itemize}
+\end{block}
+\end{textblock}
+
+## Example: Australian electricity generation
+
+\placefig{0.3}{1.5}{width=6.cm, height=10cm}{nemenyi_ig}
+
+\placefig{8.3}{1.5}{width=6.cm, height=10cm}{nemenyi_jb}
+
+\begin{textblock}{7}(0.2,7.)\fontsize{11}{12}\sf
+\begin{block}{Nemenyi test for different scores}
+Base forecasts are independent and Gaussian.
+\end{block}
+\end{textblock}
+
+\begin{textblock}{7}(8.8,7.)\fontsize{11}{12}\sf
+\begin{block}{Nemenyi test for different scores}
+Base forecasts are obtained by jointly bootstrapping residuals.
+\end{block}
+\end{textblock}
+
+
+## Thanks!
+
+\placefig{0}{1.4}{trim = 10 45 0 0, clip=TRUE, width=10cm, height=2.5cm}{roman}
+\placefig{2}{1.4}{trim = 20 20 0 0, clip=TRUE, width=10cm, height=2.7cm}{george}
+\placefig{4}{1.4}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm}{hanlin}
+\placefig{6}{1.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{earowang}
+\placefig{8}{1.4}{trim = 0 15 0 0, clip=TRUE, width=10cm, height=2.5cm}{alanlee}
+\placefig{10}{1.4}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{mitch}
+\placefig{12}{1.4}{trim = 15 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{shanika}
+\placefig{14}{1.4}{trim = 40 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{tas}
+
+\placefig{0}{3.9}{trim = 30 10 30 0, clip=TRUE, width=10cm, height=2.5cm}{puwasala}
+\placefig{2}{3.9}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm}{fotios}
+\placefig{4}{3.9}{trim = 100 30 50 20, clip=TRUE, width=10cm, height=2.5cm}{nikos}
+\placefig{6}{3.9}{trim = 50 30 0 0, clip=TRUE, width=10cm, height=2.5cm}{souhaib}
+\placefig{8}{3.9}{trim = 110 40 50 0, clip=TRUE, width=10cm, height=2.5cm}{james}
+\placefig{10}{3.9}{trim = 40 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{mahdi}
+\placefig{12}{3.9}{trim = 50 50 0 0, clip=TRUE, width=10cm, height=2.5cm}{christoph}
+\placefig{14}{3.9}{trim = 50 50 0 20, clip=TRUE, width=10cm, height=2.5cm}{fin}
+
+\placefig{0}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{berwin}
+\placefig{2}{6.4}{trim = 10 20 0 0, clip=TRUE, width=10cm, height=2.5cm}{galit}
+\placefig{4}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{mahsa}
+\placefig{6}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{florian}
+\placefig{8}{6.4}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{evan}
+\placefig{10}{6.4}{trim = 5 5 0 0, clip=TRUE, width=10cm, height=2.5cm}{vassilis}
+\placefig{12}{6.4}{trim = 90 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{carla}
+\placefig{14}{6.4}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{pablo}
+
+## More information
+\fontsize{18}{20}\sf
+
+ * Slides and papers: **robjhyndman.com**
+ * Packages: **tidyverts.org**
+ * Forecasting textbook using fable package: **OTexts.com/fpp3**
+
+\begin{textblock}{8}(7.6,4.8)
+\begin{alertblock}{Find me at ...}
+\href{https://twitter.com/robjhyndman}{\faicon{twitter} @robjhyndman}
+
+\href{https://github.com/robjhyndman}{\faicon{github}  @robjhyndman}
+
+\href{https://robjhyndman.com}{\faicon{home} robjhyndman.com}
+
+\href{mailto:rob.hyndman@monash.edu}{\faicon{envelope}  rob.hyndman@monash.edu}
+\end{alertblock}
+\end{textblock}
+\vspace*{10cm}
