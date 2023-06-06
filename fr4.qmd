@@ -27,7 +27,10 @@ execute:
 ---
 
 ```{r}
+#| cache: false
 source("setup.R")
+library(knitr)
+library(kableExtra)
 ```
 
 ## Outline
@@ -49,6 +52,594 @@ source("setup.R")
 * Count
 
 \nocite{coherentprob,smartmeterhts}
+
+
+## Coherent probabilistic forecasts
+\begin{textblock}{9.5}(0.2,1.2)\fontsize{13}{15}\sf
+\begin{block}{Coherent probabilistic forecasts}
+Given the triple $(\mathbb{R}^m, \mathscr{F}_{\mathbb{R}^m}, \nu)$, a coherent probability triple $(\mathfrak{s}, \mathscr{F}_{\mathfrak{s}}, \breve{\nu})$  is such that
+$$
+  \breve{\nu}(s(\mathcal{B})) = \nu(\mathcal{B}) \quad \forall \mathcal{B} \in \mathscr{F}_{\mathbb{R}^m}.
+$$
+\end{block}\vspace*{-0.2cm}
+\begin{block}{Probabilistic forecast reconciliation}
+The reconciled probability measure of $\hat{\nu}$ wrt $\psi(.)$ is such that
+  \[
+  \tilde{\nu}(\mathcal{B}) = \hat{\nu}(\psi^{-1}(\mathcal{B})) \qquad \forall \mathcal{B} \in \mathscr{F}_{\mathfrak{s}}\,,
+  \]
+  where $\psi^{-1}(\mathcal{B}):=\{{\bm{y}}\in \mathbb{R}^n:\psi({\bm{y}})\in \mathcal{B}\}$ is the pre-image of $\mathcal{B}$, that is the set of all points in $\mathbb{R}^n$ that $\psi(.)$ maps to a point in $\mathcal{B}$.
+\end{block}
+\end{textblock}
+\begin{textblock}{7}(9.5,1.2)
+\resizebox{\textwidth}{!}{
+\input figs/probforerec_schematic.tex
+}
+\end{textblock}
+
+## Construction of reconciled distributions
+
+\begin{block}{Reconciled density of bottom-level}
+Density of bottom-level series under reconciled distribution is
+$$
+  \tilde{f}_{\bm{b}}(\bm{b})=|\bm{G}^*|\int \hat{f}(\bm{G}^{-}\bm{b}+\bm{G}_\perp \bm{a})d\bm{a}
+$$
+\vspace*{-0.5cm}\begin{itemize}
+\item $\hat{f}$ is density of incoherent base probabilistic forecast
+\item $\bm{G^-}$ is $n\times m$ generalised inverse of $\bm{G}$ st $\bm{G}\bm{G}^-=\bm{I}$
+\item $\bm{G_\perp}$ is $n\times (n-m)$ orthogonal complement to $\bm{G}$ st $\bm{G}\bm{G}_\perp=\bm{0}$
+\item $\bm{G}^*=\left(\bm{G}^-\,\vdots\,\bm{G}_\perp\right)$, and $\bm{b}$ and $\bm{a}$ are obtained via\newline the change of variables $\bm{y}=\bm{G}^*\begin{pmatrix}\bm{b}\\\bm{a}\end{pmatrix}$
+\end{itemize}
+\end{block}
+\vspace*{10cm}
+
+## Construction of reconciled distributions
+
+\begin{block}{Reconciled density of full hierarchy}\fontsize{14}{15}\sf
+Density of full hierarchy under reconciled distribution is
+$$
+  \tilde{f}_{\bm{y}}(\bm{y}) =
+  |\bm{S}^*| \tilde{f}_{\bm{b}}({\bm{S}^-\bm{y}})
+  \mathbb{1}\{\bm{y}\in\mathfrak{s}\}
+$$
+\vspace*{-0.5cm}\begin{itemize}
+\item $\bm{S}^*=\begin{pmatrix}
+  \bm{S}^-\\
+  \bm{S}'_\perp
+  \end{pmatrix}$
+\item $\bm{S^-}$ is $m\times n$ generalised inverse of $\bm{S}$ such that $\bm{S}^-\bm{S}=\bm{I}$,
+\item $\bm{S_\perp}$ is $n\times (n-m)$ orthogonal complement to $\bm{S}$ such that $\bm{S}'_\perp\bm{S}=\bm{0}$.
+\end{itemize}
+\end{block}\pause
+
+\begin{alertblock}{Gaussian reconciliation}
+If the incoherent base forecasts are $\text{N}(\hat{\bm{\mu}}, \hat{\bm{\Sigma}})$,\newline
+then the reconciled density is $\text{N}(\bm{S}\bm{G}\hat{\bm{\mu}}, \bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$.
+\end{alertblock}
+
+## Simulation from a reconciled distribution
+
+\begin{block}{}
+Suppose that $\left(\hat{\bm{y}}^{[1]},\ldots,\hat{\bm{y}}^{[L]}\right)$ is a sample drawn from an incoherent probability measure $\hat{\nu}$. Then $\left(\tilde{\bm{y}}^{[1]},\ldots,\tilde{\bm{y}}^{[L]}\right)$ where $\tilde{\bm{y}}^{[\ell]}:=\psi(\hat{\bm{y}}^{[\ell]})$ for $\ell=1,\ldots,L$, is a sample drawn from the reconciled probability measure $\tilde{\nu}$.
+\end{block}
+
+* So reconciling sample paths from incoherent distributions works.
+
+\vspace*{10cm}
+
+# Evaluating probabilistic forecasts
+
+## Evaluating probabilistic forecasts
+
+```{r setup_tourism_example, include=FALSE}
+library(gganimate)
+set.seed(2020 - 08 - 25)
+
+# Total Australian tourism numbers
+aus_tourism <- tourism %>%
+  summarise(Trips = sum(Trips))
+# Training data
+train <- aus_tourism %>%
+  filter(year(Quarter) <= 2016)
+# Fit ETS model
+fit <- train %>%
+  model(arima = ARIMA(Trips))
+# Future sample paths
+future <- fit %>%
+  generate(times = 200, h = "1 year") %>%
+  as_tibble() %>%
+  mutate(modrep = paste0(.model, .rep))
+# Deciles
+qf <- fit %>%
+  generate(times = 1000, h = "1 year") %>%
+  as_tibble() %>%
+  group_by(Quarter) %>%
+  reframe(
+    qs = quantile(.sim, seq(from = 0.1, to = 0.9, by = 0.1)),
+    prob = seq(from = 0.1, to = 0.9, by = 0.1)
+  )
+# Colors of sample paths
+colours <- tibble(modrep = unique(future$modrep)) %>%
+  mutate(col = sample(rainbow(200)))
+future <- future %>% left_join(colours, by = "modrep")
+
+# Plot of deciles
+p1 <- train %>%
+  autoplot(Trips) +
+  labs(
+    x = "Quarter",
+    y = "Total visitors",
+    title = "Australian domestic tourism"
+  ) +
+  guides(colour = FALSE, level = FALSE) +
+  ylim(min(train$Trips, future$.sim, na.rm = TRUE), max(train$Trips, future$.sim, na.rm = TRUE))
+```
+
+
+```{r tourism_data_again, fig.width=10, fig.height=5}
+p1
+```
+
+## Evaluating probabilistic forecasts
+
+```{r eval2, fig.width=10, fig.height=5}
+p1 <- p1 +
+  annotate("label", x=as.Date("2017-06-01"), y=6000, label="ARIMA futures", col='#888888')
+p1 +
+  geom_line(
+    data = filter(future, as.numeric(.rep) <= 5),
+    aes(y = .sim, group = modrep, col=col),
+  )
+```
+
+## Evaluating probabilistic forecasts
+
+```{r eval3, fig.width=10, fig.height=5}
+# Less data shown
+p1$data <- train %>% filter(year(Quarter) >= 2015)
+p1 +
+  geom_line(
+    data = filter(future, as.numeric(.rep) <= 5),
+    aes(y = .sim, group = modrep, col=col),
+  )
+```
+
+## Evaluating probabilistic forecasts
+
+```{r eval4, fig.width=10, fig.height=5}
+p1 +
+  geom_line(
+    data = future,
+    aes(y = .sim, group = modrep, col=col),
+  )
+```
+
+## Evaluating probabilistic forecasts
+
+```{r eval5, fig.width=10, fig.height=5}
+p1 <- p1 +
+  geom_line(
+    data = future,
+    aes(y = .sim, group = modrep),
+    color = "gray"
+  )
+p1
+```
+
+## Evaluating probabilistic forecasts
+
+```{r eval6, fig.width=10, fig.height=5}
+p1 <- p1 +
+  geom_line(
+    data = qf,
+    mapping = aes(x = Quarter, y = qs, group = prob),
+    colour = "#0063A7"
+  ) +
+  annotate("label", x=as.Date("2017-06-01"), y=11300, label="Deciles", col="#0063A7")
+p1
+```
+
+
+## Evaluating probabilistic forecasts
+
+```{r eval7, fig.width=10, fig.height=5}
+p1 <- p1 +
+  geom_line(aes(y = Trips), data = aus_tourism %>% filter(year(Quarter) >= 2015))
+p1
+Cairo::CairoPDF("./figs/deciles.pdf", height=5, width=10)
+p1
+crop::dev.off.crop()
+```
+
+
+## Evaluating probabilistic forecasts
+
+```{r pinball, eval=FALSE, echo=FALSE, fig.show='animate', interval=1/10, message=FALSE, fig.height=3, fig.width=5.5}
+# Set eval=TRUE to generate the plots
+# Then set eval=FALSE as we only need to do this once.
+library(gganimate)
+prob <- seq(0.05, 0.95, by = 0.05)
+df <- expand.grid(
+    error = c(-10, 0, 10),
+    p = c(prob, rev(head(prob, -1)[-1]))
+  ) %>%
+  mutate(
+    state = rep(seq(length(p) / 3), rep(3, length(p) / 3)),
+    qpt = 2 * p * error * (error > 0) - 2 * (1 - p) * error * (error < 0)
+  )
+labels <- df %>%
+  select(p, state) %>%
+  distinct() %>%
+  mutate(label = paste0("p = ", sprintf("%.2f", p)))
+df %>% ggplot(aes(x = error, y = qpt)) +
+  geom_line(aes(group = state), colour = "red") +
+  labs(
+    x = latex2exp::TeX("Error: $y_t - q_{p,t}$"),
+    y = latex2exp::TeX("S_{t}(p,y)")
+  ) +
+  geom_label(data = labels, aes(x = 0, y = 17, label = label)) +
+  transition_states(state)
+```
+
+\fontsize{12}{13}\sf
+\begin{textblock}{8}(0.2,1.2)
+\begin{alertblock}{}\vspace*{-0.3cm}
+\begin{align*}
+q_{p,t} &= \text{quantile forecast with prob. $p$ at time $t$.}\\
+y_{t} &= \text{observation at time $t$}
+\end{align*}
+\end{alertblock}\vspace*{-0.3cm}
+\begin{block}{Quantile score}\vspace*{-0.1cm}
+$$
+  S_t(p,y) = \begin{cases}
+  2(1 - p) \big|y_t - q_{p,t}\big|, & \text{if $y_{t} < q_{p,t}$}\\
+  2p \big|y_{t} - q_{p,t}\big|, & \text{if $y_{t} \ge q_{p,t}$} \end{cases}
+$$
+\end{block}
+\end{textblock}
+\begin{textblock}{8}(0.2,5.)
+\begin{itemize}\itemsep=0cm\parskip=0cm
+\item Low $S_{t}$ is good
+\item Multiplier of 2 often omitted,\newline but useful for interpretation
+\item $S_{t}$ like absolute error,\newline weighted to account for likely exceedance
+\item Average $S_{t}(p,y)$ over $p$ = \newline CRPS (Continuous Rank Probability Score)
+\end{itemize}
+\end{textblock}
+\placefig{8.7}{1.4}{width=7.3cm}{deciles.pdf}
+
+\begin{textblock}{1}(8.5,5.1)
+\animategraphics[loop,autoplay,width=7.4cm]{10}{Macquarie_2020_files/figure-beamer/pinball-}{1}{100}
+\end{textblock}
+
+## Evaluating probabilistic forecasts
+
+### Continuous Rank Probability Score (univariate forecsts)
+
+Forecast distribution $F_t$ and observation $y_t$.
+$$
+\text{CRPS}(F_t,y_t)~  = \int_{0}^1 S_{p,t}(p,y_t) dp ~  = ~\text{E}_F|Y-y_t|-\frac{1}{2}\text{E}_F|Y-Y^*|
+$$
+
+ * $Y$ and $Y^*$ are iid draws from $F_t$.
+ * Optimal when $F_t$ is true distribution (i.e., it is a proper score)
+
+\pause
+
+### Energy score (multivariate forecasts)
+
+ * $\text{ES}(F_t,\bm{y}_t) = \E_{F} ||{\bm{Y}}-\bm{y}_t|| -\frac{1}{2}\E_{F}||\bm{Y}-\bm{Y}^*||$
+
+\pause
+
+### Log score (multivariate forecasts)
+
+ * $\text{LS}(F_t, \bm{y}_t) = -\log f(\bm{y}_t)$
+
+## Evaluating probabilistic forecasts
+\vspace*{-0.1cm}
+
+\begin{alertblock}{Proper scoring rule}
+optimized when true forecast distribution is used.
+\end{alertblock}\pause\vspace*{-0.1cm}
+
+\begin{block}{}\centering
+\begin{tabular}{llp{4.4cm}}
+    \bfseries Scoring Rule &
+    \bfseries Coherent v Incoherent &
+    \bfseries Coherent v Coherent\\
+    \midrule
+    Log Score & Not proper & $\bullet$ Ordering preserved\par\hspace*{0.3cm} if compared using\par\hspace*{0.3cm} bottom-level only\\
+    Energy Score & Proper & $\bullet$ Full hierarchy\par\hspace*{0.3cm} should be used. \par $\bullet$ Rankings may\par\hspace*{0.3cm} change otherwise.
+\end{tabular}
+\end{block}
+
+## Score optimal reconciliation
+
+Algorithm proposed by Panagiotelis et al (2020) for optimizing $\bm{G}$ using stochastic gradient descent to optimize Energy Score.
+
+1. Compute base forecasts over a test set.
+2. Compute OLS reconciliation: $\bm{G} = (\bm{S}'\bm{S})^{-1}\bm{S}'$
+3. Iteratively update $\bm{G}$ using SGD with Adam method and ES objective over a test set
+
+# Example: Australian tourism
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r tourismdata, echo=TRUE}
+tourism
+```
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r tourismagg, echo=TRUE}
+tourism_agg <- tourism %>%
+  aggregate_key(State/Region * Purpose, Trips = sum(Trips))
+```
+
+```{r tourismagg2, echo=FALSE}
+tourism_agg
+```
+
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r tourismmodels, echo=TRUE}
+fit <- tourism_agg %>%
+  filter(year(Quarter) <= 2015) %>%
+  model(ets = ETS(Trips))
+```
+
+```{r tourismmodels1, echo=FALSE}
+fit
+```
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r fctourism, echo=TRUE}
+fc <- fit %>%
+  reconcile(ets_adjusted = min_trace(ets)) %>%
+  forecast(h = "2 years")
+```
+
+```{r fctourism1, echo=FALSE}
+fc
+```
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r fctourism2, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
+fc %>%
+  filter(is_aggregated(State) & is_aggregated(Purpose)) %>%
+  autoplot(filter(tourism_agg, year(Quarter) > 2012), level = 95)
+```
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r fctourism3, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
+fc %>%
+  filter(State == "New South Wales" & is_aggregated(Region) & is_aggregated(Purpose)) %>%
+  autoplot(filter(tourism_agg, year(Quarter) > 2012), level = 95)
+```
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r fctourism4, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
+fc %>%
+  filter(Region == "Melbourne" & is_aggregated(Purpose)) %>%
+  autoplot(filter(tourism_agg, year(Quarter) > 2012), level = 95)
+```
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r fctourism5, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
+fc %>%
+  filter(Region == "Snowy Mountains", Purpose == "Holiday") %>%
+  autoplot(filter(tourism_agg, year(Quarter) > 2012), level = 95)
+```
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r fctourism6, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
+fc %>%
+  filter(Region == "Barossa") %>%
+  autoplot(filter(tourism_agg, year(Quarter) > 2012), level = 95)
+```
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r fctourism7, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
+fc %>%
+  filter(Region == "MacDonnell") %>%
+  autoplot(filter(tourism_agg, year(Quarter) > 2012), level = 95)
+```
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r fctourismcomb, echo=TRUE}
+fc <- tourism_agg %>%
+  filter(year(Quarter) <= 2015) %>%
+  model(
+    ets = ETS(Trips),
+    arima = ARIMA(Trips)
+  ) %>%
+  mutate(
+    comb = (ets + arima) / 2
+  ) %>%
+  reconcile(
+    ets_adj = min_trace(ets),
+    arima_adj = min_trace(arima),
+    comb_adj = min_trace(comb)
+  ) %>%
+  forecast(h = "2 years")
+```
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r fcaccuracy, dependson='fctourismcomb', echo=TRUE}
+fc %>%
+  accuracy(data = tourism_agg,
+           measures = list(crps = CRPS, ss=skill_score(CRPS)))
+```
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r fcaccuracy2, dependson='fctourismcomb', echo=TRUE}
+fc %>%
+  accuracy(tourism_agg,
+           measures = list(crps = CRPS, ss=skill_score(CRPS))) %>%
+  group_by(.model) %>%
+  summarise(sspc = mean(ss) * 100) %>%
+  arrange(sspc)
+```
+
+
+# Example: Australian electricity generation
+
+## Example: Australian electricity generation
+
+\begin{block}{Daily time series from \url{opennem.org.au}}
+\begin{enumerate}
+\item
+  Total = Renewable + Non-renewable
+\item
+  Renewable = Batteries + Hydro + Solar + Wind + Biomass\\
+  Non-Renewable = Coal + Gas + Distillate
+\item
+  Battery = Battery (Discharging) + Battery (Charging)\\
+  Solar = Solar (Rooftop) + Solar (Utility)\\
+  Coal = Black Coal + Brown Coal\\
+  Gas = Gas (OCGT) + Gas (CCGT) + Gas (Steam) + Gas (Recip)
+\end{enumerate}
+\end{block}
+
+$n=23$ series; $m=15$ bottom-level series.
+
+
+## Example: Australian electricity generation
+
+```{r include=FALSE}
+energy <- readr::read_csv('energy/daily.csv') %>%
+  head(-1)%>% #Remove last observation
+  select(date,contains(' -  GWh'))%>%
+  rename_all(~gsub(' -  GWh','',.x))%>%
+  mutate(date=as.Date(date),
+         Battery=rowSums(select(., contains("Battery"))),
+         Gas = rowSums(select(., contains("Gas"))),
+         Solar = rowSums(select(., contains("Solar"))),
+         Coal = rowSums(select(., contains("Coal"))),
+         `Hydro (inc. Pumps)` = Hydro + Pumps,
+         Renewable=Biomass+Hydro+Solar+Wind,
+         `non-Renewable`=Coal+Distillate+Gas,
+         Total=Renewable+`non-Renewable`+Battery+Pumps)%>%
+  pivot_longer(cols=-date,names_to = 'Source',values_to = 'Generation') %>%
+  as_tsibble(key = Source)
+```
+
+```{r selected, fig.width=12, fig.height=6}
+energy %>%
+  filter(
+    Source %in% c('Total', 'Wind', 'Solar', 'Distillate')
+  ) %>%
+  mutate(
+    Source = ordered(Source,
+            levels = c('Total','Wind','Solar','Distillate'))
+  ) %>%
+  ggplot(aes(x=date, y=Generation)) +
+  geom_line() +
+  facet_wrap(~Source, nrow = 4,  ncol = 1, scales = 'free_y')
+```
+
+## Example: Australian electricity generation
+
+\alert{Forecast evaluation}
+
+ * Rolling window of 140 days training data, and one-step-forecasts for 170 days test data.
+ * One-layer feed-forward neural network with up to 28 lags of target variable as inputs.
+ * Implemented using `NNETAR()` function in `fable` package.
+ * Model could be improved with temperature predictor.
+
+## Example: Australian electricity generation
+
+\placefig{0.3}{1.5}{width=7.5cm, height=10cm}{densities}
+\begin{textblock}{6}(9,1.7)
+\begin{block}{Histogram of residuals:\\ 2 Oct 2019 -- 21 Jan 2020}
+Clearly non-Gaussian
+\end{block}
+\end{textblock}
+
+## Example: Australian electricity generation
+
+\placefig{0.3}{1.5}{width=7.7cm, height=10cm}{corr}
+
+\begin{textblock}{6}(9,1.7)
+\begin{block}{Correlations of residuals:\\ 2 Oct 2019 -- 21 Jan 2020}
+Blue = positive correlation. Red = negative correlation. Large = stronger correlations.
+\end{block}
+\end{textblock}
+
+
+## Example: Australian electricity generation
+
+\placefig{0.3}{1.5}{width=7.2cm, height=10cm}{meanenergyscore}
+
+\begin{textblock}{3.5}(2.5,1.4)\fontsize{12}{12.5}\sf
+\begin{block}{}
+Mean Energy score
+\end{block}
+\end{textblock}
+
+\begin{textblock}{7}(8.7,1.3)\fontsize{12}{12.5}\sf
+\begin{block}{Base residual assumptions}
+\begin{itemize}\itemsep=0cm\parskip=0cm
+\item Gaussian independent
+\item Gaussian dependent
+\item Non-Gaussian independent
+\item Non-Gaussian dependent
+\end{itemize}
+\end{block}\vspace*{-0.1cm}
+\begin{block}{Reconciliation methods}
+\begin{itemize}\itemsep=0cm\parskip=0cm
+\item Base
+\item BottomUp
+\item BTTH: Ben Taieb, Taylor, Hyndman
+\item JPP: Jeon, Panagiotelis, Petropoulos
+\item OLS
+\item MinT(Shrink)
+\item Score Optimal Reconciliation
+\end{itemize}
+\end{block}
+\end{textblock}
+
+
+## Example: Australian electricity generation
+
+\placefig{0.3}{1.5}{width=6.cm, height=10cm}{nemenyi_ig}
+
+\placefig{8.3}{1.5}{width=6.cm, height=10cm}{nemenyi_jb}
+
+\begin{textblock}{7}(0.2,7.)\fontsize{11}{12}\sf
+\begin{block}{Nemenyi test for different scores}
+Base forecasts are independent and Gaussian.
+\end{block}
+\end{textblock}
+
+\begin{textblock}{7}(8.8,7.)\fontsize{11}{12}\sf
+\begin{block}{Nemenyi test for different scores}
+Base forecasts are obtained by jointly bootstrapping residuals.
+\end{block}
+\end{textblock}
 
 
 ## Probabilistic forecast reconciliation
@@ -214,7 +805,7 @@ energy <- readr::read_csv('energy/daily.csv') %>%
   as_tsibble(key = Source)
 ```
 
-```{r selected, fig.width=12, fig.height=6}
+```{r selected2, fig.width=12, fig.height=6}
 energy %>%
   filter(
     Source %in% c('Total', 'Wind', 'Solar', 'Distillate')
@@ -306,6 +897,705 @@ Base forecasts are obtained by jointly bootstrapping residuals.
 \end{block}
 \end{textblock}
 
+# Emergency Services Demand
+
+## Wales Health Board Areas
+
+\placefig{3.3}{1.2}{width=7.8cm}{Map-of-Wales-Health-Boards}
+
+## Data
+
+```{r}
+#| label: data
+incident_gthf <- readr::read_rds(here::here("data/incidents_gt.rds"))
+```
+
+
+
+* Daily number of attended incidents:\newline 1 October 2015 -- 31 July 2019
+* Disaggregated by:
+  * control area
+  * health board
+  * priority
+  * nature of incidents
+* `r scales::label_comma()(NROW(incident_gthf))` rows observations from `r scales::label_comma()(NROW(attributes(incident_gthf)$key))` time series.
+
+## Data structure
+
+```{r}
+#| label: data_structure
+#| include: false
+data <- data.frame(
+  level1 = "Total",
+  level2 = c(
+    "Central & West", "Central & West", "Central & West",
+    "North", "South & East", "South & East", "South & East"
+  ),
+  level3 = c("HD", "AB", "PO", "BC", "CV", "CT", "AB")
+)
+# transform it to a edge list!
+edges_level1_2 <- data |>
+  select(level1, level2) |>
+  unique() |>
+  rename(from = level1, to = level2)
+edges_level2_3 <- data |>
+  select(level2, level3) |>
+  unique() |>
+  rename(from = level2, to = level3)
+Cairo::CairoPDF(here::here("figs/group.pdf"), width = 6, height = 6)
+rbind(edges_level1_2, edges_level2_3) |>
+  igraph::graph_from_data_frame() |>
+  ggraph::ggraph(layout = "dendrogram", circular = FALSE) +
+  ggraph::geom_edge_diagonal() +
+  ggraph::geom_node_point(color = "#dddddd", size = 10) +
+  ggraph::geom_node_text(
+    aes(label = c(
+      "All country",
+      "Central & West", "North", "South & East",
+      "HD", "AB", "PO", "BC", "CV", "CT", "AB"
+    ))
+  ) +
+  theme_void() +
+  theme(
+    # panel.background = element_rect(fill = "transparent"), # transparent panel bg
+    plot.background = element_rect(fill = "transparent"), # transparent plot bg
+  )
+crop::dev.off.crop()
+```
+
+\placefig{0.3}{1.5}{width=7cm}{group.pdf}
+\placefig{7.5}{1.5}{width=7.7cm}{group.png}
+
+## Data structure
+\fontsize{10}{11}\sf
+
+```{r}
+#| label: data_structure_table
+agg_level <- tibble::tribble(
+  ~Level, ~`Number of series`,
+  "All country", 1,
+  "Control", 3,
+  "Health board", 7,
+  "Priority", 3,
+  "Priority * Control", 9,
+  "Priority * Health board", 21,
+  "Nature of incident", 35,
+  "Nature of incident * Control", 105,
+  "Nature of incident * Health board", 245,
+  "Priority * Nature of incident", 104,
+  "Control * Priority * Nature of incident", 306,
+  "Control * Health board * Priority * Nature of incident (Bottom level)", 691,
+  "Total", 1530
+)
+knitr::kable(agg_level, booktabs = TRUE, position = "left", linesep = "") |>
+  kableExtra::kable_classic(full_width = FALSE)
+```
+
+## Data
+\fontsize{10}{10}\sf
+
+```{r}
+incident_gthf
+```
+
+## Data
+\fontsize{10}{10}\sf
+
+```{r}
+incident_gthf  |>
+  arrange(date, region, category, nature, lhb)  |>
+  mutate(category = recode(category, RED = "Red", AMB = "Amber", GRE = "Green"))
+```
+
+```{r}
+#| label: time_plots
+gglabs <- ggplot2::labs(x = "Date", y = "Incidents")
+p_total <- incident_gthf |>
+  filter(is_aggregated(region) & is_aggregated(lhb) & is_aggregated(category) & is_aggregated(nature)) |>
+  autoplot(incident) +
+  gglabs
+
+p_control <- incident_gthf |>
+  filter(!is_aggregated(region) & !is_aggregated(lhb) & is_aggregated(category) & is_aggregated(nature)) |>
+  as_tibble() |>
+  select(-nature, -category) |>
+  group_by(date, region) |>
+  summarise(incident = sum(incident), .groups = "drop") |>
+  ggplot(aes(x = date, y = incident, color = factor(region))) +
+  geom_line() +
+  gglabs +
+  labs(color = "Control")
+
+p_board <- incident_gthf |>
+  filter(!is_aggregated(region) & !is_aggregated(lhb) & is_aggregated(category) & is_aggregated(nature)) |>
+  as_tibble() |>
+  select(-nature, -category) |>
+  ggplot(aes(x = date, y = incident, color = factor(lhb))) +
+  geom_line() +
+  gglabs +
+  labs(color = "Health board")
+
+p_priority <- incident_gthf |>
+  filter(is_aggregated(region) & is_aggregated(lhb) & !is_aggregated(category) & is_aggregated(nature)) |>
+  mutate(
+    category = recode(category, RED = "Red", AMB = "Amber", GRE = "Green"),
+    category = factor(category, levels = c("Red", "Amber", "Green"))
+  ) |>
+  as_tibble() |>
+  select(-nature, -region) |>
+  ggplot(aes(x = date, y = incident, color = factor(category))) +
+  geom_line() +
+  scale_color_manual(values = c(Red = "#ff3300", Amber = "#E69f00", Green = "#009e73")) +
+  gglabs +
+  labs(color = "Priority")
+
+p_nature1 <- incident_gthf |>
+  filter(is_aggregated(region) & is_aggregated(lhb) & is_aggregated(category) & !is_aggregated(nature)) |>
+  as_tibble() |>
+  mutate(nature = stringr::str_pad(as.character(nature), width = 12, side = "right")) |>
+  group_by(date, nature, lhb) |>
+  summarise(incident = sum(incident), .groups = "drop") |>
+  ggplot(aes(x = date, y = incident, color = nature)) +
+  geom_line() +
+  gglabs +
+  labs(color = "Nature of incident") +
+  ylim(0,260)
+
+top_cat <- incident_gthf |>
+  as_tibble() |>
+  filter(!is_aggregated(nature)) |>
+  group_by(nature) |>
+  summarise(incident = sum(incident), .groups = "drop") |>
+  arrange(desc(incident)) |>
+  head(3) |>
+  pull(nature) |>
+  as.character()
+selected_nature <- c("CHESTPAIN", "STROKECVA", "BREATHING", "ABDOMINAL")
+p_nature2 <- incident_gthf |>
+  filter(is_aggregated(region) & is_aggregated(lhb) & is_aggregated(category) & !is_aggregated(nature)) |>
+  as_tibble() |>
+  mutate(nature = as.character(nature)) |>
+  filter(nature %in% selected_nature) |>
+  group_by(date, nature, lhb) |>
+  summarise(incident = sum(incident), .groups = "drop") |>
+  ggplot(aes(x = date, y = incident, color = nature)) +
+  geom_line() +
+  gglabs +
+  labs(color = "Nature of incident") +
+  ylim(0,260)
+
+p <- patchwork::align_patches(p_total, p_control, p_board, p_priority, p_nature1, p_nature2)
+```
+
+## Aggregated daily incidents
+
+```{r}
+#| label: time_plots1
+p[[1]]
+```
+
+## Daily incidents by control area
+
+```{r}
+#| label: time_plots2
+p[[2]]
+```
+
+## Data incidents by health board
+
+```{r}
+#| label: time_plots3
+p[[3]]
+```
+
+## Data incidents by priority
+
+```{r}
+#| label: time_plots4
+p[[4]]
+```
+
+## Data incidents by nature of incident
+
+```{r}
+#| label: time_plots5
+p[[5]]
+```
+
+## Data incidents by nature of incident
+
+```{r}
+#| label: time_plots6
+p[[6]]
+```
+
+## Data features
+
+```{r}
+#| label: data_features
+incident_gthf |>
+  features(incident, feat_stl) |>
+  ggplot(aes(x = trend_strength, y = seasonal_strength_week)) +
+  geom_point(alpha = 0.25) +
+  labs(x = "Strength of trend", y = "Strength of weekly seasonality")
+```
+
+## Forecasting methods
+
+1. **Naïve**: Empirical distribution of past daily attended incidents.
+2. **ETS**: Exponential Smoothing State Space models.
+3. **GLM**: Poission Regression with spline trend, day of the week, annual Fourier seasonality, public holidays, school holidays, Christmas Day, New Year's Day.
+4. **TSGLM**: Poisson Regression with same covariates plus three autoregressive terms.
+5. **Ensemble**: Mixture distribution of 1--4.
+
+## Forecasting methods
+
+1. **Naïve**: Empirical distribution of past daily attended incidents.
+
+\begin{block}{}
+\centerline{$y_{T+h|T} \sim \text{Empirical}(y_{1},\dots,y_{T})$}
+\end{block}\vspace*{1cm}\pause
+
+2. **ETS**: Exponential Smoothing State Space models.
+
+\begin{block}{}
+\centerline{$y_{T+h|T} \sim \text{Normal}(\hat{y}_{T+h|T},\hat{\sigma}^2_{T+h|T})$}
+\end{block}
+
+## Forecasting methods
+
+3. **GLM**: Poission Regression
+
+\begin{block}{}
+\centerline{$y_{T+h|T} \sim \text{Poisson}(\hat{y}_{T+h|T}) \qquad\text{where}\qquad \hat{y}_{T+h|T} = \exp(\bm{x}_{T+h}'\bm{\beta})$}
+\end{block}
+
+and $\bm{x}_{T+h}$ is a vector of covariates including
+
+\begin{multicols}{2}
+\begin{itemize}\tightlist
+\item spline trend
+\item day of the week
+\item annual Fourier seasonality
+\item public holidays
+\item school holidays
+\item Christmas Day
+\item New Year's Day
+\end{itemize}
+\end{multicols}\vspace*{10cm}
+
+## Forecasting methods
+\fontsize{9}{8}\sf\vspace*{-0.15cm}
+
+```{r}
+y <- incident_gthf |>
+  filter(is_aggregated(region), is_aggregated(category), is_aggregated(nature))  |>
+  pull(incident)  |>
+  ts(frequency=7, start=c(1,4))
+holidays <- readr::read_rds(here::here("data/holidays_ts.rds"))
+
+n <- length(y)
+fourier_year <- forecast::fourier(ts(y, frequency = 365.25), K = 3)
+season_week <- forecast::seasonaldummy(y)
+trend <- splines::ns(seq(n), df = round(n / 300))
+X <- cbind(trend, season_week, fourier_year, holidays[seq_along(y), ])
+# Remove constant covariates
+constant <- apply(X, 2, forecast:::is.constant)
+X <- X[, !constant]
+fit <- glm(y ~ X, family = poisson())
+names(fit$coefficients) <- c(
+  "(Intercept)", paste0("Spline_",1:5),
+  "Monday","Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
+  "Fourier_S1_365", "Fourier_C1_365", "Fourier_S2_365", "Fourier_C2_365","Fourier_S3_365", "Fourier_C3_365",
+  "Public_holiday","School_holiday", "Xmas", "New_years_day")
+glm_summary(fit)
+```
+
+\begin{textblock}{2.7}(12,3)
+\fontsize{9}{9}\sf
+\begin{block}{\fontsize{9}{9}\sf\centerline{Significance}}
+\begin{tabular}{rl}
+\verb|***| &$p < 0.001$\\
+\verb|**| &$p < 0.01$\\
+\verb|*| &$p < 0.05$\\
+\verb|.| &$p < 0.1$
+\end{tabular}
+\end{block}
+\end{textblock}
+
+## Forecasting methods
+
+4. **TSGLM**: Poisson Regression
+
+\begin{block}{}\vspace*{-0.8cm}
+\begin{align*}
+y_{T+h|T} &\sim \text{Poisson}(\hat{y}_{T+h|T}) \\
+\text{where}\qquad
+\hat{y}_{T+h|T} &= \exp\Big(\bm{x}_{T+h}'\bm{\beta} + \sum_{k=1}^3 \alpha_k \log(y_{T+h-k}+1)\Big)
+\end{align*}
+\end{block}\vspace*{-0.3cm}
+
+and $\bm{x}_{T+h}$ is a vector of covariates including
+
+\begin{multicols}{2}
+\begin{itemize}\tightlist
+\item spline trend
+\item day of the week
+\item annual Fourier seasonality
+\item public holidays
+\item school holidays
+\item Christmas Day
+\item New Year's Day
+\end{itemize}
+\end{multicols}\vspace*{10cm}
+
+## Notation
+
+\begin{textblock}{8.5}(0.2,1.5)
+Every collection of time series with linear constraints can be written as
+\centerline{\colorbox[RGB]{210,210,210}{$\bY_{t}=\color{blue}\bS\color{red}\bm{b}_{t}$}}
+\vspace*{-0.9cm}\begin{itemize}\parskip=0cm\itemsep=0cm
+\item $\by_t=$ vector of all series at time $t$
+\item $ y_{\text{Total},t}= $ aggregate of all series at time
+$t$.
+\item $ y_{X,t}= $ value of series $X$ at time $t$.
+\item $\color{red}{\bm{b}_t}=$ vector of most disaggregated series at time $t$
+\item $\color{blue}{\bS}=$ ``summing matrix'' containing the linear constraints.
+\end{itemize}
+\end{textblock}
+
+\begin{textblock}{5.7}(11.4,0.1)
+\begin{minipage}{4cm}
+\begin{block}{}\centering
+\begin{tikzpicture}
+\tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
+\tikzstyle[level distance=.3cm]
+\tikzstyle[sibling distance=12cm]
+\tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
+\node{Total}[edge from parent fork down]
+ child {node {A}
+ }
+ child {node {B}
+ }
+ child {node {C}
+ };
+\end{tikzpicture}
+\end{block}
+\end{minipage}
+\end{textblock}
+
+\only<1>{\begin{textblock}{5.7}(9.4,2.8)\fontsize{14}{15}\sf
+\begin{align*}
+\bY_{t}&= \begin{pmatrix}
+  y_{\text{Total},t}\\
+  y_{A,t}\\
+  y_{B,t}\\
+  y_{C,t}
+  \end{pmatrix}  \\
+  &= {\color{blue}\underbrace{\begin{pmatrix}
+                1 & 1 & 1 \\
+                1 & 0 & 0 \\
+                0 & 1 & 0\\
+                0 & 0 & 1
+                \end{pmatrix}}_{\bS}}
+     {\color{red}\underbrace{\begin{pmatrix}
+       y_{A,t}\\y_{B,t}\\y_{C,t}
+       \end{pmatrix}}_{\bm{b}_{t}}}
+\end{align*}
+\end{textblock}}
+\only<2>{\begin{textblock}{5.7}(9.4,3.2)\fontsize{14}{15}\sf
+\begin{alertblock}{}
+\begin{itemize}\itemsep=0.1cm
+\item Base forecasts: $\hat{\bm{y}}_{T+h|T}$
+\item Reconciled forecasts: $\tilde{\bm{y}}_{T+h|T}=\bS\bm{G}\hat{\bm{y}}_{T+h|T}$
+\item MinT: $\bG = (\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$ where $\bm{W}_h$ is covariance matrix of base forecast errors.
+\end{itemize}
+\end{alertblock}
+\end{textblock}}
+
+## Nonparametric bootstrap reconciliation
+
+* Fit model to all series and store the residuals as $\underaccent{\tilde}{\bm{\varepsilon}}_t$.
+* These should be serially uncorrelated but cross-sectionally correlated.
+* Draw iid samples from $\underaccent{\tilde}{\bm{\varepsilon}}_1,\dots,\underaccent{\tilde}{\bm{\varepsilon}}_T$ with replacement.
+* Simulate future sample paths for model using the bootstrapped residuals.
+* Reconcile each sample path using MinT.
+* Combine the reconciled sample paths to form a mixture distribution at each forecast horizon.
+
+## Performance evaluation
+
+* Ten-fold time series cross-validation
+* Forecast horizon of 1--84 days
+* Each training set contains an additional 42 days.
+* Forecasts at 43--84 days correspond to planning horizon.
+
+```{r}
+#| label: cv1
+#| echo: false
+#| fig-height: 2.7
+.lines <- 10
+.init <- 30
+.step <- 6
+h <- 7:12
+max_t <- .init + .step*(.lines - 1) + max(h)
+expand.grid(
+    time = seq(max_t),
+    .id = seq(.lines)
+  ) |>
+  mutate(
+    min_h = (.id-1) * .step + .init + min(h),
+    max_h =  (.id-1) * .step + .init + max(h),
+    observation = case_when(
+      time <= ((.id - 1) * .step + .init) ~ "train",
+      time < min_h ~ "test1",
+      time <= max_h ~ "test2",
+      TRUE ~ "unused"
+    )
+  ) |>
+  ggplot(aes(x = time, y = .id)) +
+  geom_segment(
+    aes(x = 0, xend = max_t+1, y = .id, yend = .id),
+    arrow = arrow(length = unit(0.015, "npc")),
+    col = "black", linewidth = .25
+  ) +
+  geom_point(aes(col = observation), size = 2) +
+  scale_y_reverse() +
+  scale_colour_manual(values = c(train = "#0072B2", test1 = "#d59771", test2 = "#D55E00", unused = "gray")) +
+  theme_void() +
+  guides(colour = "none") +
+  labs(x = "weeks", y = "") +
+  theme_void() +
+  theme(
+    axis.title = element_text(),
+    plot.background = element_rect(fill = "#fafafa", color = "#fafafa")
+  )
+```
+
+## Performance evaluation
+
+\vspace*{0.2cm}\begin{block}{}
+\centerline{$\text{MASE} = \text{mean}(|q_{j}|)$}
+$$
+  q_{j} = \frac{e_{j}\phantom{^2}}
+ {\displaystyle\frac{1}{T-m}\sum_{t=m+1}^T |y_{t}-y_{t-m}|}
+$$
+\end{block}
+
+* $y_t=$ observation for period $t$
+* $e_{j}=$ forecast error for forecast horizon $j$
+* $T=$ size of training set
+* $m = 7$
+
+\vspace*{10cm}
+
+## Performance evaluation
+
+\vspace*{0.2cm}\begin{block}{}
+\centerline{$\text{MSSE} = \text{mean}(q_{j}^2)$}
+$$
+  q^2_{j} = \frac{ e^2_{j}}
+ {\displaystyle\frac{1}{T-m}\sum_{t=m+1}^T (y_{t}-y_{t-m})^2}
+$$
+\end{block}
+
+* $y_t=$ observation for period $t$
+* $e_{j}=$ forecast error for forecast horizon $j$
+* $T=$ size of training set
+* $m = 7$
+
+\vspace*{10cm}
+
+## Performance evaluation
+
+\vspace*{0.2cm}\begin{block}{}
+\centerline{$\text{CRPS} = \text{mean}(p_j)$}
+$$
+  p_j = \int_{-\infty}^{\infty} \left(G_j(x) - F_j(x)\right)^2dx,
+$$
+\end{block}
+
+* $G_j(x)=$ forecast distribution for forecast horizon $j$
+* $F_j(x)=$ true distribution for same period
+
+\vspace*{10cm}
+
+```{r}
+#| label: results
+#| include: false
+rmsse <- readr::read_rds(here::here("results/rmsse.rds")) |>
+  mutate(msse = rmsse^2)
+mase <- readr::read_rds(here::here("results/mase.rds"))
+crps <- readr::read_rds(here::here("results/crps.rds")) |>
+  pivot_wider(names_from = model, values_from = crps) |>
+  group_by(method, h, series) |>
+  mutate(across(where(is.numeric), ~ .x / naiveecdf)) |>
+  ungroup()
+```
+
+
+## Forecast accuracy
+
+```{r}
+#| label: results_graph
+crps <- crps |>
+  pivot_longer(ensemble:tscount, names_to = "model", values_to = "crps")
+
+accuracy <- bind_rows(
+  rmsse |> mutate(measure = "msse", accuracy = rmsse^2),
+  mase |> mutate(measure = "mase", accuracy = mase),
+  crps |> mutate(measure = "crps", accuracy = crps),
+) |>
+  select(-rmsse, -mase, -crps)
+
+# Plot of average accuracy vs week for each method for Total
+acc_summary <- accuracy |>
+  filter(
+    series %in% c("Total", "Control areas", "Health boards"),
+    method == "mint", model != "qcomb"
+  ) |>
+  mutate(model = case_when(
+    model == "naiveecdf" ~ "Naïve",
+    model == "ets" ~ "ETS",
+    model == "tscount" ~ "TSGLM",
+    model == "iglm" ~ "GLM",
+    model == "ensemble" ~ "Ensemble"
+  )) |>
+  mutate(
+    measure = factor(measure, levels = c("mase", "msse", "crps"), labels = c("MASE", "MSSE", "CRPS")),
+    series = factor(series, levels = c("Total", "Control areas", "Health boards")),
+    model = factor(model, levels = c("Naïve", "ETS", "TSGLM", "GLM", "Ensemble")),
+    week = factor(trunc((h - 1) / 7) + 1)
+  ) |>
+  group_by(week, model, measure, series) |>
+  summarise(accuracy = mean(accuracy), .groups = "drop")
+
+
+acc_summary |>
+  ggplot(aes(x = week, y = accuracy, group = model, col = model)) +
+  geom_line() +
+  geom_point(size = .5) +
+  facet_grid(measure ~ series, scales = "free_y") +
+  labs(y = "Average accuracy", x = "Week ahead")
+```
+
+## Forecast accuracy: 43--84 days ahead
+\fontsize{10}{10}\sf
+
+```{r}
+#| label: results_table_msse
+# Set minimum in column to bold
+set_to_bold <- function(table) {
+  for (i in 3:6) {
+    best <- which.min(table[[i]])
+    table[[i]] <- sprintf(table[[i]], fmt = "%1.3f")
+    table[[i]][best] <- cell_spec(table[[i]][best], bold = TRUE)
+  }
+  return(table)
+}
+
+msse1 <- rmsse |>
+  filter(
+    method %in% c("mint", "base"),
+    model != "qcomb",
+    h > 42
+  ) |>
+  mutate(
+    model = factor(model,
+      levels = c("naiveecdf", "ets", "iglm", "tscount", "ensemble"),
+      labels = c("Naïve", "ETS", "GLM", "TSGLM", "Ensemble")
+    ),
+    method = factor(method, levels = c("base", "mint"), labels = c("Base", "MinT")),
+  ) |>
+  group_by(method, model, series) |>
+  summarise(msse = mean(msse), .groups = "drop") |>
+  pivot_wider(names_from = series, values_from = msse) |>
+  select(Method = method, Model = model, Total, `Control areas`, `Health boards`, Bottom) |>
+  set_to_bold()
+kbl(msse1, booktabs = TRUE, escape = FALSE, align = "llrrrr") |>
+  add_header_above(c(" " = 2, "MSSE" = 4)) |>
+  kable_styling(latex_options = c("hold_position"))
+```
+
+## Forecast accuracy: 43--84 days ahead
+\fontsize{10}{10}\sf
+
+```{r}
+#| label: results_table_mase
+mase1 <- mase |>
+  filter(
+    method %in% c("mint", "base"),
+    model != "qcomb",
+    h > 42
+  ) |>
+  mutate(
+    model = factor(model,
+      levels = c("naiveecdf", "ets", "iglm", "tscount", "ensemble"),
+      labels = c("Naïve", "ETS", "GLM", "TSGLM", "Ensemble")
+    ),
+    method = factor(method, levels = c("base", "mint"), labels = c("Base", "MinT"))
+  ) |>
+  group_by(method, model, series) |>
+  summarise(mase = mean(mase), .groups = "drop") |>
+  pivot_wider(names_from = series, values_from = mase) |>
+  select(Method = method, Model = model, Total, `Control areas`, `Health boards`, Bottom) |>
+  set_to_bold()
+kbl(mase1, booktabs = TRUE, escape = FALSE, align = "llrrrr") |>
+  add_header_above(c(" " = 2, "MASE" = 4)) |>
+  kable_styling(latex_options = c("hold_position"))
+```
+
+## Forecast accuracy: 43--84 days ahead
+\fontsize{10}{10}\sf
+
+```{r}
+
+crps1 <- readr::read_rds(here::here("results/crps.rds")) |>
+  filter(
+    method %in% c("mint", "base"),
+    model != "qcomb",
+    h > 42
+  ) |>
+  mutate(
+    model = factor(model,
+      levels = c("naiveecdf", "ets", "iglm", "tscount", "ensemble"),
+      labels = c("Naïve", "ETS", "GLM", "TSGLM", "Ensemble")
+    ),
+    method = factor(method, levels = c("base", "mint"), labels = c("Base", "MinT"))
+  ) |>
+  group_by(method, model, series) |>
+  summarise(crps = mean(crps), .groups = "drop") |>
+  pivot_wider(names_from = series, values_from = crps) |>
+  select(Method = method, Model = model, Total, `Control areas`, `Health boards`, Bottom) |>
+  set_to_bold()
+kbl(crps1, booktabs = TRUE, escape = FALSE, align = "llrrrr") |>
+  add_header_above(c(" " = 2, "CRPS" = 4)) |>
+  kable_styling(latex_options = c("hold_position"))
+```
+
+## Conclusions
+
+* Ensemble mixture distributions give better forecasts than any component methods.
+* Forecast reconciliation improves forecast accuracy, even when some component methods are quite poor.
+* Forecast reconciliation allows coordinated planning and resource allocation.
+
+
+# Bayesian versions
+
+## Bayesian versions
+
+@novetal2017
+
+Another strain of the literature brings a Bayesian approach to the regression model interpretation of forecast reconciliation. @novetal2017 recognise that the posterior of ${\bm\beta}_{h}$ can act as a probabilistic forecast for the bottom-level series. Using Markov chain Monte Carlo to obtain a sample from this posterior, and then aggregating, gives a probabilistic forecast for the entire hierarchy.
+
+## Bayesian versions
+
+@swissexports also obtain a posterior on ${\bm\beta}_{h}$, but their focus is on augmenting the reconciliation regression equation with a vector of intercepts that allow for base forecasts to be biased and evolve according to a state space representation.
+
+Judgement can be incorporated via the prior, in the latter case via an explicit empirical example where prior information about a structural break in data classification can be exploited. Also, while both papers recognise the potential of Bayesian inference to obtain probabilistic forecasts, neither paper makes this the focus of empirical evaluation. @novetal2017 minimise loss functions over the posterior sample and then use this as a point forecast, while @swissexports use maximum a posteriori (MAP) estimates as point forecasts.
+
+## Bayesian versions
+
+@CorEtAl2021 In particular, a prior is placed on the bottom-level series with the mean set to point forecasts obtained in the first step of forecast reconciliation and a variance given by the variance-covariance matrix of one-step ahead errors. This prior is updated using the top-level forecasts obtained in the first stage of forecast reconciliation via Bayes' rule. The method generalises MinT in the sense that the posterior mean is equivalent to the usual MinT approach. The necessary updates via Bayes' rule have parallels with the Kalman filter since the reconciliation problem is recast as a linear Gaussian model. The empirical results are evaluated using scoring rules for probabilistic forecasts including the CRPS and energy score. This approach has also recently been extending to the challenging case of forecast reconciliation for discrete data by @CorEtAl2022 and @Zambon2022.
 
 ## Thanks!
 
@@ -355,3 +1645,6 @@ Base forecasts are obtained by jointly bootstrapping residuals.
 \end{alertblock}
 \end{textblock}
 \vspace*{10cm}
+
+
+\nocite{ctprob,smartmeterhts,coherentprob,swissexports}
