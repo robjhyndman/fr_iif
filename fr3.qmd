@@ -167,4 +167,4 @@ y_j^{\left[k\right]} = \sum^{jk}_{t=1+(j-1)k}{y_t},\qquad \text{for $j = 1,\dots
 
 ## Daniele and Tommy's papers
 
-\nocite{Di_FonGir2022,temporal-hierarchies}
+\nocite{Di_FonGir2022a,temporal-hierarchies}

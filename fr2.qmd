@@ -34,6 +34,8 @@ source("setup.R")
 
 \vspace*{0.4cm}\tableofcontents
 
+#
+
 # Reconciliation via constraints
 
 ## Notation reminder
@@ -186,10 +188,84 @@ Assuming $\bm{C}$ is full rank
 \centerline{where\qquad $\bm{M} = \bm{I} - \bm{W}_h\bm{C}'(\bm{C}\bm{W}_h\bm{C}')^{-1}\bm{C}$}
 \end{block}\vspace*{-0.3cm}
 
-* Originally proved by Byron (1978, 1979) for reconciling data.
+* Originally proved by @Byron1978 & @Byron1979 for reconciling data.
 * Re-discovered by @mint for reconciling forecasts.
 * $\bm{M} = \bm{S}\bm{G}$ (the MinT solution)
 * Leads to more efficient reconciliation than using $\bm{G}$.
+
+## Zero-constraint representation
+
+\begin{textblock}{5.7}(11.4,0.1)
+\begin{minipage}{4cm}
+\begin{block}{}\centering
+\begin{tikzpicture}
+\tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
+\tikzstyle[level distance=.3cm]
+\tikzstyle[sibling distance=12cm]
+\tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
+\node{Total}[edge from parent fork down]
+ child {node {A}
+ }
+ child {node {B}
+ }
+ child {node {C}
+ };
+\end{tikzpicture}
+\end{block}
+\end{minipage}
+\end{textblock}
+
+\begin{textblock}{5.8}(9.6,3.5)
+\begin{block}{}\vspace*{-0.6cm}\fontsize{11}{11}\sf
+\begin{align*}
+\bm{A} &= \begin{pmatrix}
+           1 & 1 & 1
+           \end{pmatrix} \\
+\bS & = \begin{pmatrix}\bm{A}\\\bm{I}_{n_b}\end{pmatrix} =
+\begin{pmatrix}
+                1 & 1 & 1 \\
+                1 & 0 & 0 \\
+                0 & 1 & 0\\
+                0 & 0 & 1
+                \end{pmatrix} \\
+\bm{C} & = \begin{pmatrix} \bm{I}_{n_a} & - \bm{A} \end{pmatrix} = \begin{pmatrix} 1 & -1 & -1 & -1 \end{pmatrix}
+\end{align*}
+\end{block}
+\end{textblock}
+
+\begin{textblock}{9}(.2, 1.5)\fontsize{11}{11}\sf
+Suppose $\bm{W}_h = \bm{I}$. Then\vspace*{-0.2cm}
+\begin{align*}
+\bm{M} &= \bm{I} - \bm{W}_h\bm{C}'(\bm{C}\bm{W}_h\bm{C}')^{-1}\bm{C} \\
+       &= \begin{pmatrix}
+                1 & 0 & 0 & 0 \\
+                0 & 1 & 0 & 0 \\
+                0 & 0 & 1 & 0\\
+                0 & 0 & 0 & 1
+                \end{pmatrix} -
+                \begin{pmatrix} \phantom{-}1 \\ -1 \\ -1 \\ -1 \end{pmatrix} \frac{1}{4} \begin{pmatrix} 1 & -1 & -1 & -1 \end{pmatrix} \\
+&= \begin{pmatrix}
+                1 & 0 & 0 & 0 \\
+                0 & 1 & 0 & 0 \\
+                0 & 0 & 1 & 0\\
+                0 & 0 & 0 & 1
+                \end{pmatrix} -
+                \begin{pmatrix}
+                \phantom{-}1 & -1 & -1 & -1 \\
+                -1 & \phantom{-}1 & \phantom{-}1 & \phantom{-}1 \\
+                -1 & \phantom{-}1 & \phantom{-}1 & \phantom{-}1 \\
+                -1 & \phantom{-}1 & \phantom{-}1 & \phantom{-}1
+                \end{pmatrix} \\
+                & =
+                \begin{pmatrix}
+                \frac{3}{4} & \phantom{-}\frac14 & \phantom{-}\frac14 & \phantom{-}\frac14 \\[0.1cm]
+                \frac{1}{4} & \phantom{-}\frac34 & -\frac14 & -\frac14 \\[0.1cm]
+                \frac{1}{4} & -\frac14 & \phantom{-}\frac34 & -\frac14  \\[0.1cm]
+                \frac{1}{4} & -\frac14 & -\frac14 & \phantom{-}\frac34
+                \end{pmatrix}
+\end{align*}
+\end{textblock}
+
 
 # The geometry of forecast reconciliation
 
@@ -357,8 +433,7 @@ $$
 $$
 and unbiased estimates must lie on $\mathfrak{s}$.
 * The projection is orthogonal if and only if $\bm{M}'=\bm{M}$.
-* $\bm{S}$ forms a basis set for $\mathfrak{s}$.
-* Projections are of the form $\bm{M} = \bS(\bS'\bm{\Psi}\bS)^{-1}\bS'\bm{\Psi}$ where $\bm{\Psi}$ is a positive definite matrix.
+* If $\bm{S}$ forms a basis set for $\mathfrak{s}$, then projections are of the form $\bm{M} = \bS(\bS'\bm{\Psi}\bS)^{-1}\bS'\bm{\Psi}$ where $\bm{\Psi}$ is a positive definite matrix.
 
 \vspace*{10cm}
 
@@ -382,10 +457,14 @@ and unbiased estimates must lie on $\mathfrak{s}$.
 
 ## Mean square error bounds
 
-\vspace*{0.2cm}\begin{block}{Distance reducing property}
+\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\citet{htsgeometry}
+\end{block}\end{textblock}
+
+\vspace*{0.2cm}\begin{alertblock}{Distance reducing property}
 Let $\|\bm{u}\|_{\bm{\Psi}} = \bm{u}'\bm{\Psi}\bm{u}$. Then
   \centerline{$\|\bm{y}_{t+h}-\tilde{\bm{y}}_{t+h|t}\|_{\bm{\Psi}}\le\|\bm{y}_{t+h}-\hat{\bm{y}}_{t+h|t}\|_{\bm{\Psi}}$}
-\end{block}
+\end{alertblock}
 
  * $\bm{\Psi}$-projection is guaranteed to improve forecast accuracy over base forecasts *using this distance measure*.
  * Distance reduction holds for any realisation and any forecast.
@@ -434,7 +513,7 @@ Using sums of variances:
 ## Minimum trace reconciliation
 
 \vspace*{0.2cm}\begin{alertblock}{Minimum trace (MinT) reconciliation}
-If $\bS\bG$ is a projection, then the trace of $\bm{V}_h$ is \textbf{minimized} when
+If $\bS\bG$ is a projection, then the trace of $\bm{V}_h = \text{Var}(\tilde{\bm{y}}_{t+h|t} - \bm{y}_{t+h})$ is \textbf{minimized} when
 \centerline{$\bG = (\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$}
 \end{alertblock}
 \begin{block}{}
@@ -491,45 +570,24 @@ where $\bm{B} = [\bm{b}_{T_1+h}, \dots, \bm{b}_{T}]'$.
 Reference: @Ben_TaiEtAl2019
 
 ## Non-negative forecasts
-
-\begin{textblock}{6.4}(9,0.)\begin{block}{}
-\citet{nonnegmint}
-\end{block}\end{textblock}
-
-* How to ensure all forecasts are positive?
-
-\pause\begin{block}{}
-\centerline{$\min_{\bm{G}_h}\text{tr}\Big(\E[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]'[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]\Big)$}
-\centerline{such that $\bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t} \ge 0$}
-\end{block}\pause
-
-## Non-negative forecast reconciliation
 \fontsize{14}{15}\sf
+\vspace*{0.1cm}\begin{alertblock}{}
+\centerline{$\min_{\bm{G}_h}\text{tr}\Big(\E[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]'[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]\Big)$}
+\centerline{such that $\bm{b}_{t+h|t} = \bm{G}_h\hat{\bm{y}}_{t+h|t} \ge 0$}
+\end{alertblock}\pause\vspace*{-0.2cm}
 
-\begin{block}{Minimum trace (MinT) reconciliation}
-The trace of $\bm{V}_h$ is minimized when
-$$
-  \tilde{\bm{b}}_{T+h|T} = (\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}\hat{\bm{y}}_{T+h|T}
-$$
-subject to unbiasedness preservation ($\bS\bG\bS=\bS$).
-\end{block}\vspace*{-0.1cm}\pause
-
-Wickramasuriya, Turlach and Hyndman (*S&C*, 2020) replace the unbiased constraint by a non-negative constraint:
-$$
-  \tilde{\bm{b}}_{T+h|T}\ge0
-$$
-and show that it can be solved via quadratic programming:
-
-\begin{alertblock}{}
+\begin{block}{Solve via quadratic programming:}
 $$
   \text{min}_{\bm{b}} \frac12 \bm{b}'\bS'\bm{W}_h^{-1}\bS\bm{b} - \bm{b}'\bS'\bm{W}_h^{-1}\hat{\bm{y}}_{T+h|T} \quad \text{s.t.~~} \bm{b} \ge 0
 $$
-\end{alertblock}
+\rightline{\citep{nonnegmint}}
+\end{block}\pause\vspace*{-0.1cm}
 
-@di2023spatio propose an effective nonnegative heuristic called "set-negative-to-zero"
-
-  * Negative reconciled forecasts at the bottom level are set to zero
+### Set-negative-to-zero heuristic solution
+  * Negative reconciled forecasts at bottom level set to zero
   * Remaining forecasts computed via aggregation
+
+\rightline{\citep{di2023spatio}}
 
 ## Immutable forecasts
 
@@ -537,9 +595,7 @@ $$
 \citet{HolEtAl2021}
 \end{block}\end{textblock}
 
-* How to ensure some forecasts are unchanged?
-
-\pause\begin{block}{}
+\begin{block}{}
 \centerline{$\min_{\bm{G}_h}\text{tr}\Big(\E[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]'[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]\Big)$}
 \centerline{such that $\bm{C}\bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t} = \bm{d}$}
 \end{block}
@@ -575,58 +631,73 @@ Focusing on temporal hierarchies, \textcite{TheKou2021} provide an end-to-end ne
 \textcite{AboEtAl2019} use ML to improve the performance of non-combination hierarchical approaches. They consider various ML methods to obtain better prorations to decompose upper-level forecasts to lower-levels. \textcite{FenZha2020} provide a standard implementation of hierarchical methods using base forecasts from ML models, and find the hierarchically reconciled forecasts to be the most accurate. \textcite{PunEtAl2020} leverage on LSTM networks to produce forecasts for the cross-temporal case. Forecasts are generated for the various temporal aggregation levels, which are reconciled first by using temporal hierarchies and then cross-sectional. \textcite{SprEtAl2021} propose a method for probabilistic gradient boosting machines, and benchmark its performance on the hierarchical M5 dataset, demonstrating good performance against other non-hierarchical ML methods. Although the proposed method can provide probabilistic predictions for all time series of the hierarchy, coherence is not established. \textcite{ManEtAl2021} use a deep neural network to directly produce reconciled forecasts. The neural network captures the structure of the hierarchy, as well links the relationship between time series features extracted at any level of the hierarchy and explanatory variables into an end-to-end neural network.
 
 
-# Bayesian versions
-
-## Bayesian versions
-
-@novetal2017
-
-Another strain of the literature brings a Bayesian approach to the regression model interpretation of forecast reconciliation. @novetal2017 recognise that the posterior of ${\bm\beta}_{h}$ can act as a probabilistic forecast for the bottom-level series. Using Markov chain Monte Carlo to obtain a sample from this posterior, and then aggregating, gives a probabilistic forecast for the entire hierarchy.
-
-## Bayesian versions
-
-@swissexports also obtain a posterior on ${\bm\beta}_{h}$, but their focus is on augmenting the reconciliation regression equation with a vector of intercepts that allow for base forecasts to be biased and evolve according to a state space representation.
-
-Judgement can be incorporated via the prior, in the latter case via an explicit empirical example where prior information about a structural break in data classification can be exploited. Also, while both papers recognise the potential of Bayesian inference to obtain probabilistic forecasts, neither paper makes this the focus of empirical evaluation. @novetal2017 minimise loss functions over the posterior sample and then use this as a point forecast, while @swissexports use maximum a posteriori (MAP) estimates as point forecasts.
-
-## Bayesian versions
-
-@CorEtAl2021 In particular, a prior is placed on the bottom-level series with the mean set to point forecasts obtained in the first step of forecast reconciliation and a variance given by the variance-covariance matrix of one-step ahead errors. This prior is updated using the top-level forecasts obtained in the first stage of forecast reconciliation via Bayes' rule. The method generalises MinT in the sense that the posterior mean is equivalent to the usual MinT approach. The necessary updates via Bayes' rule have parallels with the Kalman filter since the reconciliation problem is recast as a linear Gaussian model. The empirical results are evaluated using scoring rules for probabilistic forecasts including the CRPS and energy score. This approach has also recently been extending to the challenging case of forecast reconciliation for discrete data by @CorEtAl2022 and @Zambon2022.
 
 # In-built coherence
 
 ## In-built coherence
 
-Two-step approach: compute base forecasts $\hat{\bm{y}}_h$, and then reconcile them to produce $\tilde{\bm{y}}_h$.
+**Two-step approach**: compute base forecasts $\hat{\bm{y}}_h$, and then reconcile them to produce $\tilde{\bm{y}}_h$.
 
-as shown by @AshEtAl2021, if the base forecasts $\hat{\bm{y}}$ are produced using a linear regression model, the base forecasts and reconciliation can be combined, giving coherent forecasts directly in a single closed form equation. Further, the computation is extremely fast provided sparse matrix algebra is used.
+**One-step approaches:** compute coherent $\tilde{\bm{y}}_h$ directly.
 
-## Reconciled linear regression forecasts
+  * @lhf: linear regression models
+  * @PenvanDal2017: state space models
+  * @villegas2018supply: state space models
 
-If the base forecasts are from a linear regression model, then we can produce coherent forecasts in one step:
-\begin{block}{}
-\only<1>{\centerline{$\tilde{\bm{y}}_{T+h|T} = \bm{S}(\bm{S}'\bm{\Lambda}_s\bm{S})^{-1}\bm{S}'\bm{\Lambda}_s \hat{\bm{y}}_{T+h|T} \qquad
-  \hat{\bm{y}}_{T+h|T} = \bm{X}_{T+h}^* (\bm{X}'\bm{X})^{-1} \bm{X}'\bm{Y}$}}
-\only<2->{\centerline{$\tilde{\bm{y}}_{T+h|T} = \bm{S}(\bm{S}'\bm{\Lambda}_s\bm{S})^{-1}\bm{S}'\bm{\Lambda}_s
-                            \bm{X}_{T+h}^* (\bm{X}'\bm{X})^{-1} \bm{X}'\bm{Y}$}}
-\begin{itemize}\tightlist
-\item $\bm{X}$ is matrix of predictors for training set
-\item $\bm{X}^*_{T+h}$ is vector of predictors for time $T+h$
-\end{itemize}
-\end{block}
-
-\only<3->{\begin{block}{}
-\centerline{$\bm{V}_h = \sigma^2\bm{S}(\bm{S}'\bm{\Lambda}_s\bm{S})^{-1}\bm{S}'\bm{\Lambda}_s\left[1 + \bm{X}_{T+h}^*(\bm{X}'\bm{X})^{-1}(\bm{X}_{T+h}^*)'\right] \bm{\Lambda}_s\bm{S}'(\bm{S}'\bm{\Lambda}_s\bm{S})^{-1}\bm{S}'$}
-\begin{itemize}\tightlist
-\item $\sigma^2$ is variance of base model residuals.
-\end{itemize}
-\end{block}}
-
+## In-built coherence using linear models
+\fontsize{13}{14}\sf
+Suppose $\hat{y}_{t,i} = \hat{\bm{\beta}}_{i}' \bm{x}_{t,i}$
+with $\bm{x}_{t,i}= (1, x_{t,1,i},\dots,x_{t,p,i})$&nbsp; & &nbsp;\rlap{$\hat{\bm{y}}_i = (\hat{y}_{1,i}, \dots, \hat{y}_{T,i})$.}
+\pause
+\begin{align*}
+\textcolor{blue}{\begin{pmatrix}
+  \hat{\bm{y}}_1\\
+  \hat{\bm{y}}_2\\
+  \vdots\\
+  \hat{\bm{y}}_n
+  \end{pmatrix}} &=
+  \textcolor{red}{\begin{pmatrix}
+  \bm{X}_1 & 0        & \dots  & 0\\
+  0        & \bm{X}_2 & \ddots & \vdots \\
+  \vdots   & \ddots   & \ddots & 0\\
+  0        & \dots    & 0      & \bm{X}_n
+  \end{pmatrix}}
+  \begin{pmatrix}
+  \hat{\bm{\beta}}_1\\
+  \hat{\bm{\beta}}_2\\
+  \vdots\\
+  \hat{\bm{\beta}}_n
+\end{pmatrix},
+&&\quad
+  \bm{X}_i = \begin{pmatrix}
+  1 & x_{1,i,1} & x_{1,i,2} & \dots & x_{1,i,p}\\
+  1 & x_{2,i,1} & x_{2,i,2} & \dots & x_{2,i,p}\\
+  \vdots & \vdots & \vdots & & \vdots \\
+  1 & x_{T,i,1} & x_{T,i,2} & \dots & x_{T,i,p}
+\end{pmatrix}
+\end{align*}\pause
+$\hat{\bm{B}} = (\textcolor{red}{\bm{X}}'\textcolor{red}{\bm{X}})^{-1} \textcolor{red}{\bm{X}}'\textcolor{blue}{\bm{Y}}$
+\pause\qquad
+$\hat{\bm{y}}_{t+h} = \bm{X}_{t+h}^* \hat{\bm{B}}$
+\pause\qquad
+$\bm{X}^*_{t+h} =\text{diag}(\bm{x}_{t+h,i}', \dots, \bm{x}_{t+h,n}')$
+\pause
+\begin{alertblock}{}\vspace*{-0.8cm}
+\begin{align*}
+\tilde{\bm{y}}_{t+h} & = \bm{S}(\bm{S}'\bm{W}_h\bm{S})^{-1}\bm{S}'\bm{W}_h
+                            \hat{\bm{y}}_{t+h}
+                         = \bm{S}(\bm{S}'\bm{W}_h\bm{S})^{-1}\bm{S}'\bm{W}_h
+                            \bm{X}_{t+h}^* (\textcolor{red}{\bm{X}}'\textcolor{red}{\bm{X}})^{-1} \textcolor{red}{\bm{X}}'\textcolor{blue}{\bm{Y}}
+\\
+\bm{V}_h &= \sigma^2\bm{S}(\bm{S}'\bm{W}_h\bm{S})^{-1}\bm{S}'\bm{W}_h\big[1 + \bm{X}_{T+h}^*(\textcolor{red}{\bm{X}}'\textcolor{red}{\bm{X}})^{-1}(\bm{X}_{T+h}^*)'\big] \bm{W}_h\bm{S}'(\bm{S}'\bm{W}_h\bm{S})^{-1}\bm{S}'
+\end{align*}
+\end{alertblock}
 \only<4->{\begin{alertblock}{}
-Reference: Ashouri, Hyndman, and Shmueli (2019). \url{robjhyndman.com/publications/lhf/}
+Reference: \citet{lhf}
 \end{alertblock}}
 
 \vspace*{10cm}
+
 ## In-built coherence
 
 @PenvanDal2017 propose the state space model
@@ -643,4 +714,4 @@ Reference: Ashouri, Hyndman, and Shmueli (2019). \url{robjhyndman.com/publicatio
 A related state space approach was proposed by @villegas2018supply, who show that their formulation subsumes bottom-up, top-down, and some forms of forecast reconciliation and combination forecasting.
 
 
-\nocite{htsgeometry, nonnegmint, Di_FonGir2022b,swissexports,Van_ErvCug2015}
+\nocite{htsgeometry, nonnegmint, Di_FonGir2022b, Van_ErvCug2015, lhf}
