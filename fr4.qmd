@@ -19,6 +19,7 @@ cite-method: biblatex
 bibliography: hts.bib
 biblio-title: References
 keep-tex: true
+keep-md: true
 execute:
   echo: false
   message: false
@@ -126,12 +127,10 @@ Suppose that $\left(\hat{\bm{y}}^{[1]},\ldots,\hat{\bm{y}}^{[L]}\right)$ is a sa
 
 \vspace*{10cm}
 
-# Evaluating probabilistic forecasts
-
-## Evaluating probabilistic forecasts
-
-```{r setup_tourism_example, include=FALSE}
-library(gganimate)
+```{r}
+#| label: setup_tourism_example
+#| include: false
+# Generate future sample paths ready to be plotted
 set.seed(2020 - 08 - 25)
 
 # Total Australian tourism numbers
@@ -145,12 +144,12 @@ fit <- train |>
   model(arima = ARIMA(Trips))
 # Future sample paths
 future <- fit |>
-  generate(times = 200, h = "1 year") |>
+  generate(times = 200, h = "2 years") |>
   as_tibble() |>
   mutate(modrep = paste0(.model, .rep))
 # Deciles
 qf <- fit |>
-  generate(times = 1000, h = "1 year") |>
+  generate(times = 1000, h = "2 years") |>
   as_tibble() |>
   group_by(Quarter) |>
   reframe(
@@ -170,86 +169,97 @@ p1 <- train |>
     y = "Total visitors",
     title = "Australian domestic tourism"
   ) +
-  guides(colour = FALSE, level = FALSE) +
-  ylim(min(train$Trips, future$.sim, na.rm = TRUE), max(train$Trips, future$.sim, na.rm = TRUE))
-```
-
-
-```{r tourism_data_again, fig.width=10, fig.height=5}
-p1
-```
-
-## Evaluating probabilistic forecasts
-
-```{r eval2, fig.width=10, fig.height=5}
-p1 <- p1 +
-  annotate("label", x=as.Date("2017-06-01"), y=6000, label="ARIMA futures", col='#888888')
-p1 +
+  guides(colour = "none", level = "none") +
+  ylim(min(train$Trips, future$.sim, na.rm = TRUE), max(train$Trips, future$.sim))
+# Add a few future sample paths
+pbase <- p1 +
+  annotate("label", x=as.Date("2018-01-01"), y=20000, label="ARIMA futures", col='#888888')
+p2 <- pbase +
   geom_line(
     data = filter(future, as.numeric(.rep) <= 5),
     aes(y = .sim, group = modrep, col=col),
   )
-```
-
-## Evaluating probabilistic forecasts
-
-```{r eval3, fig.width=10, fig.height=5}
-# Less data shown
-p1$data <- train |> filter(year(Quarter) >= 2015)
-p1 +
+# Show less data
+pbase$data <- train |> filter(year(Quarter) >= 2015)
+p3 <- pbase +
   geom_line(
     data = filter(future, as.numeric(.rep) <= 5),
     aes(y = .sim, group = modrep, col=col),
   )
-```
-
-## Evaluating probabilistic forecasts
-
-```{r eval4, fig.width=10, fig.height=5}
-p1 +
+# Add more sample paths
+p4 <- pbase +
   geom_line(
     data = future,
     aes(y = .sim, group = modrep, col=col),
   )
-```
-
-## Evaluating probabilistic forecasts
-
-```{r eval5, fig.width=10, fig.height=5}
-p1 <- p1 +
+# Grey out the sample paths
+p5 <- pbase +
   geom_line(
     data = future,
     aes(y = .sim, group = modrep),
     color = "gray"
   )
-p1
-```
-
-## Evaluating probabilistic forecasts
-
-```{r eval6, fig.width=10, fig.height=5}
-p1 <- p1 +
+# Show deciles
+p6 <- p5 +
   geom_line(
     data = qf,
     mapping = aes(x = Quarter, y = qs, group = prob),
     colour = "#0063A7"
   ) +
   annotate("label", x=as.Date("2017-06-01"), y=11300, label="Deciles", col="#0063A7")
-p1
+# Add actuals
+p7 <- p6 +
+  geom_line(aes(y = Trips), data = aus_tourism |> filter(year(Quarter) >= 2015))
+# Save final result as pdf
+Cairo::CairoPDF("./figs/deciles.pdf", height=5, width=10)
+print(p7)
+crop::dev.off.crop()
+p <- patchwork::align_patches(p1,p2,p3,p4,p5,p6,p7)
 ```
 
+# Evaluating probabilistic forecasts
 
 ## Evaluating probabilistic forecasts
 
-```{r eval7, fig.width=10, fig.height=5}
-p1 <- p1 +
-  geom_line(aes(y = Trips), data = aus_tourism |> filter(year(Quarter) >= 2015))
-p1
-Cairo::CairoPDF("./figs/deciles.pdf", height=5, width=10)
-p1
-crop::dev.off.crop()
+```{r}
+print(p[[1]])
 ```
 
+## Evaluating probabilistic forecasts
+
+```{r}
+print(p[[2]])
+```
+
+## Evaluating probabilistic forecasts
+
+```{r}
+print(p[[3]])
+```
+
+## Evaluating probabilistic forecasts
+
+```{r}
+print(p[[4]])
+```
+
+## Evaluating probabilistic forecasts
+
+```{r}
+print(p[[5]])
+```
+
+## Evaluating probabilistic forecasts
+
+```{r}
+print(p[[6]])
+```
+
+## Evaluating probabilistic forecasts
+
+```{r}
+print(p[[7]])
+```
 
 ## Evaluating probabilistic forecasts
 
@@ -532,32 +542,31 @@ fc |>
 
 $n=23$ series; $m=15$ bottom-level series.
 
-
 ## Example: Australian electricity generation
 
 ```{r include=FALSE}
-energy <- readr::read_csv('energy/daily.csv') |>
-  head(-1)|> #Remove last observation
-  select(date,contains(' -  GWh'))|>
-  rename_all(~gsub(' -  GWh','',.x))|>
-  mutate(date=as.Date(date),
-         Battery=rowSums(select(., contains("Battery"))),
-         Gas = rowSums(select(., contains("Gas"))),
-         Solar = rowSums(select(., contains("Solar"))),
-         Coal = rowSums(select(., contains("Coal"))),
-         `Hydro (inc. Pumps)` = Hydro + Pumps,
-         Renewable=Biomass+Hydro+Solar+Wind,
-         `non-Renewable`=Coal+Distillate+Gas,
-         Total=Renewable+`non-Renewable`+Battery+Pumps)|>
-  pivot_longer(cols=-date,names_to = 'Source',values_to = 'Generation') |>
+energy <- readr::read_csv("energy/daily.csv") |>
+  head(-1) |> # Remove last observation
+  select(date, contains(" -  GWh")) |>
+  rename_all(~ gsub(" -  GWh", "", .x)) %>%
+  mutate(
+    date = as.Date(date),
+    Battery = rowSums(select(., contains("Battery"))),
+    Gas = rowSums(select(., contains("Gas"))),
+    Solar = rowSums(select(., contains("Solar"))),
+    Coal = rowSums(select(., contains("Coal"))),
+    `Hydro (inc. Pumps)` = Hydro + Pumps,
+    Renewable = Biomass + Hydro + Solar + Wind,
+    `non-Renewable` = Coal + Distillate + Gas,
+    Total = Renewable + `non-Renewable` + Battery + Pumps
+  ) |>
+  pivot_longer(cols = -date, names_to = "Source", values_to = "Generation") |>
   as_tsibble(key = Source)
 ```
 
 ```{r selected, fig.width=12, fig.height=6}
 energy |>
-  filter(
-    Source %in% c('Total', 'Wind', 'Solar', 'Distillate')
-  ) |>
+  filter(Source %in% c('Total', 'Wind', 'Solar', 'Distillate')) |>
   mutate(
     Source = ordered(Source,
             levels = c('Total','Wind','Solar','Distillate'))
@@ -794,20 +803,22 @@ Algorithm proposed by Panagiotelis et al (2020) for optimizing $\bG$ using stoch
 ## Example: Australian electricity generation
 
 ```{r include=FALSE}
-energy <- readr::read_csv('energy/daily.csv') |>
-  head(-1)|> #Remove last observation
-  select(date,contains(' -  GWh'))|>
-  rename_all(~gsub(' -  GWh','',.x))|>
-  mutate(date=as.Date(date),
-         Battery=rowSums(select(., contains("Battery"))),
-         Gas = rowSums(select(., contains("Gas"))),
-         Solar = rowSums(select(., contains("Solar"))),
-         Coal = rowSums(select(., contains("Coal"))),
-         `Hydro (inc. Pumps)` = Hydro + Pumps,
-         Renewable=Biomass+Hydro+Solar+Wind,
-         `non-Renewable`=Coal+Distillate+Gas,
-         Total=Renewable+`non-Renewable`+Battery+Pumps)|>
-  pivot_longer(cols=-date,names_to = 'Source',values_to = 'Generation') |>
+energy <- readr::read_csv("energy/daily.csv") |>
+  head(-1) |> # Remove last observation
+  select(date, contains(" -  GWh")) |>
+  rename_all(~ gsub(" -  GWh", "", .x)) %>%
+  mutate(
+    date = as.Date(date),
+    Battery = rowSums(select(., contains("Battery"))),
+    Gas = rowSums(select(., contains("Gas"))),
+    Solar = rowSums(select(., contains("Solar"))),
+    Coal = rowSums(select(., contains("Coal"))),
+    `Hydro (inc. Pumps)` = Hydro + Pumps,
+    Renewable = Biomass + Hydro + Solar + Wind,
+    `non-Renewable` = Coal + Distillate + Gas,
+    Total = Renewable + `non-Renewable` + Battery + Pumps
+  ) |>
+  pivot_longer(cols = -date, names_to = "Source", values_to = "Generation") |>
   as_tsibble(key = Source)
 ```
 
@@ -1425,17 +1436,22 @@ $$
 
 \vspace*{10cm}
 
+
 ```{r}
 #| label: results
 #| include: false
 rmsse <- readr::read_rds(here::here("results/rmsse.rds")) |>
-  mutate(msse = rmsse^2)
-mase <- readr::read_rds(here::here("results/mase.rds"))
+  mutate(msse = rmsse^2) |>
+	mutate(model = if_else(model == "", "ensemble2", model))
+mase <- readr::read_rds(here::here("results/mase.rds")) |>
+		mutate(model = if_else(model == "", "ensemble2", model))
 crps <- readr::read_rds(here::here("results/crps.rds")) |>
+	mutate(model = if_else(model == "", "ensemble2", model)) |>
   pivot_wider(names_from = model, values_from = crps) |>
   group_by(method, h, series) |>
   mutate(across(where(is.numeric), ~ .x / naiveecdf)) |>
-  ungroup()
+  ungroup() |>
+  pivot_longer(ensemble2:tscount, names_to = "model", values_to = "crps")
 ```
 
 
@@ -1443,21 +1459,19 @@ crps <- readr::read_rds(here::here("results/crps.rds")) |>
 
 ```{r}
 #| label: results_graph
-crps <- crps |>
-  pivot_longer(ensemble:tscount, names_to = "model", values_to = "crps")
-
 accuracy <- bind_rows(
   rmsse |> mutate(measure = "msse", accuracy = rmsse^2),
   mase |> mutate(measure = "mase", accuracy = mase),
   crps |> mutate(measure = "crps", accuracy = crps),
 ) |>
-  select(-rmsse, -mase, -crps)
+  select(-rmsse, -mase, -crps) |>
+	filter(model != "ensemble2", model != "qcomb")
 
 # Plot of average accuracy vs week for each method for Total
 acc_summary <- accuracy |>
   filter(
     series %in% c("Total", "Control areas", "Health boards"),
-    method == "mint", model != "qcomb"
+    method == "mint",
   ) |>
   mutate(model = case_when(
     model == "naiveecdf" ~ "Naïve",
@@ -1502,7 +1516,7 @@ set_to_bold <- function(table) {
 msse1 <- rmsse |>
   filter(
     method %in% c("mint", "base"),
-    model != "qcomb",
+    model != "qcomb", model != "ensemble2",
     h > 42
   ) |>
   mutate(
@@ -1530,7 +1544,7 @@ kbl(msse1, booktabs = TRUE, escape = FALSE, align = "llrrrr") |>
 mase1 <- mase |>
   filter(
     method %in% c("mint", "base"),
-    model != "qcomb",
+    model != "qcomb", model != "ensemble2",
     h > 42
   ) |>
   mutate(
@@ -1558,7 +1572,7 @@ kbl(mase1, booktabs = TRUE, escape = FALSE, align = "llrrrr") |>
 crps1 <- readr::read_rds(here::here("results/crps.rds")) |>
   filter(
     method %in% c("mint", "base"),
-    model != "qcomb",
+    model != "qcomb", model != "ensemble2",
     h > 42
   ) |>
   mutate(
@@ -1582,6 +1596,7 @@ kbl(crps1, booktabs = TRUE, escape = FALSE, align = "llrrrr") |>
 
 * Ensemble mixture distributions give better forecasts than any component methods.
 * Forecast reconciliation improves forecast accuracy, even when some component methods are quite poor.
+* The ensemble without the Naïve method was worse.
 * Forecast reconciliation allows coordinated planning and resource allocation.
 
 
