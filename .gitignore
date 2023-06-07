@@ -1,5 +1,6 @@
 fr[1-4].tex
 figs/scatterplot*.pdf
+figs/pinball*
 
 /.quarto/
 

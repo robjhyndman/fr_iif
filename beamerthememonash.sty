@@ -8,7 +8,6 @@
 % Fonts
 \usepackage[scale=0.85]{sourcecodepro}
 \usepackage[lf]{FiraSans}
-%\IfFileExists{carlito.sty}{\usepackage[lf,t]{carlito}}{\usepackage{bera}}
 
 %% Default color theme
 \usecolortheme{monashwhite}
@@ -99,3 +98,6 @@
   \definecolor{shadecolor}{RGB}{225,225,225}
   \renewenvironment{Shaded}{\color{black}\begin{snugshade}\color{black}}{\end{snugshade}}
 \fi
+
+\setbeamertemplate{footline}{%
+\hfill\textcolor[rgb]{0.7,0.7,0.7}{\fbox{\insertframenumber{}}}}
