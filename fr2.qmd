@@ -269,6 +269,116 @@ Suppose $\bm{W}_h = \bm{I}$. Then\vspace*{-0.2cm}
 
 # The geometry of forecast reconciliation
 
+## The coherent subspace
+
+\begin{textblock}{9}(.2,1.25)\fontsize{13}{13}\sf
+\begin{block}{Coherent subspace}
+$m$-dimensional linear subspace $\mathfrak{s}\subset \mathbb{R}^n$ for which linear constraints hold for all $\bm{y}\in\mathfrak{s}$.
+\end{block}\vspace*{-0.3cm}
+\begin{block}{Hierarchical time series}
+An $n$-dimensional multivariate time series such that $\bm{y}_t\in\mathfrak{s}\quad\forall t$.
+\end{block}\vspace*{-0.3cm}
+\begin{block}{Coherent point forecasts}
+$\tilde{\bm{y}}_{t+h|t}$ is \emph{coherent} if $\tilde{\bm{y}}_{t+h|t} \in \mathfrak{s}$.
+\end{block}\vspace*{-0.2cm}
+\end{textblock}
+\only<2-3>{\begin{textblock}{7.5}(.2,6.75)\fontsize{13}{13}\sf
+\begin{alertblock}{Base forecasts}
+Let $\hat{\bm{y}}_{t+h|t}$ be vector of \emph{incoherent} initial $h$-step forecasts.$\phantom{y_{t|h}}$
+\end{alertblock}
+\end{textblock}}
+\only<3>{\begin{textblock}{7.5}(8.3,6.75)\fontsize{13}{13}\sf
+\begin{alertblock}{Reconciled forecasts}
+Let $\psi$ be a mapping, $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$.  $\tilde{\bm{y}}_{t+h|t}=\psi(\hat{\bm{y}}_{t+h|t})$ ``reconciles'' $\hat{\bm{y}}_{t+h|t}$.
+\end{alertblock}
+\end{textblock}}
+
+\placefig{9.4}{.0}{width=6.6cm}{3D_hierarchy}
+\begin{textblock}{3}(11.4,5.6)\fontsize{13}{13}\sf
+\begin{block}{}
+\centerline{$ y_{Tot} = y_A + y_B$}
+\end{block}
+\end{textblock}
+
+## The coherent subspace
+
+\begin{textblock}{5.7}(11.4,0.1)
+\begin{minipage}{4cm}
+\begin{block}{}\centering
+\begin{tikzpicture}
+\tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
+\tikzstyle[level distance=.3cm]
+\tikzstyle[sibling distance=12cm]
+\tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
+\node{Total}[edge from parent fork down]
+ child {node {A}
+ }
+ child {node {B}
+ }
+ child {node {C}
+ };
+\end{tikzpicture}
+\end{block}
+\end{minipage}
+\end{textblock}
+
+The columns of $\bm{S}$ form a basis set for $\mathfrak{s}$.
+
+They are not unique.\newline Each corresponds to different vector of "bottom-level" series.
+
+\only<2>{\begin{block}{}
+\centerline{$\displaystyle
+\bm{y} = \begin{pmatrix}\text{Total}\\A\\B\\C\end{pmatrix}\qquad
+\bS  = \begin{pmatrix*}[r]
+                \phantom{-}1 & \phantom{-}1 & \phantom{-}1 \\
+                1 & 0 & 0 \\
+                0 & 1 & 0\\
+                0 & 0 & 1
+                \end{pmatrix*} \qquad
+  \bm{b} = \begin{pmatrix}\phantom{Total}\\[-0.7cm]
+                A \\
+                B \\
+                C \\
+                \end{pmatrix}
+$}
+\end{block}}
+\only<3>{\begin{block}{}
+\centerline{$\displaystyle
+\bm{y} = \begin{pmatrix}\text{Total}\\A\\B\\C\end{pmatrix}\qquad
+\bS  =
+\begin{pmatrix*}[r]
+                \phantom{-}1 & 0 & 0 \\
+                0 & 0 & 1 \\
+                0 & 1 & 0\\
+                1 & -1 & -1
+                \end{pmatrix*}\qquad
+  \bm{b} = \begin{pmatrix}
+      \text{Total} \\
+      B \\
+      A
+  \end{pmatrix}
+$}
+\end{block}}
+\only<4>{\begin{block}{}
+\centerline{$\displaystyle
+\bm{y} = \begin{pmatrix}\text{Total}\\A\\B\\C\end{pmatrix}\qquad
+\bS  =
+\begin{pmatrix*}[r]
+                1 & 0 & 0 \\
+                1 & 0 & -1 \\
+                -1 & 1 & 1\\
+                1 & -1 & 0
+                \end{pmatrix*}\qquad
+  \bm{b} = \begin{pmatrix}
+      \text{Total} \\
+      B+A \\
+      C+B
+  \end{pmatrix}
+$}
+\end{block}}
+
+\vspace*{10cm}
+
 ## Projections in linear algebra
 
 \begin{textblock}{9}(.2,1.25)
@@ -362,37 +472,6 @@ system("pdfcrop figs/scatterplot4.pdf figs/scatterplot4.pdf")
 * A projection is *orthogonal* if $\bm{M}'=\bm{M}$.
 * If a projection is not orthogonal, it is called *oblique*.
 * In regression, OLS is an orthogonal projection onto space spanned by predictors.
-
-## The coherent subspace
-
-\begin{textblock}{9}(.2,1.25)\fontsize{13}{13}\sf
-\begin{block}{Coherent subspace}
-$m$-dimensional linear subspace $\mathfrak{s}\subset \mathbb{R}^n$ for which linear constraints hold for all $\bm{y}\in\mathfrak{s}$.
-\end{block}\vspace*{-0.3cm}
-\begin{block}{Hierarchical time series}
-An $n$-dimensional multivariate time series such that $\bm{y}_t\in\mathfrak{s}\quad\forall t$.
-\end{block}\vspace*{-0.3cm}
-\begin{block}{Coherent point forecasts}
-$\tilde{\bm{y}}_{t+h|t}$ is \emph{coherent} if $\tilde{\bm{y}}_{t+h|t} \in \mathfrak{s}$.
-\end{block}\vspace*{-0.2cm}
-\end{textblock}
-\only<2-3>{\begin{textblock}{7.5}(.2,6.75)\fontsize{13}{13}\sf
-\begin{alertblock}{Base forecasts}
-Let $\hat{\bm{y}}_{t+h|t}$ be vector of \emph{incoherent} initial $h$-step forecasts.$\phantom{y_{t|h}}$
-\end{alertblock}
-\end{textblock}}
-\only<3>{\begin{textblock}{7.5}(8.3,6.75)\fontsize{13}{13}\sf
-\begin{alertblock}{Reconciled forecasts}
-Let $\psi$ be a mapping, $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$.  $\tilde{\bm{y}}_{t+h|t}=\psi(\hat{\bm{y}}_{t+h|t})$ ``reconciles'' $\hat{\bm{y}}_{t+h|t}$.
-\end{alertblock}
-\end{textblock}}
-
-\placefig{9.4}{.0}{width=6.6cm}{3D_hierarchy}
-\begin{textblock}{3}(11.4,5.6)\fontsize{13}{13}\sf
-\begin{block}{}
-\centerline{$ y_{Tot} = y_A + y_B$}
-\end{block}
-\end{textblock}
 
 ## Linear projection reconciliation
 
@@ -562,12 +641,29 @@ $$
 * $\|\cdot\|_F$ is the Frobenius norm
 * $\bm{Y} = [\bm{y}_{T_1+h}, \dots, \bm{y}_{T}]'$
 * $\hat{\bm{Y}} = [\hat{\bm{y}}_{T_1+h|T_1}, \dots, \hat{\bm{y}}_{T|T-h}]'$
-* $\lambda$ is a regularization parameter.
+* $\lambda$ is a regularization parameter
 
 When $\lambda=0$:\qquad  $\hat{\bm{G}} = \bm{B}'\hat{\bm{Y}}(\hat{\bm{Y}}'\hat{\bm{Y}})^{-1}$
 where $\bm{B} = [\bm{b}_{T_1+h}, \dots, \bm{b}_{T}]'$.
 
 Reference: @Ben_TaiEtAl2019
+
+## MinT expressed as a regression
+
+Since $\tilde{\bm{b}}_{t+h|t} = (\bm{S}'\bm{W}_h^{-1}\bm{S})^{-1}\bm{S}'\bm{W}_h^{-1}\hat{\bm{y}}_{t+h|t}$, we can write the MinT solution as a regression problem:
+\begin{block}{}\vspace*{-0.7cm}
+\begin{align*}
+\tilde{\bm{b}}_{t+h|t} &= \text{arg min}_{\bm{b}}\big[\hat{\bm{y}}_{t+h|t} - \bm{S}\bm{b}\big]' \bm{W}_h^{-1}\big[\hat{\bm{y}}_{t+h|t} - \bm{S}\bm{b}\big] \\
+& =\text{arg min}_{\bm{b}}\big[\bm{b}'\bm{S}'\bm{W}_h^{-1}\bm{S}\bm{b} - 2\bm{b}'\bm{S}'\bm{W}_h^{-1}\hat{\bm{y}}_{t+h|t} +
+\hat{\bm{y}}_{t+h|t}'\bm{W}_h^{-1}\hat{\bm{y}}_{t+h|t} \big]\\
+& =\text{arg min}_{\bm{b}}\big[\bm{b}'\bm{S}'\bm{W}_h^{-1}\bm{S}\bm{b} - 2\bm{b}'\bm{S}'\bm{W}_h^{-1}\hat{\bm{y}}_{t+h|t}\big]
+\end{align*}
+\end{block}\vspace*{-0.2cm}
+
+* MinT solution is equivalent to a GLS regression of $\hat{\bm{y}}_{t+h|t}$ on $\bm{S}$ with covariance weights $\bm{W}_h^{-1}$.
+* The estimated coefficients are the forecasts of the bottom level series.
+
+\vspace*{10cm}
 
 ## Non-negative forecasts
 \fontsize{14}{15}\sf
@@ -578,7 +674,7 @@ Reference: @Ben_TaiEtAl2019
 
 \begin{block}{Solve via quadratic programming:}
 $$
-  \text{min}_{\bm{b}} \frac12 \bm{b}'\bS'\bm{W}_h^{-1}\bS\bm{b} - \bm{b}'\bS'\bm{W}_h^{-1}\hat{\bm{y}}_{T+h|T} \quad \text{s.t.~~} \bm{b} \ge 0
+  \text{min}_{\bm{b}} \big[\bm{b}'\bS'\bm{W}_h^{-1}\bS\bm{b} - 2 \bm{b}'\bS'\bm{W}_h^{-1}\hat{\bm{y}}_{T+h|T}\big] \quad \text{s.t.~~} \bm{b} \ge 0
 $$
 \rightline{\citep{nonnegmint}}
 \end{block}\pause\vspace*{-0.1cm}
@@ -592,17 +688,31 @@ $$
 ## Immutable forecasts
 
 \begin{textblock}{6.4}(9,0.)\begin{block}{}
-\citet{HolEtAl2021}
+\citet{ZhaEtAl2022}
 \end{block}\end{textblock}
+$\displaystyle \hat{\bm{y}}_{t+h|t} = \begin{bmatrix}\hat{\bm{a}}_{t+h|t} \\ \hat{\bm{v}}_{t+h|t} \\ \hat{\bm{u}}_{t+h|t}\end{bmatrix} = \begin{bmatrix} \bm{A}_1 & \bm{A}_2 \\ \bm{I}_{n_b-k} & \bm{O} \\ \bm{O} & \bm{I}_k \end{bmatrix} \begin{bmatrix}\hat{\bm{v}}_{t+h|t} \\ \hat{\bm{u}}_{t+h|t}\end{bmatrix}$\vspace*{-0.5cm}
 
-\begin{block}{}
-\centerline{$\min_{\bm{G}_h}\text{tr}\Big(\E[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]'[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]\Big)$}
-\centerline{such that $\bm{C}\bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t} = \bm{d}$}
+Suppose $\hat{\bm{u}}_{t+h|t}$ are fixed and let $\hat{\bm{w}}_{t+h|t} = \begin{bmatrix}\hat{\bm{a}}_{t+h|t} - \bm{A}_2 \hat{\bm{u}}_{t+h|t} \\ \hat{\bm{v}}_{t+h|t}\end{bmatrix}$.
+\begin{block}{Optimization problem}
+\centerline{$\displaystyle\text{min}_{\bm{v}}\big[\hat{\bm{w}}_{t+h|t} - \bm{A}_3\bm{v}\big]' \bm{W}_{\bm{v}}^{-1}\big[\hat{\bm{w}}_{t+h|t} - \bm{A}_3\bm{v}\big]\qquad\text{where}\qquad
+\bm{A}_3 = \begin{bmatrix}\bm{A}_1 \\\bm{I}_{n_b-k}\end{bmatrix}$}
+and $\bm{W}_{\bm{v}}$ contains elements of $\bm{W}_h$ corresponding to $\hat{\bm{v}}_{t+h|t}$.
 \end{block}
+\vspace*{10cm}
 
-* Differs from top-down approaches in that it can be done while also preserving the unbiasedness of base forecasts.
+## Immutable forecasts
 
-See also @Di_FonGir2022b. @ZhaEtAl2022.
+\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\citet{ZhaEtAl2022}
+\end{block}\end{textblock}
+$\displaystyle \hat{\bm{y}}_{t+h|t} = \begin{bmatrix}\hat{\bm{a}}_{t+h|t} \\ \hat{\bm{v}}_{t+h|t} \\ \hat{\bm{u}}_{t+h|t}\end{bmatrix} = \begin{bmatrix} \bm{A}_1 & \bm{A}_2 \\ \bm{I}_{n_b-k} & \bm{O} \\ \bm{O} & \bm{I}_k \end{bmatrix} \begin{bmatrix}\hat{\bm{v}}_{t+h|t} \\ \hat{\bm{u}}_{t+h|t}\end{bmatrix}$\vspace*{-0.5cm}
+
+Suppose $\hat{\bm{u}}_{t+h|t}$ are fixed and let $\hat{\bm{w}}_{t+h|t} = \begin{bmatrix}\hat{\bm{a}}_{t+h|t} - \bm{A}_2 \hat{\bm{u}}_{t+h|t} \\ \hat{\bm{v}}_{t+h|t}\end{bmatrix}$.
+\begin{block}{Solve with non-negativity constraint}
+\centerline{$\displaystyle\text{min}_{\bm{v}}\big[\hat{\bm{w}}_{t+h|t} - \bm{A}_3\bm{v}\big]' \bm{W}_{\bm{v}}^{-1}\big[\hat{\bm{w}}_{t+h|t} - \bm{A}_3\bm{v}\big]\qquad\text{where}\qquad
+\bm{A}_3 = \begin{bmatrix}\bm{A}_1 \\\bm{I}_{n_b-k}\end{bmatrix}$}
+$$\text{such that}\qquad \bm{A}_3 \bm{v} \ge \begin{bmatrix}-\bm{A}_2\hat{\bm{u}}_{t+h|t}\\ \bm{0}\end{bmatrix}$$
+\end{block}
 
 # ML and regularization
 ## ML and regularization
