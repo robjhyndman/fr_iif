@@ -34,7 +34,17 @@ source("setup.R")
 
 \vspace*{0.4cm}\tableofcontents
 
-#
+# Time series reconciliation
+
+## Time series reconciliation
+\fontsize{13}{15}\sf
+
+* @Stone1942: reconciling national economic accounts (disaggregated into production, income, outlay, capital transactions, etc.)
+* @Byron1978: extended Stone's work using more computationally efficient methods.
+* 1984: Stone wins 1984 Nobel Prize in Economics.
+* Same approach used for reconciling seasonally adjusted data.
+* @chow1971best: Temporal reconciliation of monthly or quarterly estimates to sum to annual estimates.
+* @Di_Fonzo1990: Cross-temporal reconciliation of time series data.
 
 # Reconciliation via constraints
 
@@ -266,6 +276,58 @@ Suppose $\bm{W}_h = \bm{I}$. Then\vspace*{-0.2cm}
 \end{align*}
 \end{textblock}
 
+# Example: reconciling GDP forecasts
+
+## Example: reconciling GDP forecasts
+
+\only<1>{\full{IncomeApproach}}
+\only<2>{\full{ExpenditureApproach}}
+\only<3>{\full{GFCF}}
+\only<4>{\full{HFCE}}
+
+## Example: reconciling GDP forecasts
+
+* No unique hierarchy.
+* Several disaggregations with the same parent node
+* Not possible to represent using structural $\bm{S}$ notation.
+* Instead, we can use the constraint $\bm{C}$ notation.
+
+## Example: reconciling GDP forecasts
+
+\alert{Using structural notation:}
+$$
+\bm{y}^I_t = \begin{bmatrix}x_t \\\bm{a}^I_t \\ \bm{b}^I_t\end{bmatrix} = \bm{S}^I\bm{b}_t^I\qquad
+\bm{y}^E_t = \begin{bmatrix}x_t \\\bm{a}^E_t \\ \bm{b}^E_t\end{bmatrix} = \bm{S}^E\bm{b}_t^E
+$$
+where
+$$\bm{S}^I = \begin{bmatrix}\bm{1}_{10}' \\\bm{A}^I\\\bm{I}_{10}\end{bmatrix}\qquad
+\bm{S}^E = \begin{bmatrix}\bm{1}_{53}' \\\bm{A}^E\\\bm{I}_{53}\end{bmatrix}$$
+
+* Can reconcile both trees, but the totals won't be equal.
+
+## Example: reconciling GDP forecasts
+
+\alert{Using constraint notation:}
+$$
+  \bm{C}\bm{y}_t = \bm{0}
+$$
+where
+$$ \bm{y}_t = \begin{bmatrix}x_t\\
+ \bm{a}^I_t\\
+ \bm{b}^I_t\\
+ \bm{a}^E_t\\
+ \bm{b}^E_t
+ \end{bmatrix}
+ \qquad\text{and}\qquad
+  \bm{C} = \begin{bmatrix}
+  1 & \bm{0}_5' & -\bm{1}_{10}' & \bm{0}_{26}' & \bm{0}_{53}' \\
+  1 & \bm{0}_5' & \bm{0}_{10}' & \bm{0}_{26}' & -\bm{1}_{53}' \\
+  \bm{0}_5 & \bm{I}_5 & - \bm{A}^I & \bm{0}_{5\times 26} & \bm{0}_{5\times 53} \\
+  \bm{0}_{26} & \bm{0}_{26\times 5} & \bm{0}_{26\times10} & \bm{I}_{26} & -\bm{A}^E
+  \end{bmatrix}
+$$
+
+Ref: @Bisaglia2020
 
 # The geometry of forecast reconciliation
 
@@ -784,30 +846,17 @@ Spiliotis et al. (ASC, 2021)\nocite{hfrml}
 
 ## ML and regularization
 
+@Mishchenko2019:\newline Optimize all forecasts with an incoherence penalty
+$$
+\text{min}_{\hat{\bm{y}}_{t}} \sum_{t=1}^T \|\bm{y}_t - \hat{\bm{y}}_t\|_2 + \lambda \sum_{t=1}^T \|\hat{\bm{y}}_t - \bm{S}_t \hat{\bm{b}}_t\|_2
+$$\pause
 
 
-* Replace the linear regression formulation with a less restrictive method to obtain combinations of forecasts from the various hierarchical levels.
-* Coherence is achieved via a bottom-up approach, or by embedding coherence in the ML training.
-*
+@Shiratori2020:\newline Optimize bottom level forecasts with an incoherence penalty
+$$
+\text{min}_{\hat{\bm{b}}_{t}} \sum_{t=1}^T \|\hat{\bm{b}}_t - \bm{b}_t\|_2 + \sum_{t=1}^T \bm{\Lambda} \|\bm{a}_t - \bm{A}_t \hat{\bm{b}}_t\|_2
+$$
 
-
-\textcite{Gle2020} attempts to overcome the lack of focus on coherence by adjusting the objective function. Using neural network forecasts, he includes a regularisation term that penalises incoherences in the generated forecasts. This follows from @mishchenko2019self who proposed a similar regularisation term to obtain reconciled forecasts directly from the base forecasts. The disadvantage of these regularisation approaches is that they result in soft constrains that do not guarantee coherence. \textcite{Gle2020} provides two alternatives for the regularisation term and shows that the resulting forecasts can outperform standard MinT reconciliation. However, when the regulisation is used in conjunction with MinT this results in both coherent and the most accurate forecasts. \textcite{HanEtAl2021} propose a similar approach, where a regularisation term is added in the loss function, again based on coherence constraints. They also consider a regularised loss for producing coherent quantile forecasts. The authors demonstrate the use of the proposed regularised loss on a variety of linear and ML models, and also empirically show the negative effect of regularisation on coherence.
-
-\textcite{ShiEtAl2020} introduces a regularisation term, based on the coherence constraints, in the objective function to push bottom-level forecasts to fit both on their target series and their aggregate counterparts. They forecast the bottom-level series but as the regularisation cannot ensure coherence, these are used in a bottom-up setting to produce coherent forecasts for the rest of the hierarchy. The authors demonstrate the efficacy of this in the context of neural networks. They find that these outperform conventionally trained networks whose forecasts are then reconciled, either with bottom-up or MinT.
-
-\textcite{ParEtAl2021} propose a regularised neural network with sequence-to-sequence architecture. Focusing on the hierarchical part of the contribution, a regularisation term is added to incorporate the coherence constraints. As with the previous work, this does not guarantee coherence, yet forces the final forecasts to be approximately coherent. The regularisation is embedded in the loss function of the network, achieving an integrated approach. In contrast to the previous work, the network outputs forecasts for all the levels.
-
-The contribution by \textcite{AndLi2021} can be seen to belong loosely in the regularisation approaches. Focusing on the M5 competition dataset, the authors produce separate forecasts for the top- and the bottom-levels of the hierarchy, using different methods (NBEATS and LightGBM respectively). To achieve coherent forecasts they modify the loss function of the bottom-level method, where positive errors can are multiplied by a factor. This factor is identified by minimising the incoherence error between the summed bottom-level forecasts and the top-level forecast. Note that this factor is calibrated by keeping the top-level forecasts fixed, and therefore any coherence is obtained by modifying the bottom-level forecasts.
-
-\textcite{RanEtAl2021} propose another way to achieve an integrated forecast-reconciliation mechanism. First, a global neural network is used to forecast the time series in the hierarchy, which with the assumption of a forecast distribution can produce sample forecasts. The sample forecasts are subsequently reconciled, obtaining distributions of coherent probabilistic forecasts. The calculation of the loss for the training of the model makes use of the reconciled forecasts, allowing an end-to-end approach that parametrises the model to achieve both accurate and coherent forecasts. Note that the methodology allows for various assumptions on the forecast distribution, and the relaxing of these. The resulting forecasts guarantee coherence, in contrast to the previous integrated approaches. The substantive difference with conventional hierarchical approaches, that post-processes base forecasts, is that the global network can model richer interconnections between the time series in the hierarchy for the generation of the forecasts. Furthermore, the authors compare the results of the proposed hierarchical model against a global learner without coherent forecasts and demonstrate on average better performance, suggesting that the integrated methodology offers gains beyond any achieved by the global learning.
-
-\textcite{WanEtAl2022} contribute with a similar formulation. The important differences are in that they use an autoregressive transformer to produce the base forecasts and that their approach does not require assuming particular predictive distributions. Instead, they rely on empirical estimation (conditional normalising flow) for the distributions. Furthermore, their approach focuses on obtaining bottom-level forecasts which are internally aggregated in a bottom-up fashion to the complete hierarchy. Similar to the \textcite{RanEtAl2021}, the errors of the final forecasts are used during training, realising an end-to-end hierarchical forecasting method. The authors demonstrate gains in performance over a non-hierarchical version of the their method, as well as over various benchmarks.
-
-Focusing on temporal hierarchies, \textcite{TheKou2021} provide an end-to-end neural network based method. Similarly to \textcite{BurChe2021} they explore a series of encoder-decoders to achieve reconciliation, considering fixed and trained decoder weights, using the complete or only the bottom-level of the hierarchy. These can be used instead of conventional hierarchical methods, demonstrating good performance in a global learning setting. To achieve an end-to-end integration, they pass the temporal hierarchy data through a convolutional layer and subsequently to an LSTM. The convolutional layer compresses the abstracts the hierarchical time series, and the LSTM models the dynamics over time. By appending an encoder-decoder to the outputs of the LSTM an end-to-end methodology is obtained. The authors demonstrate the gains due to the various components, but also investigate the amount of time series that are needed to achieve good performance in a global training setting. By modifying the training loss function, \textcite{TheKou2020} extend the method to provide quantile forecasts.
-
-\textcite{AboEtAl2022} use ML to address the challenge of selecting the best method to perform the hierarchical reconciliation. To achieve this they rely on a meta-learning classifier, which is trained to identify given the time series features of a dataset what is the best reconciliation method to employ. The approach is quite flexible in terms of features and classifiers, as well as the forecasting models and reconciliation methods.
-
-\textcite{AboEtAl2019} use ML to improve the performance of non-combination hierarchical approaches. They consider various ML methods to obtain better prorations to decompose upper-level forecasts to lower-levels. \textcite{FenZha2020} provide a standard implementation of hierarchical methods using base forecasts from ML models, and find the hierarchically reconciled forecasts to be the most accurate. \textcite{PunEtAl2020} leverage on LSTM networks to produce forecasts for the cross-temporal case. Forecasts are generated for the various temporal aggregation levels, which are reconciled first by using temporal hierarchies and then cross-sectional. \textcite{SprEtAl2021} propose a method for probabilistic gradient boosting machines, and benchmark its performance on the hierarchical M5 dataset, demonstrating good performance against other non-hierarchical ML methods. Although the proposed method can provide probabilistic predictions for all time series of the hierarchy, coherence is not established. \textcite{ManEtAl2021} use a deep neural network to directly produce reconciled forecasts. The neural network captures the structure of the hierarchy, as well links the relationship between time series features extracted at any level of the hierarchy and explanatory variables into an end-to-end neural network.
 
 
 
@@ -877,20 +926,18 @@ Reference: \citet{lhf}
 
 \vspace*{10cm}
 
-## In-built coherence
+## In-built coherence using state space models
 
 @PenvanDal2017 propose the state space model
-\begin{align}\label{eq:measurement}
+\begin{align*}
 \bm{y}_t &= \bm{S}\bm{\mu}_t + \bm{Z}_t\bm{\beta} + \bm{\varepsilon}_t, && \bm{\varepsilon}_t \sim N(\bm{0}, \bm{\Sigma}_{\bm{\varepsilon}}),\\
 \bm{\mu}_t &= \bm{\mu}_{t-1} + \bm{\eta}_t, && \bm{\eta}_t \sim N(\bm{0}, \bm{\Sigma}_{\bm{\eta}}).
-\end{align}
+\end{align*}
 
 * Coherent forecasts arise naturally using the Kalman filter
 * Covariance matrices difficult to estimate except for small hierarchies.
-
-## In-build coherence
-
-A related state space approach was proposed by @villegas2018supply, who show that their formulation subsumes bottom-up, top-down, and some forms of forecast reconciliation and combination forecasting.
+* Requires the same model for all series
+* A related approach proposed by @villegas2018supply
 
 
 \nocite{htsgeometry, nonnegmint, Di_FonGir2022b, Van_ErvCug2015, lhf}
