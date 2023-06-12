@@ -70,22 +70,16 @@ Let $\psi$ be a mapping, $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$.  $\tilde{\b
 \end{block}
 \end{textblock}
 
-
-
 ## Coherent probabilistic forecasts
 \begin{textblock}{9.5}(0.2,1.2)\fontsize{13}{15}\sf
 \begin{block}{Coherent probabilistic forecasts}
 Given the triple $(\mathbb{R}^m, \mathscr{F}_{\mathbb{R}^m}, \nu)$, a coherent probability triple $(\mathfrak{s}, \mathscr{F}_{\mathfrak{s}}, \breve{\nu})$  is such that
-$$
-  \breve{\nu}(s(\mathcal{B})) = \nu(\mathcal{B}) \quad \forall \mathcal{B} \in \mathscr{F}_{\mathbb{R}^m}.
-$$
+\centerline{$\breve{\nu}(s(\mathcal{B})) = \nu(\mathcal{B}) \quad \forall \mathcal{B} \in \mathscr{F}_{\mathbb{R}^m}$}
 \end{block}\vspace*{-0.2cm}
 \begin{block}{Probabilistic forecast reconciliation}
 The reconciled probability measure of $\hat{\nu}$ wrt $\psi(.)$ is such that
-  \[
-  \tilde{\nu}(\mathcal{B}) = \hat{\nu}(\psi^{-1}(\mathcal{B})) \qquad \forall \mathcal{B} \in \mathscr{F}_{\mathfrak{s}}\,,
-  \]
-  where $\psi^{-1}(\mathcal{B}):=\{{\bm{y}}\in \mathbb{R}^n:\psi({\bm{y}})\in \mathcal{B}\}$ is the pre-image of $\mathcal{B}$, that is the set of all points in $\mathbb{R}^n$ that $\psi(.)$ maps to a point in $\mathcal{B}$.
+\centerline{$\tilde{\nu}(\mathcal{B}) = \hat{\nu}(\psi^{-1}(\mathcal{B})) \qquad \forall \mathcal{B} \in \mathscr{F}_{\mathfrak{s}}$}
+where $\psi^{-1}(\mathcal{B}):=\{{\bm{y}}\in \mathbb{R}^n:\psi({\bm{y}})\in \mathcal{B}\}$ is the pre-image of $\mathcal{B}$, that is the set of all points in $\mathbb{R}^n$ that $\psi(.)$ maps to a point in $\mathcal{B}$.
 \end{block}
 \end{textblock}
 \begin{textblock}{7}(9.5,1.2)
@@ -94,15 +88,12 @@ The reconciled probability measure of $\hat{\nu}$ wrt $\psi(.)$ is such that
 }
 \end{textblock}
 
-
 ## Construction of reconciled distributions
 
-\begin{block}{Reconciled density of bottom-level}
+\vspace*{0.1cm}\begin{block}{Reconciled density of bottom-level}
 Density of bottom-level series under reconciled distribution is
-$$
-  \tilde{f}_{\bm{b}}(\bm{b})=|\bG^*|\int \hat{f}(\bG^{-}\bm{b}+\bG_\perp \bm{a})d\bm{a}
-$$
-\vspace*{-0.5cm}\begin{itemize}
+\centerline{$\tilde{f}_{\bm{b}}(\bm{b})=|\bG^*|\mathop{\mathlarger\int} \hat{f}(\bG^{-}\bm{b}+\bG_\perp \bm{a})d\bm{a}$}
+\vspace*{-0.4cm}\begin{itemize}\tightlist
 \item $\hat{f}$ is density of incoherent base probabilistic forecast
 \item $\bm{G^-}$ is $n\times m$ generalised inverse of $\bG$ st $\bG\bG^-=\bm{I}$
 \item $\bm{G_\perp}$ is $n\times (n-m)$ orthogonal complement to $\bG$ st $\bG\bG_\perp=\bm{0}$
@@ -113,38 +104,35 @@ $$
 
 ## Construction of reconciled distributions
 
-\begin{block}{Reconciled density of full hierarchy}\fontsize{14}{15}\sf
+\vspace*{0.1cm}\begin{block}{Reconciled density of full hierarchy}\fontsize{14}{15}\sf
 Density of full hierarchy under reconciled distribution is
-$$
-  \tilde{f}_{\bm{y}}(\bm{y}) =
+\centerline{$\tilde{f}_{\bm{y}}(\bm{y}) =
   |\bS^*|
   \,
   \tilde{f}_{\bm{b}}({\bS^-\bm{y}})
   \,
-  \mathbb{1}\!\{\bm{y}\in\mathfrak{s}\}
-$$
-\vspace*{-0.6cm}\begin{itemize}
+  \mathbb{1}\!\{\bm{y}\in\mathfrak{s}\}$}
+\vspace*{-0.4cm}\begin{itemize}\tightlist
 \item $\bS^*=\begin{pmatrix} {\bS^-}' & \bS_\perp \end{pmatrix}'$
-\item $\bm{S^-}$ is $m\times n$ generalised inverse of $\bS$ such that $\bS^-\bS=\bm{I}$,
-\item $\bm{S_\perp}$ is $n\times (n-m)$ orthogonal complement to $\bS$ such that $\bS'_\perp\bS=\bm{0}$.
+\item $\bm{S^-}$ is $m\times n$ generalised inverse of $\bS$ such that $\bS^-\bS=\bm{I}$
+\item $\bm{S_\perp}$ is $n\times (n-m)$ orthogonal complement to $\bS$ such that $\bS'_\perp\bS=\bm{0}$
 \end{itemize}
 \end{block}
 
-\begin{textblock}{7.7}(0.4,5.8)
+\only<2->{\begin{textblock}{7.3}(0.8,5.9)
 \begin{alertblock}{Gaussian reconciliation}
 If the incoherent base forecasts are $\text{N}(\hat{\bm{\mu}}, \hat{\bm{\Sigma}})$,
-then the reconciled density is $\text{N}(\bS\bG\hat{\bm{\mu}}, \bS\bG\hat{\bm{\Sigma}}\bG'\bS')$.
+then the reconciled density is $\text{N}(\bS\bG\hat{\bm{\mu}}, \bS\bG\hat{\bm{\Sigma}}\bG'\bS')$
 \end{alertblock}
-\end{textblock}
+\end{textblock}}
 
-\begin{textblock}{6.8}(8.8,5.8)
+\only<3>{\begin{textblock}{6.7}(8.5,5.9)
 \begin{alertblock}{Bootstrap reconciliation}
 Reconciling sample paths from incoherent distributions works.
 \end{alertblock}
-\end{textblock}
+\end{textblock}}
 
 \vspace*{10cm}
-
 
 ## Simulation from a reconciled distribution
 
@@ -152,7 +140,9 @@ Reconciling sample paths from incoherent distributions works.
 Suppose that $\left(\hat{\bm{y}}^{[1]},\ldots,\hat{\bm{y}}^{[L]}\right)$ is a sample drawn from an incoherent probability measure $\hat{\nu}$. Then $\left(\tilde{\bm{y}}^{[1]},\ldots,\tilde{\bm{y}}^{[L]}\right)$ where $\tilde{\bm{y}}^{[\ell]}:=\psi(\hat{\bm{y}}^{[\ell]})$ for $\ell=1,\ldots,L$, is a sample drawn from the reconciled probability measure $\tilde{\nu}$.
 \end{block}
 
-* So reconciling sample paths from incoherent distributions works.
+* Simulate future sample paths for each series using a multivariate bootstrap of the residuals from each model.
+* Reconcile the sample paths.
+* The reconciled sample paths are a sample from the reconciled distribution.
 
 \vspace*{10cm}
 
@@ -363,7 +353,6 @@ $}
 \animategraphics[loop,autoplay,width=7.4cm]{10}{figs/pinball_}{1}{36} -->
 \end{textblock}
 
-
 # Emergency Services Demand
 
 ## Wales Health Board Areas
@@ -376,8 +365,6 @@ $}
 #| label: data
 incident_gthf <- readr::read_rds(here::here("data/incidents_gt.rds"))
 ```
-
-
 
 * Daily number of attended incidents:\newline 1 October 2015 -- 31 July 2019
 * Disaggregated by:
@@ -627,7 +614,7 @@ incident_gthf |>
 
 \begin{block}{}
 \centerline{$y_{T+h|T} \sim \text{Normal}(\hat{y}_{T+h|T},\hat{\sigma}^2_{T+h|T})$}
-\end{block}
+\end{block}\vspace*{10cm}
 
 ## Forecasting methods
 
@@ -715,8 +702,6 @@ and $\bm{x}_{T+h}$ is a vector of covariates including
 \item New Year's Day
 \end{itemize}
 \end{multicols}\vspace*{10cm}
-
-
 
 ## Nonparametric bootstrap reconciliation
 
@@ -824,7 +809,6 @@ $$
 
 \vspace*{10cm}
 
-
 ```{r}
 #| label: results
 #| include: false
@@ -841,7 +825,6 @@ crps <- readr::read_rds(here::here("results/crps.rds")) |>
   ungroup() |>
   pivot_longer(ensemble2:tscount, names_to = "model", values_to = "crps")
 ```
-
 
 ## Forecast accuracy
 
@@ -876,7 +859,6 @@ acc_summary <- accuracy |>
   ) |>
   group_by(week, model, measure, series) |>
   summarise(accuracy = mean(accuracy), .groups = "drop")
-
 
 acc_summary |>
   ggplot(aes(x = week, y = accuracy, group = model, col = model)) +
@@ -990,6 +972,7 @@ kbl(crps1, booktabs = TRUE, escape = FALSE, align = "llrrrr") |>
 # Evaluating multivariate probabilistic forecasts
 
 ## Evaluating probabilistic forecasts
+\vspace*{0.2cm}
 
 ### Continuous Rank Probability Score (univariate forecsts)
 
@@ -1043,7 +1026,7 @@ Algorithm proposed by Panagiotelis et al (2020) for optimizing $\bm{G}$ using st
 ## Example: Australian electricity generation
 
 \hspace*{-0.8cm}\begin{minipage}{15.6cm}
-\begin{block}{Daily time series from \url{opennem.org.au}}
+\begin{block}{Daily time series from \url{opennem.org.au}}\fontsize{11}{11}\sf
 \begin{tikzpicture}
 \tikzstyle{every node}=[rectangle, rounded corners=2pt,draw,inner sep=1pt,fill=red!15]
 \tikzstyle[level distance=.1cm]
@@ -1085,7 +1068,7 @@ Algorithm proposed by Panagiotelis et al (2020) for optimizing $\bm{G}$ using st
 \end{block}
 \end{minipage}
 
-\begin{textblock}{10}(3,7.8)
+\begin{textblock}{10}(3,8)
 \begin{block}{}\vspace*{-0.1cm}
 \centerline{$n=23$ series\qquad $m=15$ bottom-level series}
 \end{block}
@@ -1165,7 +1148,7 @@ Mean Energy score
 \end{block}
 \end{textblock}
 
-\begin{textblock}{7}(8.7,1.3)\fontsize{12}{12.5}\sf
+\begin{textblock}{7}(8.7,1.3)\fontsize{11}{11.5}\sf
 \begin{block}{Base residual assumptions}
 \begin{itemize}\itemsep=0cm\parskip=0cm
 \item Gaussian independent
@@ -1173,7 +1156,7 @@ Mean Energy score
 \item Non-Gaussian independent
 \item Non-Gaussian dependent
 \end{itemize}
-\end{block}\vspace*{-0.1cm}
+\end{block}\vspace*{-0.2cm}
 \begin{block}{Reconciliation methods}
 \begin{itemize}\itemsep=0cm\parskip=0cm
 \item Base
@@ -1205,23 +1188,5 @@ Base forecasts are obtained by jointly bootstrapping residuals.
 \end{block}
 \end{textblock}
 
-# Bayesian versions
 
-## Bayesian versions
-
-@novetal2017
-
-Another strain of the literature brings a Bayesian approach to the regression model interpretation of forecast reconciliation. @novetal2017 recognise that the posterior of ${\bm\beta}_{h}$ can act as a probabilistic forecast for the bottom-level series. Using Markov chain Monte Carlo to obtain a sample from this posterior, and then aggregating, gives a probabilistic forecast for the entire hierarchy.
-
-## Bayesian versions
-
-@swissexports also obtain a posterior on ${\bm\beta}_{h}$, but their focus is on augmenting the reconciliation regression equation with a vector of intercepts that allow for base forecasts to be biased and evolve according to a state space representation.
-
-Judgement can be incorporated via the prior, in the latter case via an explicit empirical example where prior information about a structural break in data classification can be exploited. Also, while both papers recognise the potential of Bayesian inference to obtain probabilistic forecasts, neither paper makes this the focus of empirical evaluation. @novetal2017 minimise loss functions over the posterior sample and then use this as a point forecast, while @swissexports use maximum a posteriori (MAP) estimates as point forecasts.
-
-## Bayesian versions
-
-@CorEtAl2021 In particular, a prior is placed on the bottom-level series with the mean set to point forecasts obtained in the first step of forecast reconciliation and a variance given by the variance-covariance matrix of one-step ahead errors. This prior is updated using the top-level forecasts obtained in the first stage of forecast reconciliation via Bayes' rule. The method generalises MinT in the sense that the posterior mean is equivalent to the usual MinT approach. The necessary updates via Bayes' rule have parallels with the Kalman filter since the reconciliation problem is recast as a linear Gaussian model. The empirical results are evaluated using scoring rules for probabilistic forecasts including the CRPS and energy score. This approach has also recently been extending to the challenging case of forecast reconciliation for discrete data by @CorEtAl2022 and @Zambon2022.
-
-
-\nocite{ctprob,smartmeterhts,coherentprob,swissexports}
+\nocite{smartmeterhts,coherentprob}
