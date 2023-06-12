@@ -1,6 +1,6 @@
 ---
 title: Forecast reconciliation
-subtitle: 4. Probabilistic forecast reconciliation
+subtitle: 3. Probabilistic forecast reconciliation
 author: Rob J Hyndman
 pdf-engine: pdflatex
 fig-width: 9

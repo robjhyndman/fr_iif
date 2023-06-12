@@ -1,6 +1,6 @@
 ---
 title: Forecast reconciliation
-subtitle: 3. Temporal & cross-temporal forecast reconcilation
+subtitle: 4. Temporal & cross-temporal forecast reconcilation
 author: Rob J Hyndman
 pdf-engine: pdflatex
 fig-width: 9
