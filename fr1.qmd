@@ -1284,7 +1284,7 @@ Think of the hierarchy as a tree of trees:
  };
 \end{tikzpicture}
 \end{center}\pause
-Then the summing matrix contains $k$ smaller summing matrices:
+Then the summing matrix contains $K$ smaller summing matrices:
 
 \begin{multicols}{2}
 $\displaystyle
