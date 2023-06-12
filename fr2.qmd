@@ -273,7 +273,7 @@ Suppose $\bm{W}_h = \bm{I}$. Then\vspace*{-0.2cm}
 
 \begin{textblock}{9}(.2,1.25)\fontsize{13}{13}\sf
 \begin{block}{Coherent subspace}
-$m$-dimensional linear subspace $\mathfrak{s}\subset \mathbb{R}^n$ for which linear constraints hold for all $\bm{y}\in\mathfrak{s}$.
+$n_b$-dimensional linear subspace $\mathfrak{s}\subset \mathbb{R}^n$ for which linear constraints hold for all $\bm{y}\in\mathfrak{s}$.
 \end{block}\vspace*{-0.3cm}
 \begin{block}{Hierarchical time series}
 An $n$-dimensional multivariate time series such that $\bm{y}_t\in\mathfrak{s}\quad\forall t$.
@@ -412,41 +412,52 @@ $}
 ```{r}
 #| include: false
 library(scatterplot3d)
-Cairo::CairoPDF(file="figs/scatterplot1.pdf", width=7, height=7)
-s3d <- scatterplot3d(trees, type = "p", color = "blue",
-    angle=55, pch = 16)
+Cairo::CairoPDF(file = "figs/scatterplot1.pdf", width = 7, height = 7)
+s3d <- scatterplot3d(trees,
+  type = "p", color = "blue",
+  angle = 55, pch = 16
+)
 crop::dev.off.crop()
-Cairo::CairoPDF(file="figs/scatterplot2.pdf", width=7, height=7)
-s3d <- scatterplot3d(trees, type = "h", color = "blue",
-    angle=55, pch = 16)
-for(i in seq(NROW(trees))) {
+Cairo::CairoPDF(file = "figs/scatterplot2.pdf", width = 7, height = 7)
+s3d <- scatterplot3d(trees,
+  type = "h", color = "blue",
+  angle = 55, pch = 16
+)
+for (i in seq(NROW(trees))) {
   s3d$points3d(trees$Girth[i], trees$Height[i], 10,
-    col = "red", type = "p", pch=16, cex=.75)
+    col = "red", type = "p", pch = 16, cex = .75
+  )
 }
 crop::dev.off.crop()
-Cairo::CairoPDF(file="figs/scatterplot3.pdf", width=7, height=7)
-s3d <- scatterplot3d(trees, type = "p", color = "blue",
-    angle=55, pch = 16)
+Cairo::CairoPDF(file = "figs/scatterplot3.pdf", width = 7, height = 7)
+s3d <- scatterplot3d(trees,
+  type = "p", color = "blue",
+  angle = 55, pch = 16
+)
 # Add regression plane
 my.lm <- lm(trees$Volume ~ trees$Girth + trees$Height)
-s3d$plane3d(my.lm, col='red')
+s3d$plane3d(my.lm, col = "red")
 crop::dev.off.crop()
-Cairo::CairoPDF(file="figs/scatterplot4.pdf", width=7, height=7)
-s3d <- scatterplot3d(trees, type = "p", color = "blue",
-    angle=55, pch = 16)
+Cairo::CairoPDF(file = "figs/scatterplot4.pdf", width = 7, height = 7)
+s3d <- scatterplot3d(trees,
+  type = "p", color = "blue",
+  angle = 55, pch = 16
+)
 # Add regression plane
 my.lm <- lm(trees$Volume ~ trees$Girth + trees$Height)
-s3d$plane3d(my.lm, col='red')
+s3d$plane3d(my.lm, col = "red")
 fits <- fitted(my.lm)
-for(i in seq(NROW(trees))) {
+for (i in seq(NROW(trees))) {
   s3d$points3d(
     rep(trees$Girth[i], 2),
     rep(trees$Height[i], 2),
     c(fits[i], trees$Volume[i]),
-    col = "blue", type = "l")
+    col = "blue", type = "l"
+  )
   s3d$points3d(
     trees$Girth[i], trees$Height[i], fits[i],
-    col = "red", type = "p", cex=.75, pch=16)
+    col = "red", type = "p", cex = .75, pch = 16
+  )
 }
 crop::dev.off.crop()
 system("pdfcrop figs/scatterplot1.pdf figs/scatterplot1.pdf")
@@ -714,8 +725,66 @@ Suppose $\hat{\bm{u}}_{t+h|t}$ are fixed and let $\hat{\bm{w}}_{t+h|t} = \begin{
 $$\text{such that}\qquad \bm{A}_3 \bm{v} \ge \begin{bmatrix}-\bm{A}_2\hat{\bm{u}}_{t+h|t}\\ \bm{0}\end{bmatrix}$$
 \end{block}
 
-# ML and regularization
+# ML reconciliation
+## ML reconciliation
+
+\placefig{7}{0}{width=9.cm, height=20cm}{mlflow}
+
+\begin{textblock}{7}(0,1.2)\fontsize{11}{12}\sf
+\begin{enumerate}\tightlist
+\item Split all series using time series cross-validation
+\item For each training set, compute one-step-ahead forecasts for all series
+\item For each bottom-level series, use RF or XGB to predict values using forecasts of all series as inputs
+\item Forecast all series
+\item For each bottom-level series, apply ML model to improve forecasts
+\item Aggregate bottom-level forecasts to obtain forecasts for other series.
+\end{enumerate}
+\end{textblock}
+\begin{textblock}{6,5}(0.5,7.8)\fontsize{11}{12}\sf
+\begin{block}{}
+Spiliotis et al. (ASC, 2021)\nocite{hfrml}
+\end{block}
+\end{textblock}
+
+## ML reconciliation: tourism data
+
+\fontsize{11}{11}\sf\hspace*{-0.8cm}
+\begin{tabular}{l c c c c c}
+    \textbf{Method} & \textbf{Total} & \textbf{States} & \textbf{Zones} & \textbf{Regions} & \textbf{Average} \\
+    \hline
+    \multicolumn{6}{c}{MASE} \\
+    \hline
+    MinT-Struct          & 1.094            & 0.968            & 0.887            & 0.843            & 0.948 \\
+    MinT-Shrink & 1.047 & \textbf{0.956} & 0.872 & 0.824 & 0.925 \\
+    ML-RF           & 1.045            & 0.964            & 0.859            & 0.812            & 0.920 \\
+    ML-XGB          & \textbf{1.043}   & 0.965            & \textbf{0.859}   & \textbf{0.812}   & \textbf{0.920} \\
+    \hline
+    \multicolumn{6}{c}{RMSSE} \\
+    \hline
+    MinT-Struct          & 1.308            & 1.225            & 1.137            & 1.109            & 1.195 \\
+    MinT-Shrink         & 1.265            & 1.214            & 1.120            & 1.086            & 1.171 \\
+    ML-RF           & 1.261            & \textbf{1.208}   & 1.104            & 1.066            & 1.159 \\
+    ML-XGB          & 1.255            & 1.208            & \textbf{1.101}   & \textbf{1.064}   & \textbf{1.157} \\
+    \hline
+    \multicolumn{6}{c}{AMSE} \\
+    \hline
+    MinT-Struct          & 0.988            & 0.611            & 0.426            & 0.349            & 0.593 \\
+    MinT-Shrink         & 0.935            & 0.599            & 0.417            & 0.337            & 0.572 \\
+    ML-RF           & 0.780            & \textbf{0.526}   & 0.366            & 0.319            & 0.498 \\
+    ML-XGB          & \textbf{0.779}   & 0.526            & \textbf{0.365}   & \textbf{0.317}   & \textbf{0.497}
+  \end{tabular}
+
+\begin{textblock}{4.2}(11.2,2.4)
+\begin{block}{}\fontsize{11}{11}\sf
+\begin{itemize}\tightlist
+\item ML methods not significantly different.
+\item MinT methods significantly different from each other and from ML methods.
+\end{itemize}\end{block}
+\end{textblock}
+
 ## ML and regularization
+
+
 
 * Replace the linear regression formulation with a less restrictive method to obtain combinations of forecasts from the various hierarchical levels.
 * Coherence is achieved via a bottom-up approach, or by embedding coherence in the ML training.
