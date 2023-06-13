@@ -14,7 +14,6 @@
 \usepackage{multirow, booktabs, float, textcmds, siunitx}
 \usepackage{bm,booktabs,animate,ragged2e,multicol,microtype,hyperref}
 \DeclareUnicodeCharacter{03BC}{$\mu$}
-\usepackage{tikz}
 \usetikzlibrary{calc}
 
 % Figures
@@ -55,7 +54,13 @@
 %\renewenvironment{Shaded}{\color{black}\begin{snugshade}\color{black}}{\end{snugshade}\columnbreak}
 
 % Tikz plots
+
+\usepackage{tikz}
+\usepackage{forest}
+
 \usetikzlibrary{trees,shapes,arrows,matrix,shadows,positioning}
+\usetikzlibrary{decorations.pathreplacing, arrows, calc, fit, arrows.meta, decorations.pathmorphing, decorations.markings}
+
 \tikzstyle{decision} = [diamond, draw, fill=blue!20,
     text width=4.5em, text badly centered, node distance=4cm, inner sep=0pt]
 \tikzstyle{block} = [rectangle, draw, fill=blue!20,
@@ -66,15 +71,40 @@
 \tikzstyle{connector} = [->,thick]
 
 \tikzset{
-  basic/.style  = {draw, text width=2cm, font=\sffamily, rectangle},
-  root/.style   = {basic, text width=3cm, rounded corners=2pt, thin, align=center, fill=red!30},
+  basic/.style = {draw, text width=2cm, drop shadow, font=\sffamily, rectangle},
+  root/.style = {basic, text width=3cm, rounded corners=2pt, thin, align=center, fill=red!30},
+  level 2/.style = {basic, rounded corners=6pt, thin,align=center, fill=green!60, text width=4em},
+  level 3/.style = {basic, thin, align=left, fill=pink!60, text width=1.5em}
   level 2a/.style = {basic, rounded corners=2pt, thin,align=center, fill=blue!50, text width=7em},
   level 2b/.style = {basic, rounded corners=2pt, thin,align=center, fill=green!50, text width=7em},
   level 3a/.style = {basic, rounded corners=2pt, thin, align=center, fill=blue!30, text width=4em},
   level 3b/.style = {basic, rounded corners=2pt, thin, align=center, fill=green!30, text width=4em},
   level 4a/.style = {basic, rounded corners=2pt, thin, align=left, fill=blue!10, text width=3.5em},
-  level 4b/.style = {basic, rounded corners=2pt, thin, align=left, fill=green!10, text width=3.5em}
+  level 4b/.style = {basic, rounded corners=2pt, thin, align=left, fill=green!10, text width=3.5em},
 }
+\newcommand{\relation}[3]
+{
+	\draw (#3.south) -- +(0,-#1) -| ($ (#2.north) $)
+}
+\newcommand{\relationW}[2]
+{
+	\draw (#2.west) -| ($ (#1.north) $)
+}
+\newcommand{\relationE}[2]
+{
+	\draw (#2.east) -| ($ (#1.north) $)
+}
+
+\newcommand{\relationD}[3]
+{
+	\draw (#3.east) -- +(#1,0) |- (#2.west)
+}
+
+\pgfdeclareimage[height=0.65cm]{ngreen}{figs/boot/ngreen.pdf}
+\pgfdeclareimage[height=0.65cm]{nblue}{figs/boot/nblue.pdf}
+\pgfdeclareimage[height=0.65cm]{nred}{figs/boot/nred.pdf}
+\pgfdeclareimage[height=0.65cm]{nblack}{figs/boot/nblack.pdf}
+
 
 % My definitions
 

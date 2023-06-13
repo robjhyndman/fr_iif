@@ -1,0 +1,75 @@
+\begin{tikzpicture}[scale=0.7]
+\tikzset{square matrix/.style={
+    matrix of nodes,
+    column sep=-\pgflinewidth, row sep=-\pgflinewidth,
+    nodes={draw,
+      minimum height=#1,
+      anchor=center,
+      text width=#1,
+      align=center,
+      inner sep=0pt,
+      font=\scriptsize
+    },
+  },
+  square matrix/.default=0.5cm
+}
+
+\matrix[square matrix](S)
+{
+|[fill=black]| & |[fill=black]| & |[draw=none]|T\\
+|[fill=black]| & |[fill=white]| & |[draw=none]|X\\
+|[fill=white]| & |[fill=black]| & |[draw=none]|Y\\
+|[draw=none]|X & |[draw=none]|Y & |[draw=none]|$i$\\
+};
+
+\matrix[square matrix, right=of S](K)
+{
+|[fill=black]| & |[fill=black]| & |[fill=black]| & |[fill=black]| & |[draw=none]|$\quad x^{[4]}_{i,\tau}$\\
+|[fill=black]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[draw=none]|$\quad x^{[2]}_{i,2\tau-1}$\\
+|[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=black]| & |[draw=none]|$\quad x^{[2]}_{i,2\tau}$\\
+|[fill=black]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[draw=none]|$\quad x^{[1]}_{i,4\tau-3}$\\
+|[fill=white]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[draw=none]|$\quad x^{[1]}_{i,4\tau-2}$\\
+|[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=white]| & |[draw=none]|$\quad x^{[1]}_{i,4\tau-1}$\\
+|[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=black]| & |[draw=none]|$\quad x^{[1]}_{i,4\tau}$\\
+|[draw=none]| & |[draw=none]| & |[draw=none]| & |[draw=none]| & & \\
+};
+
+\node[right of=S,font=\bfseries,xshift = 0.35cm, font = \large] (kro) {$\bigotimes$};
+%\node[fit=(K-8-2)(K-8-3), font=\scriptsize, yshift = -0.25cm]{$\yvet_{(\tau)}^{i,[1]}$};
+
+\node[fit=(K-8-2)(K-8-3), font=\scriptsize, yshift = -0.7cm, text width=6cm]{$\bm{x}_{i,\tau}^{[1]}$ \\ \rotatebox{90}{$=\;$} \\$\left[x^{[1]}_{i,4\tau-3}\; x^{[1]}_{i,4\tau-2}\; x^{[1]}_{i,4\tau-1}\; x^{[1]}_{i,4\tau}\right]'$};
+
+\node[right of=S,font=\bfseries,xshift = 4.85cm, font = \huge] (ugu) {$\mathbf{=}$};
+
+\matrix[square matrix, right=of K,xshift = 0.5cm](St)
+{
+|[fill=black]| & |[fill=black]| & |[fill=black]| & |[fill=black]| & |[fill=black]| & |[fill=black]| & |[fill=black]| & |[fill=black]| & |[draw=none]|$\quad x^{[4]}_{T,\tau}$\\
+|[fill=black]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[draw=none]|$\quad x^{[2]}_{T,2\tau-1}$\\
+|[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=black]| & |[draw=none]|$\quad x^{[2]}_{T,2\tau}$\\
+|[fill=black]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[draw=none]|$\quad x^{[1]}_{T,4\tau-3}$\\
+|[fill=white]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[draw=none]|$\quad x^{[1]}_{T,4\tau-2}$\\
+|[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=white]| & |[draw=none]|$\quad x^{[1]}_{T,4\tau-1}$\\
+|[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=black]| & |[draw=none]|$\quad x^{[1]}_{T,4\tau}$\\
+|[fill=black]| & |[fill=black]| & |[fill=black]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[draw=none]|$\quad x^{[4]}_{X,\tau}$\\
+|[fill=black]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[draw=none]|$\quad x^{[2]}_{X,2\tau-1}$\\
+|[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[draw=none]|$\quad x^{[2]}_{X,2\tau}$\\
+|[fill=black]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[draw=none]|$\quad x^{[1]}_{X,4\tau-3}$\\
+|[fill=white]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[draw=none]|$\quad x^{[1]}_{X,4\tau-2}$\\
+|[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[draw=none]|$\quad x^{[1]}_{X,4\tau-1}$\\
+|[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[draw=none]|$\quad x^{[1]}_{X,4\tau}$\\
+|[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=black]| & |[fill=black]| & |[fill=black]| & |[draw=none]|$\quad x^{[4]}_{Y,\tau}$\\
+|[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[draw=none]|$\quad x^{[2]}_{Y,2\tau-1}$\\
+|[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=black]| & |[draw=none]|$\quad x^{[2]}_{Y,2\tau}$\\
+|[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[draw=none]|$\quad x^{[1]}_{Y,4\tau-3}$\\
+|[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=white]| & |[fill=white]| & |[draw=none]|$\quad x^{[1]}_{Y,4\tau-2}$\\
+|[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=black]| & |[fill=white]| & |[draw=none]|$\quad x^{[1]}_{Y,4\tau-1}$\\
+|[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=white]| & |[fill=black]| & |[draw=none]|$\quad x^{[1]}_{Y,4\tau}$\\
+|[draw=none]| & |[draw=none]| & |[draw=none]| & |[draw=none]| & |[draw=none]| & |[draw=none]| & |[draw=none]| & |[draw=none]| & \\
+};
+
+\node[fit=(St-22-1)(St-22-8), font=\scriptsize, yshift = -0.25cm, text width=6cm]{$\bm{b}_{\tau}^{[1]}$};
+
+\node[fit=(St-1-9)(St-21-9), draw = blue, xshift = 0.6cm, minimum width = 1.3cm, label={[font=\scriptsize,text=blue]above:{$\bm{x}_{\tau}$}}]{};
+
+\node[fit=(K-1-5)(K-7-5), draw = blue, xshift = 0.5cm, minimum width = 1.2cm, label={[font=\scriptsize,text=blue]above:{$\bm{x}_{i,\tau}$}}]{};
+\end{tikzpicture}

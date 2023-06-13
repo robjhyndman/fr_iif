@@ -1,0 +1,85 @@
+\begin{tikzpicture}
+\matrix (e1) [matrix of nodes,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt}, label={[name=labe1] above:{\footnotesize$\widehat{\textbf{E}}_1^{[1]}$}}]
+{
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$T,5$}}]|\pgfuseimage{nblue} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$T,6$}}]|\pgfuseimage{nblue} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$T,7$}}]|\pgfuseimage{nblue} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$T,8$}}]|\pgfuseimage{nblue}\\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$X,5$}}]|\pgfuseimage{nblue} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$X,6$}}]|\pgfuseimage{nblue} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$X,7$}}]|\pgfuseimage{nblue} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$X,8$}}]|\pgfuseimage{nblue}\\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,5$}}]|\pgfuseimage{nblue} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,6$}}]|\pgfuseimage{nblue} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,7$}}]|\pgfuseimage{nblue} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,8$}}]|\pgfuseimage{nblue}\\
+};
+
+\matrix (ek) [above= 10mm of e1.north east,
+       anchor=south east, matrix of nodes,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt}, label={[name=labek] above:{\footnotesize$\widehat{\textbf{E}}_1^{[2]}$}}]
+{
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$T,3$}}]|\pgfuseimage{nblue} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$T,4$}}]|\pgfuseimage{nblue} \\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$X,3$}}]|\pgfuseimage{nblue} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$X,4$}}]|\pgfuseimage{nblue} \\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,3$}}]|\pgfuseimage{nblue} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,4$}}]|\pgfuseimage{nblue} \\
+};
+
+\matrix (em) [above= 10mm of e1.north west,
+       anchor=south west, matrix of nodes,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt}, label={[name=labem] above:{\footnotesize$\widehat{\textbf{e}}_1^{[4]}$}}]
+{
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$T,2$}}]|\pgfuseimage{nblue} \\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$X,2$}}]|\pgfuseimage{nblue} \\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,2$}}]|\pgfuseimage{nblue} \\
+};
+
+
+\node[right= 2mm of e1.north east,
+       anchor=north west] {$\dots$};
+\matrix (e1_l) [right= 12mm of e1.north east,
+       anchor=north west, matrix of nodes,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt}, label={[name=labe1l] above:{\footnotesize$\widehat{\textbf{E}}_l^{[1]}$}}]
+{
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$T,1$}}]|\pgfuseimage{ngreen} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$T,2$}}]|\pgfuseimage{ngreen} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$T,3$}}]|\pgfuseimage{ngreen} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$T,4$}}]|\pgfuseimage{ngreen}\\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$X,1$}}]|\pgfuseimage{ngreen} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$X,2$}}]|\pgfuseimage{ngreen} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$X,3$}}]|\pgfuseimage{ngreen} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$X,4$}}]|\pgfuseimage{ngreen}\\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,1$}}]|\pgfuseimage{ngreen} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,2$}}]|\pgfuseimage{ngreen} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,3$}}]|\pgfuseimage{ngreen} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,4$}}]|\pgfuseimage{ngreen}\\
+};
+
+\matrix (ek_l) [above= 10mm of e1_l.north east,
+       anchor=south east, matrix of nodes,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt}, label={[name=labekl] above:{\footnotesize$\widehat{\textbf{E}}_l^{[2]}$}}]
+{
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$T,1$}}]|\pgfuseimage{ngreen} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$T,2$}}]|\pgfuseimage{ngreen} \\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$X,1$}}]|\pgfuseimage{ngreen} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$X,2$}}]|\pgfuseimage{ngreen} \\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,1$}}]|\pgfuseimage{ngreen} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,2$}}]|\pgfuseimage{ngreen} \\
+};
+
+\matrix (em_l) [above= 10mm of e1_l.north west,
+       anchor=south west, matrix of nodes,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt}, label={[name=labeml] above:{\footnotesize$\widehat{\textbf{e}}_l^{[4]}$}}]
+{
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$T,1$}}]|\pgfuseimage{ngreen} \\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$X,1$}}]|\pgfuseimage{ngreen} \\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,1$}}]|\pgfuseimage{ngreen} \\
+};
+
+\node[right= 2mm of e1_l.north east,
+       anchor=north west] {$\dots$};
+\matrix (e1_L) [right= 12mm of e1_l.north east,
+       anchor=north west, matrix of nodes,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt}, label={[name=labe1L] above:{\footnotesize$\widehat{\textbf{E}}_L^{[1]}$}}]
+{
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$T,13$}}]|\pgfuseimage{nblack} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$T,14$}}]|\pgfuseimage{nblack} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$T,15$}}]|\pgfuseimage{nblack} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$T,16$}}]|\pgfuseimage{nblack}\\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$X,13$}}]|\pgfuseimage{nblack} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$X,14$}}]|\pgfuseimage{nblack} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$X,15$}}]|\pgfuseimage{nblack} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$X,16$}}]|\pgfuseimage{nblack}\\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,13$}}]|\pgfuseimage{nblack} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,14$}}]|\pgfuseimage{nblack} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,15$}}]|\pgfuseimage{nblack} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,16$}}]|\pgfuseimage{nblack}\\
+};
+
+
+\matrix (ek_L) [above= 10mm of e1_L.north east,
+       anchor=south east, matrix of nodes,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt}, label={[name=labekL] above:{\footnotesize$\widehat{\textbf{E}}_L^{[2]}$}}]
+{
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$T,7$}}]|\pgfuseimage{nblack} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$T,8$}}]|\pgfuseimage{nblack} \\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$X,7$}}]|\pgfuseimage{nblack} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$X,8$}}]|\pgfuseimage{nblack} \\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,7$}}]|\pgfuseimage{nblack} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,8$}}]|\pgfuseimage{nblack} \\
+};
+
+\matrix (em_L) [above= 10mm of e1_L.north west,
+       anchor=south west, matrix of nodes,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt}, label={[name=labemL] above:{\footnotesize$\widehat{\textbf{e}}_L^{[4]}$}}]
+{
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$T,4$}}]|\pgfuseimage{nblack} \\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$X,4$}}]|\pgfuseimage{nblack} \\
+|[label={[font=\scriptsize, text = white, anchor=center]center:{$Y,4$}}]|\pgfuseimage{nblack} \\
+};
+
+
+\node[draw,inner sep=1mm,label={[name = boot1n] below:{\footnotesize$1^{st}$ bootstrap sample ($\tau = 2$)}},fit=(e1) (ek) (em) (labek) (labe1) (labem)] (boot1) {};
+\node[draw,inner sep=1mm,label={[name = boot2n] below:{\footnotesize$\ell^{th}$ bootstrap sample ($\tau = 1$)}},fit=(e1_l) (ek_l) (em_l) (labekl) (labe1l) (labeml)] (boot2) {};
+\node[draw,inner sep=1mm,label={[name = boot3n] below:{\footnotesize$L^{th}$ bootstrap sample ($\tau = 4$)}},fit=(e1_L) (ek_L) (em_L) (labekL) (labe1L) (labemL)] (boot3) {};
+
+\node[inner sep=2mm,label=above:{},fit=(boot3) (boot2) (boot1) (boot3n) (boot2n) (boot1n)] {};
+\end{tikzpicture}
