@@ -36,11 +36,150 @@ source("setup.R")
 
 ## Notation reminder
 
-* Data: $\bm{y}_t = \bm{S}\bm{b}_t$ where $\bm{S}$ is a summing matrix and $\bm{b}_t$ is a vector of disaggregated time series
-* Base forecasts: $\hat{\bm{y}}_{T+h|T}$
-* Reconciled forecasts: $\tilde{\bm{y}}_{T+h|T}=\bS\bm{G}\hat{\bm{y}}_{T+h|T}$
-* MinT: $\bG = (\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$ where $\bm{W}_h$ is covariance matrix of base forecast errors.
+\begin{textblock}{8.5}(0.2,1.5)
+Every collection of time series with linear constraints can be written as
+\centerline{\colorbox[RGB]{210,210,210}{$\bY_{t}=\color{blue}\bS\color{red}\bm{b}_{t}$}}
+\vspace*{-0.9cm}\begin{itemize}\parskip=0cm\itemsep=0cm
+\item $\by_t=$ vector of all series at time $t$
+\item $ y_{\text{Total},t}= $ aggregate of all series at time
+$t$.
+\item $ y_{X,t}= $ value of series $X$ at time $t$.
+\item $\color{red}{\bm{b}_t}=$ vector of most disaggregated series at time $t$
+\item $\color{blue}{\bS}=$ ``summing matrix'' containing the linear constraints.
+\end{itemize}
+\end{textblock}
 
+\begin{textblock}{5.7}(11.4,0.1)
+\begin{minipage}{4cm}
+\begin{block}{}\centering
+\begin{tikzpicture}
+\tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
+\tikzstyle[level distance=.3cm]
+\tikzstyle[sibling distance=12cm]
+\tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
+\node{Total}[edge from parent fork down]
+ child {node {A}
+ }
+ child {node {B}
+ }
+ child {node {C}
+ };
+\end{tikzpicture}
+\end{block}
+\end{minipage}
+\end{textblock}
+
+\only<1>{\begin{textblock}{5.7}(9.4,2.8)\fontsize{14}{15}\sf
+\begin{align*}
+\bY_{t}&= \begin{pmatrix}
+  y_{\text{Total},t}\\
+  y_{A,t}\\
+  y_{B,t}\\
+  y_{C,t}
+  \end{pmatrix}  \\
+  &= {\color{blue}\underbrace{\begin{pmatrix}
+                1 & 1 & 1 \\
+                1 & 0 & 0 \\
+                0 & 1 & 0\\
+                0 & 0 & 1
+                \end{pmatrix}}_{\bS}}
+     {\color{red}\underbrace{\begin{pmatrix}
+       y_{A,t}\\y_{B,t}\\y_{C,t}
+       \end{pmatrix}}_{\bm{b}_{t}}}
+\end{align*}
+\end{textblock}}
+\only<2>{\begin{textblock}{5.7}(9.4,3.2)\fontsize{14}{15}\sf
+\begin{alertblock}{}
+\begin{itemize}\itemsep=0.1cm
+\item Base forecasts: $\hat{\bm{y}}_{T+h|T}$
+\item Reconciled forecasts: $\tilde{\bm{y}}_{T+h|T}=\bS\bm{G}\hat{\bm{y}}_{T+h|T}$
+\item MinT: $\bG = (\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$ where $\bm{W}_h$ is covariance matrix of base forecast errors.
+\end{itemize}
+\end{alertblock}
+\end{textblock}}
+
+# Temporal reconciliation
+
+## Temporal reconciliation
+
+\begin{textblock}{7}(1,1.9)
+\begin{tikzpicture}
+\tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,fill=red!15,font=\small]
+\tikzstyle[level distance=.1cm]
+\tikzstyle[sibling distance=3cm]
+\tikzstyle{level 1}=[sibling distance=18mm,set style={{every node}+=[fill=yellow]}]
+\node{Annual}[edge from parent fork down]
+   child {node {Q$_1$}}
+   child {node {Q$_2$}}
+   child {node {Q$_3$}}
+   child {node {Q$_4$}};
+\end{tikzpicture}
+\end{textblock}
+
+\begin{textblock}{8.5}(8.3,1.9)
+$$\bm{y}_j =
+  \begin{bmatrix}
+    y_j \\
+    y_{j,1}^{[1]}\\
+    y_{j,2}^{[1]}\\
+    y_{j,3}^{[1]}\\
+    y_{j,4}^{[1]}
+  \end{bmatrix}
+  \qquad
+  \bm{S} = \begin{bmatrix}
+    1 & 1 & 1 & 1 \\
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0  \\
+    0 & 0 & 1 & 0  \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+$$
+\end{textblock}
+
+## Temporal reconciliation
+
+\begin{textblock}{7}(0.1,1.9)
+\begin{tikzpicture}
+\tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,fill=red!15,font=\small]
+\tikzstyle[level distance=.1cm]
+\tikzstyle[sibling distance=3cm]
+\tikzstyle{level 1}=[sibling distance=42mm,set style={{every node}+=[fill=blue!15]}]
+\tikzstyle{level 2}=[sibling distance=18mm,set style={{every node}+=[fill=yellow]}]
+\node{Annual}[edge from parent fork down]
+ child {node {Semi-Annual$_1$}
+   child {node {Q$_1$}}
+   child {node {Q$_2$}}
+  }
+ child {node {Semi-Annual$_2$}
+   child {node {Q$_3$}}
+   child {node {Q$_4$}}
+  };
+\end{tikzpicture}
+\end{textblock}
+
+\begin{textblock}{8.5}(8.3,1.9)
+$$\bm{y}_j =
+  \begin{bmatrix}
+    y_j \\
+    y_{j,1}^{[2]}\\
+    y_{j,2}^{[2]}\\
+    y_{j,1}^{[1]}\\
+    y_{j,2}^{[1]}\\
+    y_{j,3}^{[1]}\\
+    y_{j,4}^{[1]}
+  \end{bmatrix}
+  \qquad
+  \bm{S} = \begin{bmatrix}
+    1 & 1 & 1 & 1 \\
+    1 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 1 \\
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0  \\
+    0 & 0 & 1 & 0  \\
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+$$
+\end{textblock}
 
 ## Temporal reconciliation
 
@@ -119,7 +258,7 @@ source("setup.R")
 
 \vspace*{10cm}
 
-\only<3>{\begin{textblock}{12}(2,7)
+\only<3>{\begin{textblock}{14}(1,6.7)
 \begin{alertblock}{}
 \begin{itemize}
 \item[\color{white}\ding{229}] Forecast series at each available frequency.
@@ -127,6 +266,36 @@ source("setup.R")
 \end{itemize}
 \end{alertblock}
 \end{textblock}}
+
+## Temporal reconciliation
+\fontsize{11}{11}\sf
+
+$$
+\bm{y}_i=\begin{bmatrix}
+  y_{i}^{[12]} \\
+  \bm{y}_{i}^{[6]} \\
+  \bm{y}_{i}^{[4]} \\
+  \bm{y}_{i}^{[3]} \\
+  \bm{y}_i^{[2]} \\
+  \bm{y}_i^{[1]}
+  \end{bmatrix}
+  \qquad
+  \bm{S} = \begin{bmatrix}
+                1 & 1 & 1 & 1 & 1~~~1~~~1~~~1 & 1 & 1& 1& 1\\
+                1 & 1 & 1 & 1 & 1~~~1~~~0~~~0 & 0 & 0& 0& 0\\
+                0 & 0 & 0 & 0 & 0~~~0~~~1~~~1 & 1 & 1& 1& 1\\
+                1 & 1 & 1 & 1 & 0~~~0~~~0~~~0 & 0 & 0& 0& 0\\
+                0 & 0 & 0 & 0 & 1~~~1~~~1~~~1 & 0 & 0& 0& 0\\
+                0 & 0 & 0 & 0 & 0~~~0~~~0~~~0 & 1 & 1& 1& 1\\
+                1 & 1 & 1 & 0 & 0~~~0~~~0~~~0 & 0 & 0& 0& 0\\
+                  &   &   &   & \vdots        &   &  &  &  \\
+                0 & 0 & 0 & 0 & 0~~~0~~~0~~~0 & 0 & 1& 1& 1\\
+                1 & 1 & 0 & 0 & 0~~~0~~~0~~~0 & 0 & 0& 0& 0\\
+                  &   &   &   & \vdots        &   &  &  &  \\
+                0 & 0 & 0 & 0 & 0~~~0~~~0~~~0 & 0 & 0& 1& 1\\[0.2cm]
+                \phantom{\vdots}  &   &   &  & \bm{I}_{12} &  &  &  &
+  \end{bmatrix}
+$$
 
 ## Temporal reconciliation
 \fontsize{14}{15}\sf
@@ -141,6 +310,245 @@ y_j^{\left[k\right]} = \sum^{jk}_{t=1+(j-1)k}{y_t},\qquad \text{for $j = 1,\dots
 * A single unique hierarchy is only possible when there are no coprime pairs in $F(m)$.
 * $M_k=m/k$ is seasonal period of aggregated series.
 * Proposed by Athanasopoulos, Hyndman, Kourentzes, Petropoulos (*EJOR*, 2017)
+
+# Temporal reconciliation: thief package
+
+## Temporal reconciliation: thief package
+\fontsize{10}{10}\sf\vspace*{0.2cm}
+
+```{r}
+#| echo: true
+#| message: false
+library(thief)
+USAccDeaths
+thief(USAccDeaths, usemodel = "arima", comb = "struc")
+```
+
+## Temporal reconciliation: thief package
+\fontsize{10}{11}\sf\vspace*{0.2cm}
+
+```{r}
+#| echo: true
+#| message: false
+# Construct aggregates
+aggts <- tsaggregates(USAccDeaths)
+aggts[[1]]
+```
+
+## Temporal reconciliation: thief package
+\fontsize{10}{11}\sf\vspace*{0.2cm}
+
+```{r}
+#| echo: true
+aggts[[2]]
+```
+
+## Temporal reconciliation: thief package
+\fontsize{10}{11}\sf\vspace*{0.2cm}
+
+```{r}
+#| echo: true
+#| message: false
+aggts[[3]]
+```
+
+
+## Temporal reconciliation: thief package
+\fontsize{10}{11}\sf\vspace*{0.2cm}
+
+```{r}
+#| echo: true
+#| message: false
+aggts[[4]]
+```
+
+
+## Temporal reconciliation: thief package
+\fontsize{10}{11}\sf\vspace*{0.2cm}
+
+```{r}
+#| echo: true
+#| message: false
+aggts[[5]]
+```
+
+## Temporal reconciliation: thief package
+\fontsize{10}{11}\sf\vspace*{0.2cm}
+
+```{r}
+#| echo: true
+#| message: false
+aggts[[6]]
+```
+
+## Temporal reconciliation: thief package
+\fontsize{10}{11}\sf\vspace*{0.2cm}
+
+```{r}
+#| echo: true
+#| message: false
+# Compute forecasts
+fc <- list()
+for(i in seq_along(aggts))
+  fc[[i]] <- forecast(auto.arima(aggts[[i]]), h=2*frequency(aggts[[i]]))
+# Reconcile forecasts
+reconciled <- reconcilethief(fc)
+reconciled[[1]]
+```
+
+## Temporal reconciliation: thief package
+\fontsize{10}{11}\sf\vspace*{0.2cm}
+
+```{r}
+#| echo: true
+#| message: false
+reconciled[[2]]
+```
+
+## Temporal reconciliation: thief package
+\fontsize{10}{11}\sf\vspace*{0.2cm}
+
+```{r}
+#| echo: true
+#| message: false
+reconciled[[3]]
+```
+
+## Temporal reconciliation: thief package
+\fontsize{10}{11}\sf\vspace*{0.2cm}
+
+```{r}
+#| echo: true
+#| message: false
+reconciled[[4]]
+```
+
+## Temporal reconciliation: thief package
+\fontsize{10}{11}\sf\vspace*{0.2cm}
+
+```{r}
+#| echo: true
+#| message: false
+reconciled[[5]]
+```
+
+## Temporal reconciliation: thief package
+\fontsize{10}{11}\sf\vspace*{0.2cm}
+
+```{r}
+#| echo: true
+#| message: false
+reconciled[[6]]
+```
+
+## Temporal reconciliation: thief package
+\fontsize{10}{11}\sf\vspace*{0.2cm}
+
+```{r}
+#| echo: false
+#| message: false
+# Plot forecasts before and after reconcilation
+par(mfrow=c(2,3))
+for(i in seq_along(fc)) {
+  plot(reconciled[[i]], main=names(aggts)[i])
+  lines(fc[[i]]$mean, col='red')
+}
+```
+
+# Temporal reconciliation: Examples
+
+## Temporal reconciliation: M3 monthly series
+
+* Apply temporal reconciliation to all 1428 monthly series from M3 competition
+* Forecast horizon $h=18$ months
+* ETS and ARIMA models
+* Measure percentage difference to base forecasts
+* Reconciliation methods:
+  * WLS$_H$ (diagonal)
+  * WLS$_V$ (diagonal with common variances for same frequency)
+  * WLS$_S$ (diagonal/structural)
+
+## Temporal reconciliation: M3 monthly series
+\fontsize{9}{9}\sf\vspace*{-0.2cm}
+
+\hspace*{-0.8cm}
+\begin{tabular}{lr@{\hskip 0.2cm}rrrrrrrr@{\hskip 0.2cm}rrrrrr}
+\toprule
+\multicolumn{16}{c}{}\\[-0.4cm]
+Aggregation & & & \multicolumn{6}{c}{ETS} & & \multicolumn{5}{c}{ARIMA} \\
+\cmidrule{4-9}\cmidrule{11-16}
+\multicolumn{16}{c}{}\\[-0.4cm]
+level & $h$ & & Base & & BU & WLS$_H$ & WLS$_V$ & WLS$_S$ & & Base & & BU & WLS$_H$ & WLS$_V$ & WLS$_S$\\
+\cmidrule{1-2}\cmidrule{4-4}\cmidrule{6-9}\cmidrule{11-11} \cmidrule{13-16}
+\multicolumn{16}{c}{}\\[-0.3cm]
+ & & & \multicolumn{13}{c}{RMAE}\\[0.05cm]
+Annual           & 1  & & 1.0 & & -19.6 &      -22.0 &      -22.0 & {\bf-25.1}      & & 1.0 & &  -28.6 &      -33.1 &      -32.8 &    {\bf -33.4} \\
+Semi-annual      & 3  & & 1.0 & &   0.6 &       -4.0 &       -3.6 & {\bf -5.4}      & & 1.0 & &   -3.4 &       -8.2 &       -8.3 &   {\bf  -9.9} \\
+Four-monthly     & 4  & & 1.0 & &   2.0 &       -2.4 &       -2.2 & {\bf -3.0}      & & 1.0 & &   -1.7 &       -5.5 &       -5.9 &   {\bf  -6.7} \\
+Quarterly        & 6  & & 1.0 & &   2.4 &       -1.6 &       -1.7 & {\bf -2.8}      & & 1.0 & &   -3.6 &       -7.2 &       -8.1 &   {\bf  -9.1} \\
+Bi-monthly       & 9  & & 1.0 & &   0.7 &       -2.9 &       -3.3 & {\bf -4.3}      & & 1.0 & &   -1.5 &       -4.4 &       -5.3 &   {\bf  -6.3} \\
+Monthly          & 18 & & 1.0 & &   0.0 &       -2.2 &       -3.2 & {\bf -3.9}      & & 1.0 & &    0.0 &       -0.9 &       -2.9 &   {\bf  -3.4}  \\[0.01cm]
+\textit{Average} &    & &   & & \textit{-2.3} & \textit{-5.9} & \textit{-6.0} & {\bf\textit{-7.4}} & &      & & \textit{-6.5} & \textit{-9.9} & \textit{-10.5} & {\bf\textit{ -11.5}} \\[0.1cm]
+ & & & \multicolumn{13}{c}{MASE}\\[0.05cm]
+Annual           & 1  & &  1.1  & &     -12.1 &      -17.9 &   -17.8 &  {\bf -18.5}  & &       1.3 & &     -25.4 &      -29.9 &      -29.9 &  {\bf -30.2}\\
+Semi-annual      & 3  & &  1.0  & &       0.0 &       -6.3 &    -6.0 &  {\bf  -6.9}  & &       1.1 & &      -2.9 &       -8.1 &       -8.2 &  {\bf  -9.4}\\
+Four-monthly     & 4  & &  0.9  & &       3.1 &       -3.2 &    -3.0 &  {\bf  -3.4}  & &       0.9 & &      -1.8 &       -6.2 &       -6.5 &  {\bf  -7.1}\\
+Quarterly        & 6  & &  0.9  & &       3.2 &       -2.8 &    -2.7 &  {\bf  -3.4}  & &       1.0 & &      -2.6 &       -6.9 &       -7.4 &  {\bf  -8.1}\\
+Bi-monthly       & 9  & &  0.9  & &       2.7 &       -2.9 &    -3.0 &  {\bf  -3.7}  & &       0.9 & &      -1.3 &       -5.0 &       -5.5 &  {\bf  -6.3}\\
+Monthly          & 18 & &  0.9  & &       0.0 &       -3.7 &    -4.6 &  {\bf  -5.0}  & &       0.9 & &       0.0 &       -1.9 &       -3.2 &  {\bf  -3.7}\\ [0.01cm]
+\textit{Average} &    & &       & & \textit{-0.5} & \textit{-6.1} & \textit{-6.2} & {\bf\textit{-6.8}} & &      & & \textit{-5.7} & \textit{-9.7} & \textit{-10.1} & {\bf\textit{ -10.8}} \\[0.1cm]
+\bottomrule
+\end{tabular}
+
+## Example: Accident & emergency services demand
+
+Weekly A\&E demand data: 7 November 2010 to 7 June 2015.\fontsize{11}{11.5}\sf
+
+\begin{tabular}{l}
+\toprule
+Type 1 Departments --- Major A\&E	\\
+Type 2 Departments --- Single Specialty	\\
+Type 3 Departments --- Other A\&E/Minor Injury Unit \\
+Total Attendances \\
+Type 1 Departments --- Major A\&E $>$ 4 hours \\
+Type 2 Departments --- Single Specialty $>$ 4 hours \\
+Type 3 Departments --- Other A\&E/Minor Injury Unit $>$ 4 hours \\
+Total Attendances $>$ 4 hours \\
+Emergency Admissions via Type 1 A\&E \\
+Total Emergency Admissions via A\&E \\
+Other Emergency Admissions (i.e not via A\&E) \\
+Total Emergency Admissions \\
+Number of patients spending $>$ 4 hours from decision to admit to admission
+\end{tabular}
+
+## Example: Accident & emergency services demand
+
+\placefig{2.2}{2.2}{height=6.5cm, width=14cm}{AEexample.pdf}
+
+\begin{textblock}{10}(3,1)\fontsize{12}{12}\sf
+\begin{block}{}\centering
+Total emergency admissions via A\&E
+\end{block}
+\end{textblock}
+
+## Example: Accident & emergency services demand
+
+Test set: last 52 weeks
+
+\alert{MASE comparison} (ARIMA models)
+
+\begin{tabular}{llllr}
+\toprule
+Aggr. Level 		& $h$   & Base  & Reconciled & Change \\
+\midrule
+Annual & 1     	& 3.4   & 1.9   & $-42.9\%$ \\
+Weekly & 1--52 	& 2.0   & 1.9   & $-5.0\%$ \\
+Weekly & 13    	& 2.3   & 1.9   & $-16.2\%$ \\
+Weekly & 4     	& 1.9   & 1.5   & $-18.6\%$ \\
+Weekly & 1     	& 1.6   & 1.3   & $-17.2\%$
+\end{tabular}
+
+# Cross-temporal reconciliation
 
 ## Cross-temporal reconciliation
 
@@ -161,9 +569,6 @@ y_j^{\left[k\right]} = \sum^{jk}_{t=1+(j-1)k}{y_t},\qquad \text{for $j = 1,\dots
 
 \vspace*{10cm}
 
-## Thief
-
-* thief paper
 
 ## Daniele and Tommy's papers
 

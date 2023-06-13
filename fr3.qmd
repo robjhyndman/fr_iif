@@ -94,7 +94,7 @@ where $\psi^{-1}(\mathcal{B}):=\{{\bm{y}}\in \mathbb{R}^n:\psi({\bm{y}})\in \mat
 Density of bottom-level series under reconciled distribution is
 \centerline{$\tilde{f}_{\bm{b}}(\bm{b})=|\bG^*|\mathop{\mathlarger\int} \hat{f}(\bG^{-}\bm{b}+\bG_\perp \bm{a})d\bm{a}$}
 \vspace*{-0.4cm}\begin{itemize}\tightlist
-\item $\hat{f}$ is density of incoherent base probabilistic forecast
+\item $\hat{f}$ is density of incoherent base probabilistic forecasts
 \item $\bm{G^-}$ is $n\times m$ generalised inverse of $\bG$ st $\bG\bG^-=\bm{I}$
 \item $\bm{G_\perp}$ is $n\times (n-m)$ orthogonal complement to $\bG$ st $\bG\bG_\perp=\bm{0}$
 \item $\bG^*=\left(\bG^-\,\vdots\,\bG_\perp\right)$, and $\bm{b}$ and $\bm{a}$ are obtained via\newline the change of variables $\bm{y}=\bG^*\begin{pmatrix}\bm{b}\\\bm{a}\end{pmatrix}$

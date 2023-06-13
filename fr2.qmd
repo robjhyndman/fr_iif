@@ -41,7 +41,7 @@ source("setup.R")
 
 * @Stone1942: reconciling national economic accounts (disaggregated into production, income, outlay, capital transactions, etc.)
 * @Byron1978: extended Stone's work using more computationally efficient methods.
-* 1984: Stone wins 1984 Nobel Prize in Economics.
+* 1984: Stone wins Nobel Prize in Economics.
 * Same approach used for reconciling seasonally adjusted data.
 * @chow1971best: Temporal reconciliation of monthly or quarterly estimates to sum to annual estimates.
 * @Di_Fonzo1990: Cross-temporal reconciliation of time series data.

@@ -800,25 +800,6 @@
       ],
       "Hash": "15e9634c0fcd294799e9b2e929ed1b86"
     },
-    "gganimate": {
-      "Package": "gganimate",
-      "Version": "1.0.8",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "ggplot2",
-        "glue",
-        "grDevices",
-        "grid",
-        "progress",
-        "rlang",
-        "scales",
-        "stringi",
-        "tweenr",
-        "utils"
-      ],
-      "Hash": "8e627464910e6bcf6ccb62b0bdbffa35"
-    },
     "ggforce": {
       "Package": "ggforce",
       "Version": "0.4.1",
@@ -2050,6 +2031,19 @@
         "systemfonts"
       ],
       "Hash": "1ab6223d3670fac7143202cb6a2d43d5"
+    },
+    "thief": {
+      "Package": "thief",
+      "Version": "0.3",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "forecast",
+        "ggplot2",
+        "hts"
+      ],
+      "Hash": "29e625a086cd041428f0a9b37c00e601"
     },
     "tibble": {
       "Package": "tibble",
