@@ -96,7 +96,7 @@ Every collection of time series with linear constraints can be written as
 
 # Temporal reconciliation
 
-## Temporal reconciliation
+## Temporal reconciliation: quarterly data
 
 \begin{textblock}{7}(1,1.9)
 \begin{tikzpicture}
@@ -112,14 +112,14 @@ Every collection of time series with linear constraints can be written as
 \end{tikzpicture}
 \end{textblock}
 
-\begin{textblock}{8.5}(8.3,1.9)\fontsize{14}{17}\sf
+\only<3>{\begin{textblock}{8.5}(8.3,1.9)\fontsize{14}{17}\sf
 $$\bm{y}_\tau =
   \begin{bmatrix}
-    x_{\tau}^{[2]}  \\[0.2cm]
+    x_{\tau}^{[4]}  \\[0.2cm]
     x_{\tau,1}^{[1]} \\[0.2cm]
     x_{\tau,2}^{[1]} \\[0.2cm]
     x_{\tau,3}^{[1]} \\[0.2cm]
-    x_{\tau,2}^{[1]}
+    x_{\tau,4}^{[1]}
   \end{bmatrix}
   \qquad
   \bm{S} = \begin{bmatrix}
@@ -130,9 +130,19 @@ $$\bm{y}_\tau =
     0 & 0 & 0 & 1
   \end{bmatrix}
 $$
-\end{textblock}
+\end{textblock}}
 
-## Temporal reconciliation
+\only<2->{\begin{textblock}{8}(.3,5.7)
+  \begin{alertblock}{}
+    \begin{itemize}
+      \item[\color{white}\ding{229}] Forecast series at each available frequency.
+      \item[\color{white}\ding{229}] Optimally combine forecasts within the same year.
+    \end{itemize}
+  \end{alertblock}
+\end{textblock}}
+
+
+## Temporal reconciliation: quarterly data
 
 \begin{textblock}{7}(0.1,1.9)
 \begin{tikzpicture}
@@ -156,13 +166,13 @@ $$
 \begin{textblock}{8.5}(8.3,1.9)\fontsize{14}{17}\sf
 $$\bm{y}_\tau =
   \begin{bmatrix}
-    x_{\tau}^{[2]}  \\[0.2cm]
+    x_{\tau}^{[4]}  \\[0.2cm]
     x_{\tau,1}^{[2]} \\[0.2cm]
     x_{\tau,2}^{[2]} \\[0.2cm]
     x_{\tau,1}^{[1]} \\[0.2cm]
     x_{\tau,2}^{[1]} \\[0.2cm]
     x_{\tau,3}^{[1]} \\[0.2cm]
-    x_{\tau,2}^{[1]}
+    x_{\tau,4}^{[1]}
   \end{bmatrix}
   \qquad
   \bm{S} = \begin{bmatrix}
@@ -177,7 +187,16 @@ $$\bm{y}_\tau =
 $$
 \end{textblock}
 
-## Temporal reconciliation
+\begin{textblock}{8}(.3,5.7)
+  \begin{alertblock}{}
+    \begin{itemize}
+      \item[\color{white}\ding{229}] Forecast series at each available frequency.
+      \item[\color{white}\ding{229}] Optimally combine forecasts within the same year.
+    \end{itemize}
+  \end{alertblock}
+\end{textblock}
+
+## Temporal reconciliation: monthly data
 
 \only<1>{\begin{tikzpicture}
   \tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,fill=red!15,font=\small]
@@ -252,16 +271,16 @@ $$
     };
 \end{tikzpicture}}\pause
 
-\only<3>{\begin{textblock}{14}(1,6.7)
+\begin{textblock}{14}(1,6.7)
   \begin{alertblock}{}
     \begin{itemize}
       \item[\color{white}\ding{229}] Forecast series at each available frequency.
       \item[\color{white}\ding{229}] Optimally combine forecasts within the same year.
     \end{itemize}
   \end{alertblock}
-\end{textblock}}
+\end{textblock}
 
-## Temporal reconciliation
+## Temporal reconciliation: monthly data
 \fontsize{11}{11}\sf
 
 $$
@@ -565,7 +584,7 @@ Test set: last 52 weeks
   Weekly & 1     	& 1.6   & 1.3   & $-17.2\%$ \\
 \end{tabular}
 
-# Cross-temporal reconciliation
+# Cross-temporal forecast reconciliation
 
 ## Cross-temporal forecast reconciliation
 
@@ -609,7 +628,7 @@ Test set: last 52 weeks
 * $n=3$, $n_a = 1$, $n_b = 2$
 * Quarterly series: $m = 2$, $\mathcal{K} = \{1,2,4\}$
 
-## Cross-temporal reconciliation
+## Cross-temporal forecast reconciliation
 
 * $\bm{y}_t=$ series at most temporally disaggregated level, including all cross-sectionally disaggregated and aggregated series.
 * $y_{i,t}=$ $i$th element of $\bm{y}_t$, $i=1,\dots,n$.
@@ -625,13 +644,16 @@ $$\bm{x}_{i,\tau} = \begin{bmatrix}
 		\bm{x}_{n,\tau}
 	\end{bmatrix}.$$
 
-## Cross-temporal reconciliation
+## Cross-temporal forecast reconciliation
+\vspace*{-0.2cm}
 
 \alert{Structural matrix approach}
 
 * $\bm{S}_{cs}=$ structural cross-sectional matrix
 * $\bm{S}_{te}=$ structural temporal matrix
 * $\bm{S}_{ct} = \bm{S}_{cs} \otimes \bm{S}_{te}$
+
+\vspace*{-0.8cm}
 
 $$\bm{x}_\tau = \bm{S}_{ct} \bm{b}_\tau,\qquad\text{where}\qquad
 \bm{b}_\tau = \begin{bmatrix}
@@ -651,12 +673,15 @@ $$
 \end{block}
 \end{textblock}
 
-## Cross-temporal reconciliation
+## Cross-temporal forecast reconciliation
+\vspace*{-0.2cm}
 
 \alert{Constraint matrix approach}
 
 * $\bm{C}_{cs}=$ cross-sectional constraint matrix
 * $\bm{C}_{te}=$ temporal constraint matrix
+
+\vspace*{-0.8cm}
 
 $$\bm{C}_{ct}\bm{x}_\tau = \bm{0}\qquad\text{where}\qquad
 \bm{C}_{ct} = \begin{bmatrix}
@@ -669,6 +694,11 @@ $$
 * $\bm{P}=$ the commutation matrix such that $\bm{P} \text{vec}(\bm{Y}_{\tau}) = \text{vec}(\bm{Y}_{\tau}')$.
 
 # Cross-temporal probabilistic forecast reconciliation
+
+##  Cross-temporal probabilistic forecast reconciliation
+
+Bootstrap method
+
 
 ##  Cross-temporal probabilistic forecast reconciliation
 
