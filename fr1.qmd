@@ -32,7 +32,7 @@ source("setup.R")
 
 ## Outline
 
-\vspace*{0.4cm}\tableofcontents
+\vspace*{0.7cm}\tableofcontents
 
 # Hierarchical time series data
 
@@ -68,7 +68,7 @@ source("setup.R")
 \end{block}
 
 ## PBS sales
-\placefig{0}{1.4}{width=16cm, height=200cm}{pills}
+\placefig{0}{1.2}{width=16cm, height=200cm}{pills}
 
 ## PBS sales
 \alert{ATC drug classification}\fontsize{11}{11}\sffamily
@@ -110,8 +110,8 @@ V &Various
 
 ## Spectacle sales
 
-\placefig{7}{5}{width=8.7cm}{spectacles}
-\begin{textblock}{12}(0.3,1.5)
+\placefig{7}{4.9}{width=8.7cm}{spectacles}
+\begin{textblock}{12}(0.3,1.2)
 \begin{itemize}\tightlist
     \item Monthly UK sales data from 2000 -- 2014
     \item Provided by a large spectacle \rlap{manufacturer}
@@ -430,8 +430,6 @@ $t$.
 \end{align*}
 \end{textblock}
 
-\vspace*{10cm}
-
 ## Hierarchical time series
 
 \begin{block}{}\hspace*{.6cm}{\centering\small
@@ -499,8 +497,6 @@ $t$.
     y_{CY,t}\\
     y_{CZ,t}\end{pmatrix}}}$}
 
-    \vspace*{10cm}
-
 \only<3>{\begin{textblock}{3}(10.5,8)\fontsize{14}{15}\sf\colorbox[gray]{.8}{$\by_{t}=\color{red}\bS\color{blue}\bm{b}_{t}$}\end{textblock}}
 
 ## Grouped data
@@ -556,8 +552,6 @@ $t$.
 \vspace*{-1cm}
 
 \only<3>{\begin{textblock}{3}(10.5,8)\fontsize{14}{15}\sf\colorbox[gray]{.8}{$\by_{t}=\color{red}\bS\color{blue}\bm{b}_{t}$}\end{textblock}}
-
-\vspace*{10cm}
 
 ## The hierarchical forecasting problem
 
@@ -663,7 +657,6 @@ where $\bm{0}$ is null matrix and $\bm{I}$ is identity matrix.
 \item $\bm{G}$ matrix extracts only bottom-level forecasts from $\hat{\bm{y}}_{T+h|T}$
 \item $\bS$ adds them up to give the bottom-up forecasts.
 \end{itemize}
-\vspace*{10cm}
 
 ## Top-down forecasting
 
@@ -680,7 +673,6 @@ where $\bm{p}=[p_{1},p_{2},\dots,p_{n_b}]'$ and $\displaystyle\sum_{k=1}^{n_b} p
 \item $\bm{G}$ distributes forecasts of aggregate to lowest level series.
 \item Different methods of top-down forecasting lead to different proportionality vectors $\bm{p}$.
 \end{itemize}
-\vspace*{10cm}
 
 ## Properties of single-level methods
 
@@ -718,8 +710,6 @@ where $\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_T]$
 
 * $\bm{W}_h$ is hard to estimate for $h>1$.
 * This suggests we should choose $\bm{G}$ to minimise $\bm{V}_h$.
-
-\vspace*{10cm}
 
 # Linear forecast reconciliation
 
@@ -856,8 +846,8 @@ If $\bS\bG$ is a projection, then the trace of $\bm{V}_h$ is minimized when
 \begin{block}{}
 \centerline{$\displaystyle\textcolor{red}{\tilde{\by}_{T+h|T}}
 =\bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}\textcolor{blue}{\hat{\by}_{T+h|T}}$}
-\end{block}
-\centerline{\hspace*{1cm}\textcolor{red}{Reconciled forecasts}\hfill\textcolor{blue}{Base forecasts}\hspace*{2cm}}
+\end{block}\vspace*{-0.2cm}
+\centerline{\hspace*{1cm}\textcolor{red}{Reconciled forecasts}\hfill\textcolor{blue}{Base forecasts}\hspace*{2cm}}\vspace*{-0.2cm}
 
 * Trace of $\bm{V}_h$ is sum of forecast variances.
 * MinT solution is $L_2$ optimal amongst linear unbiased forecasts.
@@ -866,7 +856,7 @@ If $\bS\bG$ is a projection, then the trace of $\bm{V}_h$ is minimized when
 
 ## Linear projections
 
-\begin{textblock}{5}(6,0)
+\begin{textblock}{5}(7,-0.2)
 \begin{block}{}
 \centerline{$\tilde{\by}_{T+h|T}=\bS\bG\hat{\by}_{T+h|T}$}
 \end{block}
@@ -1147,8 +1137,6 @@ fc |>
     y_{CY,t}\\
     y_{CZ,t}\end{pmatrix}}}$}
 
-\vspace*{10cm}
-
 \begin{textblock}{3}(10.5,8)\fontsize{14}{15}\sf\colorbox[gray]{.8}{$\by_{t}=\color{red}\bS\color{blue}\bm{b}_{t}$}\end{textblock}
 
 ## Fast computation: hierarchical data
@@ -1258,8 +1246,6 @@ fc |>
     y_{CY,t}\\
     y_{CZ,t}\end{pmatrix}}}$}
 
-\vspace*{10cm}
-
 \begin{textblock}{3}(10.5,8)\fontsize{14}{15}\sf\colorbox[gray]{.8}{$\by_{t}=\color{red}\bS\color{blue}\bm{b}_{t}$}\end{textblock}
 
 ## Fast computation: hierarchies
@@ -1301,8 +1287,6 @@ $\displaystyle
 where ${\bf1}_n$ is an $n$-vector of ones and tree $T_i$ has $n_i$ terminal nodes.
 \end{multicols}
 
-\vspace*{10cm}
-
 ## Fast computation: hierarchies
 \vspace*{-0.4cm}\fontsize{13}{15}\sf
 $$
@@ -1321,8 +1305,6 @@ $$
 
 \pause
 \alert{Now apply the Sherman-Morrison formula \dots}
-
-\vspace*{10cm}
 
 ## Fast computation: hierarchies
 \vspace*{-0.4cm}\fontsize{13}{15}\sf
@@ -1349,8 +1331,6 @@ The recursive calculations can be done in such a way that we never store any of 
 \end{alertblock}
 \end{textblock}}
 \only<2>{\placefig{15}{5.4}{width=1cm}{smiley}}
-
-\vspace*{10cm}
 
 ## Fast computation: grouped data
 
@@ -1429,8 +1409,6 @@ The recursive calculations can be done in such a way that we never store any of 
 
 \begin{textblock}{3}(10.5,8)\fontsize{12}{13}\sf\colorbox[gray]{.8}{$\by_{t}=\color{red}\bS\color{blue}\bm{b}_{t}$}\end{textblock}
 
-\vspace*{10cm}
-
 ## Fast computation: grouped data
 
 $\displaystyle \bS=\begin{bmatrix}
@@ -1477,12 +1455,11 @@ $$ (\bm{M})_{ij} =
 \end{array}\right .
 $$
 
-\only<2>{\begin{textblock}{4}(11.8,4)\fontsize{12}{13}\sf
+\only<2>{\begin{textblock}{4}(11.8,3.5)\fontsize{12}{13}\sf
 \begin{alertblock}{}
 Again, the calculations can be done in such a way that we never store any of the large matrices involved.
 \end{alertblock}
 \end{textblock}}
 \only<2>{\placefig{15}{6.7}{width=1cm}{smiley}}
-
 
 \nocite{hierarchical, fasthts, mint}

@@ -1,6 +1,6 @@
 ---
 title: Forecast reconciliation
-subtitle: 2. Temporal & cross-temporal forecast reconciliation
+subtitle: 4. Temporal & cross-temporal forecast reconciliation
 author: Rob J Hyndman
 pdf-engine: pdflatex
 fig-width: 9
@@ -510,7 +510,7 @@ for(i in seq_along(fc)) {
   * WLS$_S$ (diagonal/structural)
 
 ## Temporal reconciliation: M3 monthly series
-\fontsize{9}{9}\sf\vspace*{-0.2cm}
+\fontsize{9}{9}\sf
 
 \hspace*{-0.8cm}
 \begin{tabular}{lr@{\hskip 0.2cm}rrrrrrrr@{\hskip 0.2cm}rrrrrr}

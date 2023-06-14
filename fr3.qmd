@@ -35,7 +35,7 @@ library(kableExtra)
 
 ## Outline
 
-\vspace*{0.4cm}\tableofcontents
+\vspace*{0.7cm}\tableofcontents
 
 # Definition of probabilistic coherence
 
@@ -100,7 +100,6 @@ Density of bottom-level series under reconciled distribution is
 \item $\bG^*=\left(\bG^-\,\vdots\,\bG_\perp\right)$, and $\bm{b}$ and $\bm{a}$ are obtained via\newline the change of variables $\bm{y}=\bG^*\begin{pmatrix}\bm{b}\\\bm{a}\end{pmatrix}$
 \end{itemize}
 \end{block}
-\vspace*{10cm}
 
 ## Construction of reconciled distributions
 
@@ -132,8 +131,6 @@ Reconciling sample paths from incoherent distributions works.
 \end{alertblock}
 \end{textblock}}
 
-\vspace*{10cm}
-
 ## Simulation from a reconciled distribution
 
 \begin{block}{}
@@ -143,8 +140,6 @@ Suppose that $\left(\hat{\bm{y}}^{[1]},\ldots,\hat{\bm{y}}^{[L]}\right)$ is a sa
 * Simulate future sample paths for each series using a multivariate bootstrap of the residuals from each model.
 * Reconcile the sample paths.
 * The reconciled sample paths are a sample from the reconciled distribution.
-
-\vspace*{10cm}
 
 ```{r}
 #| label: setup_tourism_example
@@ -614,7 +609,7 @@ incident_gthf |>
 
 \begin{block}{}
 \centerline{$y_{T+h|T} \sim \text{Normal}(\hat{y}_{T+h|T},\hat{\sigma}^2_{T+h|T})$}
-\end{block}\vspace*{10cm}
+\end{block}
 
 ## Forecasting methods
 
@@ -636,7 +631,7 @@ and $\bm{x}_{T+h}$ is a vector of covariates including
 \item Christmas Day
 \item New Year's Day
 \end{itemize}
-\end{multicols}\vspace*{10cm}
+\end{multicols}
 
 ## Forecasting methods
 \fontsize{9}{8}\sf\vspace*{-0.15cm}
@@ -701,7 +696,7 @@ and $\bm{x}_{T+h}$ is a vector of covariates including
 \item Christmas Day
 \item New Year's Day
 \end{itemize}
-\end{multicols}\vspace*{10cm}
+\end{multicols}
 
 ## Nonparametric bootstrap reconciliation
 
@@ -776,8 +771,6 @@ $$
 * $T=$ size of training set
 * $m = 7$
 
-\vspace*{10cm}
-
 ## Performance evaluation
 
 \vspace*{0.2cm}\begin{block}{}
@@ -793,8 +786,6 @@ $$
 * $T=$ size of training set
 * $m = 7$
 
-\vspace*{10cm}
-
 ## Performance evaluation
 
 \vspace*{0.2cm}\begin{block}{}
@@ -806,8 +797,6 @@ $$
 
 * $G_j(x)=$ forecast distribution for forecast horizon $j$
 * $F_j(x)=$ true distribution for same period
-
-\vspace*{10cm}
 
 ```{r}
 #| label: results
@@ -1148,7 +1137,7 @@ Mean Energy score
 \end{block}
 \end{textblock}
 
-\begin{textblock}{7}(8.7,1.3)\fontsize{11}{11.5}\sf
+\begin{textblock}{7}(8.7,1.1)\fontsize{11}{11.5}\sf
 \begin{block}{Base residual assumptions}
 \begin{itemize}\itemsep=0cm\parskip=0cm
 \item Gaussian independent
@@ -1172,21 +1161,21 @@ Mean Energy score
 
 ## Example: Australian electricity generation
 
-\placefig{0.3}{1.5}{width=6.cm, height=10cm}{nemenyi_ig}
+\placefig{0.3}{1.3}{width=5.5cm, height=10cm}{nemenyi_ig}
 
-\placefig{8.3}{1.5}{width=6.cm, height=10cm}{nemenyi_jb}
+\placefig{8.3}{1.3}{width=5.5cm, height=10cm}{nemenyi_jb}
 
-\begin{textblock}{7}(0.2,7.)\fontsize{11}{12}\sf
-\begin{block}{Nemenyi test for different scores}
+\begin{textblock}{7}(0.2,6.7)\fontsize{12}{13}\sf
+\begin{block}{\fontsize{11}{12}\sf Nemenyi test for different scores}
 Base forecasts are independent and Gaussian.
 \end{block}
 \end{textblock}
 
-\begin{textblock}{7}(8.8,7.)\fontsize{11}{12}\sf
-\begin{block}{Nemenyi test for different scores}
+\begin{textblock}{7}(8.8,6.7)\fontsize{12}{13}\sf
+\begin{block}{\fontsize{11}{12}\sf Nemenyi test for different scores}
 Base forecasts are obtained by jointly bootstrapping residuals.
 \end{block}
 \end{textblock}
 
 
-\nocite{smartmeterhts,coherentprob}
+\nocite{smartmeterhts,coherentprob,fem}

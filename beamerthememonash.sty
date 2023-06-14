@@ -9,6 +9,8 @@
 % Fonts
 \usepackage[scale=0.85]{sourcecodepro}
 \usepackage[lf]{FiraSans}
+\fontsize{13}{15}\sf
+%\DisableLigatures{encoding = T1, family = tt*}
 
 %% Default color theme
 \usecolortheme{monashwhite}
@@ -25,7 +27,14 @@
 \metroset{progressbar=foot}
 
 % Plenty of room
-%\setbeamersize{text margin left=2em,text margin right=2em}
+\setlength{\metropolis@frametitle@padding}{1.6ex}
+\setbeamertemplate{frametitle}{%
+\nointerlineskip
+\begin{beamercolorbox}[wd=\paperwidth,leftskip=0.3cm,rightskip=0.3cm,ht=2.2ex,dp=1.2ex]{frametitle}
+  \usebeamerfont{frametitle}\MakeLowercase{\protect\insertframetitle}%
+\end{beamercolorbox}%
+\vspace*{-0.2cm}
+}
 
 % Rounded corners on boxes
 \useinnertheme{rounded}
@@ -65,7 +74,7 @@
 \setlength{\TPHorizModule}{1cm}
 \setlength{\TPVertModule}{1cm}
 \def\placefig#1#2#3#4{\begin{textblock}{.1}(#1,#2)\rlap{\includegraphics[#3]{#4}}\end{textblock}}
-\def\full#1{\vspace*{0.05cm}\centerline{\includegraphics[width=15cm,height=7.5cm,keepaspectratio=true]{#1}}}
+\def\full#1{\vspace*{0.25cm}\centerline{\includegraphics[width=15cm,height=7.5cm,keepaspectratio=true]{#1}}}
 
 % Monash title page
 % One can alter the font size by setting eg 'titlefontsize: 20pt' in the YAML header
@@ -82,7 +91,7 @@
 
 % Outline at start of each section
 \AtBeginSection[]{
-   \begin{frame}{Outline}\vspace*{0.4cm}
+   \begin{frame}{Outline}\vspace*{0.7cm}
    \tableofcontents[currentsection]
    \end{frame}
   }
