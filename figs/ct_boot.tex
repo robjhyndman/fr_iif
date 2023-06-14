@@ -1,4 +1,4 @@
-\begin{tikzpicture}
+\begin{tikzpicture}[scale = 0.95, every node/.style={scale=0.95}]
 \matrix (e1) [matrix of nodes,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt}, label={[name=labe1] above:{\footnotesize$\widehat{\textbf{E}}_1^{[1]}$}}]
 {
 |[label={[font=\scriptsize, text = white, anchor=center]center:{$T,5$}}]|\pgfuseimage{nblue} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$T,6$}}]|\pgfuseimage{nblue} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$T,7$}}]|\pgfuseimage{nblue} & |[label={[font=\scriptsize, text = white, anchor=center]center:{$T,8$}}]|\pgfuseimage{nblue}\\
@@ -77,9 +77,9 @@
 };
 
 
-\node[draw,inner sep=1mm,label={[name = boot1n] below:{\footnotesize$1^{st}$ bootstrap sample ($\tau = 2$)}},fit=(e1) (ek) (em) (labek) (labe1) (labem)] (boot1) {};
+\node[draw,inner sep=1mm,label={[name = boot1n] below:{\footnotesize$1^{st}$ bootstrap sample ($\tau = 2$)\hspace*{0.5cm}}},fit=(e1) (ek) (em) (labek) (labe1) (labem)] (boot1) {};
 \node[draw,inner sep=1mm,label={[name = boot2n] below:{\footnotesize$\ell^{th}$ bootstrap sample ($\tau = 1$)}},fit=(e1_l) (ek_l) (em_l) (labekl) (labe1l) (labeml)] (boot2) {};
-\node[draw,inner sep=1mm,label={[name = boot3n] below:{\footnotesize$L^{th}$ bootstrap sample ($\tau = 4$)}},fit=(e1_L) (ek_L) (em_L) (labekL) (labe1L) (labemL)] (boot3) {};
+\node[draw,inner sep=1mm,label={[name = boot3n] below:{\footnotesize\hspace*{0.5cm}$L^{th}$ bootstrap sample ($\tau = 4$)}},fit=(e1_L) (ek_L) (em_L) (labekL) (labe1L) (labemL)] (boot3) {};
 
 \node[inner sep=2mm,label=above:{},fit=(boot3) (boot2) (boot1) (boot3n) (boot2n) (boot1n)] {};
 \end{tikzpicture}

@@ -697,14 +697,18 @@ $$
 
 ##  Cross-temporal probabilistic forecast reconciliation
 
-Bootstrap method
+\alert{Nonparametric bootstrap}\fontsize{14}{16}\sf
 
+* Simulate future sample paths from all models using bootstrapped residuals, then reconcile them to obtain coherent sample paths.
+* Need to generate samples that preserve cross-temporal relationships.
+* Draw residual samples of all series at same time from most temporally aggregated level.
+* Residuals for other levels obtained using the corresponding time indices.
 
 ##  Cross-temporal probabilistic forecast reconciliation
 
 \input{figs/res_boot.tex}
 
-\begin{textblock}{2}(13.5,3)
+\begin{textblock}{1.4}(13.9,3)
 \begin{block}{}
 \textcolor[HTML]{7fb97f}{Year 1}\\
 \textcolor[HTML]{7fbcff}{Year 2}\\
@@ -714,10 +718,49 @@ Bootstrap method
 \end{textblock}
 
 ##  Cross-temporal probabilistic forecast reconciliation
-\vspace*{-0.4cm}
+\vspace*{-0.3cm}
 
 \input{figs/ct_boot.tex}
 
+## Example: Australian GDP data --- CRPS skill scores
+\fontsize{9}{10}\sf
+\input{tab/AusGDP/sam_crps.tex}
+
+## Example: Australian GDP data
+
+\full{figs/AusGDP/gdptrace14.pdf}
+
+Base (first row) and reconciled (second and third rows) forecasts for Australian GDP at the second iteration of our forecasting experiment for the bootstrap (first column) and Gaussian (second column) approaches. The green represents the 80\% confidence interval. The black line and triangle indicate the observed true values, the red line represent the median value, and the blue line represent the mean value.
+
+## Example: Australian GDP data
+
+\full{figs/AusGDP/ctjb.pdf}
+
+## Example: Australian tourism data
+
+* Monthly data: January 1998 to December 2016
+* 7 states, 35 zones, 380 regions. 525 unique series
+* Time series cross-validation; initial training set 10 years.
+
+### Methods
+
+\begin{itemize}
+  \item[\textbf{oct}$(\;\cdot\;)$] optimal cross-temporal reconciliation for $ols$, $struc$, $wlsv$ and $bdshr$ approach. When necessary, in-sample residuals were used;
+  \item[\textbf{oct}$_{h}(\;\cdot\;)$] optimal cross-temporal reconciliation with multi-step residuals: $shr=$ \textit{Global shrinkage}, $hshr=$ \textit{High frequency shrinkage}, $bshr=$ \textit{bottom time series shrinkage}, $hbshr=$ \textit{High frequency bottom time series shrinkage}.
+\end{itemize}
+
+## Example: Australian tourism data -- CRPS skill scores
+
+\centering
+\fontsize{9}{10}\selectfont
+\input{tab/VN525/sam_crps_more.tex}
+
+
+## Example: Australian tourism data
+
+\full{figs/VN525/ctjb_more.pdf}
+
+Comparison with the Best" (MCB) Nemenyi test at different temporal aggregation for the non-parametric bootstrap approach. In each panel, the Friedman test is reported in the lower right corner. The mean rank of each approach is shown to the right of its name. Statistical differences in performance were indicated if the intervals of two forecast reconciliation procedures did not overlap. Thus, approaches that did not overlap with the blue interval were considered significantly worse than the best, and vice versa.
 
 ## Thanks!
 

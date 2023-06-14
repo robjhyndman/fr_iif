@@ -1,0 +1,55 @@
+
+\begin{tabular}[t]{>{\centering\arraybackslash}p{2.5cm}>{\centering\arraybackslash}p{1.5cm}>{\centering\arraybackslash}p{1.5cm}>{\centering\arraybackslash}p{1.5cm}>{\centering\arraybackslash}p{1.5cm}>{\centering\arraybackslash}p{1.5cm}}
+\toprule
+\multicolumn{1}{c}{\textbf{}} & \multicolumn{5}{c}{\textbf{Base forecasts' sample approach}} \\
+\cmidrule(l{0pt}r{0pt}){2-6}
+\multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{4}{c}{Gaussian frameworks: sample covariance matrix} \\
+\multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{2}{c}{Multi-step residuals} & \multicolumn{2}{c}{\makecell[c]{Overlapping and\\multi-step residuals}} \\
+\multirow{-5}{*}{\parbox{2cm}{\centering\textbf{Reconciliation\\approach}}} & \multirow{-4}{*}{Bootstrap} & G & H & G & H\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{6}{c}{\textbf{$\forall k \in \{4,2,1\}$}}\\
+base & \textcolor{black}{1.000} & \textcolor{black}{0.970} & \textcolor{black}{0.988} & \textcolor{black}{0.960} & \textcolor{black}{0.970}\\
+ct$(shr_{cs}, bu_{te})$ & \textcolor{black}{0.897} & \textcolor{black}{0.944} & \textcolor{black}{0.944} & \textcolor{black}{0.973} & \textcolor{black}{0.973}\\
+ct$(wls_{cs}, bu_{te})$ & \textcolor{black}{\textbf{0.886}} & \textcolor{black}{0.880} & \textcolor{black}{0.880} & \textcolor{black}{\textbf{0.860}} & \textcolor{black}{0.860}\\
+oct$_o(wlsv)$ & \textcolor{black}{0.891} & \textcolor{black}{\textbf{0.879}} & \textcolor{black}{0.881} & \textcolor{black}{0.864} & \textcolor{black}{0.864}\\
+oct$_o(bdshr)$ & \textcolor{black}{0.940} & \textcolor{black}{0.928} & \textcolor{black}{0.910} & \textcolor{black}{0.918} & \textcolor{black}{0.895}\\
+oct$_o(shr)$ & \textcolor{black}{0.900} & \textcolor{black}{0.899} & \textcolor{black}{\textbf{0.876}} & \textcolor{black}{0.878} & \textcolor{blue}{\textbf{0.858}}\\
+oct$_o(hshr)$ & \textcolor{black}{0.956} & \textcolor{black}{0.936} & \textcolor{black}{0.955} & \textcolor{black}{0.922} & \textcolor{black}{0.936}\\
+oct$_{oh}(shr)$ & \textcolor{red}{1.059} & \textcolor{red}{1.015} & \textcolor{black}{0.956} & \textcolor{red}{1.053} & \textcolor{black}{0.945}\\
+oct$_{oh}(hshr)$ & \textcolor{black}{0.986} & \textcolor{black}{0.968} & \textcolor{black}{0.999} & \textcolor{black}{0.959} & \textcolor{black}{0.992}\\
+\addlinespace[0.3em]
+\multicolumn{6}{c}{\textbf{$k = 1$}}\\
+base & \textcolor{black}{1.000} & \textcolor{black}{0.977} & \textcolor{black}{0.977} & \textcolor{black}{0.965} & \textcolor{black}{0.965}\\
+ct$(shr_{cs}, bu_{te})$ & \textcolor{black}{0.964} & \textcolor{red}{1.001} & \textcolor{red}{1.001} & \textcolor{red}{1.033} & \textcolor{red}{1.033}\\
+ct$(wls_{cs}, bu_{te})$ & \textcolor{black}{\textbf{0.954}} & \textcolor{black}{\textbf{0.944}} & \textcolor{black}{0.945} & \textcolor{blue}{\textbf{0.928}} & \textcolor{black}{\textbf{0.928}}\\
+oct$_o(wlsv)$ & \textcolor{black}{0.958} & \textcolor{black}{0.945} & \textcolor{black}{0.945} & \textcolor{black}{0.931} & \textcolor{black}{0.931}\\
+oct$_o(bdshr)$ & \textcolor{red}{1.004} & \textcolor{black}{0.986} & \textcolor{black}{0.971} & \textcolor{black}{0.980} & \textcolor{black}{0.961}\\
+oct$_o(shr)$ & \textcolor{black}{0.973} & \textcolor{black}{0.963} & \textcolor{black}{\textbf{0.944}} & \textcolor{black}{0.949} & \textcolor{black}{0.930}\\
+oct$_o(hshr)$ & \textcolor{red}{1.021} & \textcolor{red}{1.004} & \textcolor{red}{1.012} & \textcolor{black}{0.987} & \textcolor{black}{1.000}\\
+oct$_{oh}(shr)$ & \textcolor{red}{1.130} & \textcolor{red}{1.063} & \textcolor{red}{1.019} & \textcolor{red}{1.121} & \textcolor{red}{1.016}\\
+oct$_{oh}(hshr)$ & \textcolor{red}{1.053} & \textcolor{red}{1.034} & \textcolor{red}{1.049} & \textcolor{red}{1.024} & \textcolor{red}{1.055}\\
+\addlinespace[0.3em]
+\multicolumn{6}{c}{\textbf{$k = 2$}}\\
+base & \textcolor{black}{1.000} & \textcolor{black}{0.972} & \textcolor{black}{0.985} & \textcolor{black}{0.959} & \textcolor{black}{0.969}\\
+ct$(shr_{cs}, bu_{te})$ & \textcolor{black}{0.915} & \textcolor{black}{0.961} & \textcolor{black}{0.960} & \textcolor{black}{0.991} & \textcolor{black}{0.991}\\
+ct$(wls_{cs}, bu_{te})$ & \textcolor{black}{\textbf{0.904}} & \textcolor{black}{0.896} & \textcolor{black}{\textbf{0.896}} & \textcolor{blue}{\textbf{0.877}} & \textcolor{black}{\textbf{0.877}}\\
+oct$_o(wlsv)$ & \textcolor{black}{0.908} & \textcolor{black}{\textbf{0.895}} & \textcolor{black}{0.898} & \textcolor{black}{0.881} & \textcolor{black}{0.882}\\
+oct$_o(bdshr)$ & \textcolor{black}{0.960} & \textcolor{black}{0.947} & \textcolor{black}{0.929} & \textcolor{black}{0.938} & \textcolor{black}{0.915}\\
+oct$_o(shr)$ & \textcolor{black}{0.921} & \textcolor{black}{0.919} & \textcolor{black}{0.896} & \textcolor{black}{0.898} & \textcolor{black}{0.878}\\
+oct$_o(hshr)$ & \textcolor{black}{0.977} & \textcolor{black}{0.956} & \textcolor{black}{0.976} & \textcolor{black}{0.942} & \textcolor{black}{0.957}\\
+oct$_{oh}(shr)$ & \textcolor{red}{1.082} & \textcolor{red}{1.029} & \textcolor{black}{0.973} & \textcolor{red}{1.076} & \textcolor{black}{0.963}\\
+oct$_{oh}(hshr)$ & \textcolor{red}{1.007} & \textcolor{black}{0.988} & \textcolor{red}{1.017} & \textcolor{black}{0.979} & \textcolor{red}{1.014}\\
+\addlinespace[0.3em]
+\multicolumn{6}{c}{\textbf{$k = 4$}}\\
+base & \textcolor{black}{1.000} & \textcolor{black}{0.959} & \textcolor{red}{1.000} & \textcolor{black}{0.957} & \textcolor{black}{0.976}\\
+ct$(shr_{cs}, bu_{te})$ & \textcolor{black}{0.818} & \textcolor{black}{0.874} & \textcolor{black}{0.874} & \textcolor{black}{0.899} & \textcolor{black}{0.900}\\
+ct$(wls_{cs}, bu_{te})$ & \textcolor{black}{\textbf{0.807}} & \textcolor{black}{0.805} & \textcolor{black}{0.805} & \textcolor{black}{\textbf{0.782}} & \textcolor{black}{0.783}\\
+oct$_o(wlsv)$ & \textcolor{black}{0.812} & \textcolor{black}{\textbf{0.802}} & \textcolor{black}{0.806} & \textcolor{black}{0.786} & \textcolor{black}{0.786}\\
+oct$_o(bdshr)$ & \textcolor{black}{0.860} & \textcolor{black}{0.856} & \textcolor{black}{0.836} & \textcolor{black}{0.841} & \textcolor{black}{0.816}\\
+oct$_o(shr)$ & \textcolor{black}{0.814} & \textcolor{black}{0.821} & \textcolor{black}{\textbf{0.796}} & \textcolor{black}{0.794} & \textcolor{blue}{\textbf{0.775}}\\
+oct$_o(hshr)$ & \textcolor{black}{0.876} & \textcolor{black}{0.854} & \textcolor{black}{0.882} & \textcolor{black}{0.844} & \textcolor{black}{0.856}\\
+oct$_{oh}(shr)$ & \textcolor{black}{0.971} & \textcolor{black}{0.954} & \textcolor{black}{0.882} & \textcolor{black}{0.967} & \textcolor{black}{0.861}\\
+oct$_{oh}(hshr)$ & \textcolor{black}{0.904} & \textcolor{black}{0.888} & \textcolor{black}{0.934} & \textcolor{black}{0.881} & \textcolor{black}{0.913}\\
+\bottomrule
+\end{tabular}
