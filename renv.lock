@@ -295,7 +295,7 @@
     },
     "bslib": {
       "Package": "bslib",
-      "Version": "0.4.2",
+      "Version": "0.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -311,7 +311,7 @@
         "rlang",
         "sass"
       ],
-      "Hash": "a7fbf03946ad741129dc81098722fca1"
+      "Hash": "1b117970533deb6d4e992c1b34e9d905"
     },
     "cachem": {
       "Package": "cachem",
@@ -456,13 +456,13 @@
     },
     "curl": {
       "Package": "curl",
-      "Version": "5.0.0",
+      "Version": "5.0.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "e4f97056611e8e6b8b852d13b7400cf1"
+      "Hash": "2118af9cb164c8d2dddc7b89eaf732d9"
     },
     "cyclocomp": {
       "Package": "cyclocomp",
@@ -614,11 +614,11 @@
       "Version": "0.3.3.9000",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "fabletools",
       "RemoteUsername": "tidyverts",
+      "RemoteRepo": "fabletools",
       "RemoteRef": "HEAD",
       "RemoteSha": "e09af0caa2ef032a69efe34a522edc8d6e36b595",
+      "RemoteHost": "api.github.com",
       "Requirements": [
         "R",
         "R6",
@@ -1105,13 +1105,13 @@
     },
     "jsonlite": {
       "Package": "jsonlite",
-      "Version": "1.8.4",
+      "Version": "1.8.5",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "methods"
       ],
-      "Hash": "a4269a09a9b865579b2635c77e572374"
+      "Hash": "3ee4d9899e4db3e976fc82b98d24a31a"
     },
     "kableExtra": {
       "Package": "kableExtra",
@@ -1973,7 +1973,7 @@
     },
     "styler": {
       "Package": "styler",
-      "Version": "1.10.0",
+      "Version": "1.10.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1988,7 +1988,7 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "24f7192497d696c39d3b39b2e29a039d"
+      "Hash": "b0911fdb2c682f526f6e9c131fd40a1f"
     },
     "svglite": {
       "Package": "svglite",
@@ -2036,7 +2036,7 @@
       "Package": "thief",
       "Version": "0.3",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
         "forecast",
