@@ -87,6 +87,9 @@ where $\psi^{-1}(\mathcal{B}):=\{{\bm{y}}\in \mathbb{R}^n:\psi({\bm{y}})\in \mat
 \input figs/probforerec_schematic.tex
 }
 \end{textblock}
+\begin{textblock}{7}(9.5,7.5)
+\centerline{$\psi = s \circ g$}
+\end{textblock}
 
 ## Construction of reconciled distributions
 
@@ -114,20 +117,20 @@ Density of full hierarchy under reconciled distribution is
 \vspace*{-0.4cm}\begin{itemize}\tightlist
 \item $\bS^*=\begin{pmatrix} {\bS^-}' & \bS_\perp \end{pmatrix}'$
 \item $\bm{S^-}$ is $m\times n$ generalised inverse of $\bS$ such that $\bS^-\bS=\bm{I}$
-\item $\bm{S_\perp}$ is $n\times (n-m)$ orthogonal complement to $\bS$ such that $\bS'_\perp\bS=\bm{0}$
+\item $\bm{S_\perp}$ is $n\times (n-m)$ orthogonal complement to $\bS$: $\bS'_\perp\bS=\bm{0}$
 \end{itemize}
 \end{block}
 
-\only<2->{\begin{textblock}{7.3}(0.8,5.9)
-\begin{alertblock}{Gaussian reconciliation}
+\only<2->{\begin{textblock}{7}(0.8,5.4)
+\begin{alertblock}{Gaussian reconciliation}\fontsize{14}{15}\sf
 If the incoherent base forecasts are $\text{N}(\hat{\bm{\mu}}, \hat{\bm{\Sigma}})$,
 then the reconciled density is $\text{N}(\bS\bG\hat{\bm{\mu}}, \bS\bG\hat{\bm{\Sigma}}\bG'\bS')$
 \end{alertblock}
 \end{textblock}}
 
-\only<3>{\begin{textblock}{6.7}(8.5,5.9)
-\begin{alertblock}{Bootstrap reconciliation}
-Reconciling sample paths from incoherent distributions works.
+\only<3>{\begin{textblock}{7}(8.3,5.4)
+\begin{alertblock}{Elliptical reconciliation}\fontsize{14}{15}\sf
+An elliptical distribution is obtained if the base forecasts are elliptical, unbiased, and rank($\hat{\bm{\Sigma}} - \bm{\Sigma}) \le n_a$
 \end{alertblock}
 \end{textblock}}
 
@@ -137,9 +140,47 @@ Reconciling sample paths from incoherent distributions works.
 Suppose that $\left(\hat{\bm{y}}^{[1]},\ldots,\hat{\bm{y}}^{[L]}\right)$ is a sample drawn from an incoherent probability measure $\hat{\nu}$. Then $\left(\tilde{\bm{y}}^{[1]},\ldots,\tilde{\bm{y}}^{[L]}\right)$ where $\tilde{\bm{y}}^{[\ell]}:=\psi(\hat{\bm{y}}^{[\ell]})$ for $\ell=1,\ldots,L$, is a sample drawn from the reconciled probability measure $\tilde{\nu}$.
 \end{block}
 
-* Simulate future sample paths for each series using a multivariate bootstrap of the residuals from each model.
+* Simulate future sample paths for each series, by simulating from each model using a multivariate bootstrap of the residuals.
 * Reconcile the sample paths.
 * The reconciled sample paths are a sample from the reconciled distribution.
+
+## Simulation from a reconciled distribution
+
+```{r}
+#| label: sim_bootstrap
+#| include: false
+p <- tidyr::expand_grid(
+    time = seq(100),
+    series = seq(20)
+  ) |>
+  mutate(res = rnorm(n())) |>
+  ggplot(aes(x=time, y=series, fill=res)) +
+  geom_tile() +
+  scale_y_continuous(breaks = seq(20), minor_breaks = NULL, expand=c(0,0)) +
+  guides(fill = "none")
+Cairo::CairoPDF(file="figs/sim_bootstrap.pdf", width=8, height=4)
+  print(p)
+crop::dev.off.crop()
+slices <- sample(seq(100), replace = TRUE, size = 20)
+for(i in seq_along(slices)) {
+  Cairo::CairoPDF(file=paste0("figs/sim_bootstrap_", i, ".pdf"), width=8, height=4)
+    print(p +
+      geom_rect(aes(xmin = slices[i], xmax = slices[i]+0.9, ymin = 0.5, ymax = 20.5),
+                 fill = "transparent", col="white"))
+  crop::dev.off.crop()
+}
+```
+
+\vspace*{0.2cm}
+\centerline{\includegraphics[width=15.5cm]{figs/sim_bootstrap.pdf}}
+
+## Simulation from a reconciled distribution
+
+\vspace*{0.2cm}
+\centerline{
+\animategraphics[loop,autoplay,width=15.5cm]{10}{figs/sim_bootstrap_}{1}{20}
+}
+
 
 ```{r}
 #| label: setup_tourism_example
