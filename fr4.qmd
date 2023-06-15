@@ -32,7 +32,7 @@ source("setup.R")
 
 ## Notation reminder
 
-\begin{textblock}{8.5}(0.2,1.5)
+\begin{textblock}{8.5}(0.3,1.4)
 Every collection of time series with linear constraints can be written as
 \centerline{\colorbox[RGB]{210,210,210}{$\bY_{t}=\color{blue}\bS\color{red}\bm{b}_{t}$}}
 \vspace*{-0.9cm}\begin{itemize}\parskip=0cm\itemsep=0cm
@@ -325,7 +325,7 @@ $$
 * $M_k=m/k$ is seasonal period of aggregated series.
 
 ## Temporal reconciliation
-\fontsize{14}{15}\sf\vspace*{-0.8cm}
+\fontsize{14}{15}\sf\vspace*{-0.5cm}
 $$\bm{x}_\tau = \bm{S} \bm{x}_\tau^{[1]}, \qquad \bm{S} = \begin{bmatrix}\bm{A}\\\bm{I}\end{bmatrix}$$
 where
 $$
@@ -645,7 +645,6 @@ $$\bm{x}_{i,\tau} = \begin{bmatrix}
 	\end{bmatrix}.$$
 
 ## Cross-temporal forecast reconciliation
-\vspace*{-0.2cm}
 
 \alert{Structural matrix approach}
 
@@ -653,7 +652,7 @@ $$\bm{x}_{i,\tau} = \begin{bmatrix}
 * $\bm{S}_{te}=$ structural temporal matrix
 * $\bm{S}_{ct} = \bm{S}_{cs} \otimes \bm{S}_{te}$
 
-\vspace*{-0.8cm}
+\vspace*{-0.6cm}
 
 $$\bm{x}_\tau = \bm{S}_{ct} \bm{b}_\tau,\qquad\text{where}\qquad
 \bm{b}_\tau = \begin{bmatrix}
@@ -674,14 +673,13 @@ $$
 \end{textblock}
 
 ## Cross-temporal forecast reconciliation
-\vspace*{-0.2cm}
 
 \alert{Constraint matrix approach}
 
 * $\bm{C}_{cs}=$ cross-sectional constraint matrix
 * $\bm{C}_{te}=$ temporal constraint matrix
 
-\vspace*{-0.8cm}
+\vspace*{-0.6cm}
 
 $$\bm{C}_{ct}\bm{x}_\tau = \bm{0}\qquad\text{where}\qquad
 \bm{C}_{ct} = \begin{bmatrix}
@@ -706,16 +704,36 @@ $$
 
 ##  Cross-temporal probabilistic forecast reconciliation
 
-\input{figs/res_boot.tex}
+\hspace*{-0.7cm}\input{figs/res_boot.tex}
 
-\begin{textblock}{1.4}(13.9,3)
-\begin{block}{}
+\begin{textblock}{1.9}(12.9,5.3)
+\begin{block}{}\centering
 \textcolor[HTML]{7fb97f}{Year 1}\\
 \textcolor[HTML]{7fbcff}{Year 2}\\
 \textcolor[HTML]{e87f7f}{Year 3}\\
 \textcolor[HTML]{7f7f7f}{Year 4}
 \end{block}
 \end{textblock}
+
+\begin{textblock}{1.9}(12.9,1.6)
+\begin{minipage}{1.9cm}
+  \begin{block}{}\centering
+    \begin{tikzpicture}
+      \tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
+      \tikzstyle[level distance=.3cm]
+      \tikzstyle[sibling distance=12cm]
+      \tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
+      \node{Total}[edge from parent fork down]
+      child {node {X}
+        }
+      child {node {Y}
+        };
+    \end{tikzpicture}
+  \end{block}
+\end{minipage}
+\end{textblock}
+
+
 
 ##  Cross-temporal probabilistic forecast reconciliation
 \vspace*{-0.3cm}

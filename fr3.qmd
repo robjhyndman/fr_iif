@@ -138,9 +138,9 @@ An elliptical distribution is obtained if the base forecasts are elliptical, unb
 
 \begin{block}{}
 Suppose that $\left(\hat{\bm{y}}^{[1]},\ldots,\hat{\bm{y}}^{[L]}\right)$ is a sample drawn from an incoherent probability measure $\hat{\nu}$. Then $\left(\tilde{\bm{y}}^{[1]},\ldots,\tilde{\bm{y}}^{[L]}\right)$ where $\tilde{\bm{y}}^{[\ell]}:=\psi(\hat{\bm{y}}^{[\ell]})$ for $\ell=1,\ldots,L$, is a sample drawn from the reconciled probability measure $\tilde{\nu}$.
-\end{block}
+\end{block}\vspace*{-0.3cm}
 
-* Simulate future sample paths for each series, by simulating from each model using a multivariate bootstrap of the residuals.
+* Simulate future sample paths for each series, by simulating from each model using a multivariate bootstrap of the residuals (to preserve cross-correlations).
 * Reconcile the sample paths.
 * The reconciled sample paths are a sample from the reconciled distribution.
 
