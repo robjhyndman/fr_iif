@@ -27,6 +27,7 @@ execute:
 ---
 
 ```{r}
+#| cache: false
 source("setup.R")
 ```
 
@@ -787,7 +788,113 @@ Suppose $\hat{\bm{u}}_{t+h|t}$ are fixed and let $\hat{\bm{w}}_{t+h|t} = \begin{
 $$\text{such that}\qquad \bm{A}_3 \bm{v} \ge \begin{bmatrix}-\bm{A}_2\hat{\bm{u}}_{t+h|t}\\ \bm{0}\end{bmatrix}$$
 \end{block}
 
+# Time series cross-validation
+
+## Time series cross-validation
+
+```{r tscvplots, echo=FALSE}
+tscv_plot <- function(.init, .step, h = 1) {
+  expand.grid(
+    time = seq(26),
+    .id = seq(trunc(15 / .step))
+  ) |>
+    group_by(.id) |>
+    mutate(
+      observation = case_when(
+        time <= ((.id - 1) * .step + .init) ~ "train",
+        time %in% c((.id - 1) * .step + .init + h) ~ "test",
+        TRUE ~ "unused"
+      )
+    ) |>
+    ungroup() |>
+    filter(.id <= 26 - .init) |>
+    ggplot(aes(x = time, y = .id)) +
+    geom_segment(
+      aes(x = 0, xend = 27, y = .id, yend = .id),
+      arrow = arrow(length = unit(0.015, "npc")),
+      col = "black", size = .25
+    ) +
+    geom_point(aes(col = observation), size = 2) +
+    scale_y_reverse() +
+    scale_color_manual(values = c(train = "#0072B2", test = "#D55E00", unused = "gray")) +
+    # theme_void() +
+    # geom_label(aes(x = 28.5, y = 1, label = "time")) +
+    guides(col = FALSE) +
+    labs(x = "time", y = "") +
+    theme_void() +
+    theme(axis.title = element_text())
+}
+```
+
+**Traditional evaluation**
+
+```{r traintest1, fig.height=.7, echo=FALSE, dependson="tscvplots"}
+tscv_plot(.init = 18, .step = 10, h = 1:8) +
+  geom_text(aes(x = 10, y = 0.6, label = "Training data"), color = "#0072B2") +
+  geom_text(aes(x = 21, y = 0.6, label = "Test data"), color = "#D55E00") +
+  ylim(1, 0)
+```
+
+\pause
+
+**Time series cross-validation**
+
+```{r tscvggplot1, echo=FALSE, fig.height=2.3}
+tscv_plot(.init = 8, .step = 1, h = 1) +
+  geom_text(aes(x = 21, y = 0, label = "h = 1"), color = "#D55E00")
+```
+
+## Time series cross-validation {-}
+
+**Traditional evaluation**
+
+```{r traintest2, ref.label="traintest1", fig.height=.7, echo=FALSE}
+```
+
+**Time series cross-validation**
+
+```{r tscvggplot2, echo=FALSE,  dependson="tscvplots", fig.height=2.3}
+tscv_plot(.init = 8, .step = 1, h = 2) +
+  geom_text(aes(x = 21, y = 0, label = "h = 2"), color = "#D55E00")
+```
+
+## Time series cross-validation {-}
+
+**Traditional evaluation**
+
+```{r traintest3, ref.label="traintest1", fig.height=.7, echo=FALSE}
+```
+
+**Time series cross-validation**
+
+```{r tscvggplot3, echo=FALSE,  dependson="tscvplots", fig.height=2.3}
+tscv_plot(.init = 8, .step = 1, h = 3) +
+  geom_text(aes(x = 21, y = 0, label = "h = 3"), color = "#D55E00")
+```
+
+## Time series cross-validation {-}
+
+**Traditional evaluation**
+
+```{r traintest4, ref.label="traintest1", fig.height=.7, echo=FALSE}
+```
+
+**Time series cross-validation**
+
+```{r tscvggplot4, echo=FALSE,  dependson="tscvplots", fig.height=2.3}
+tscv_plot(.init = 8, .step = 1, h = 4) +
+  geom_text(aes(x = 21, y = 0, label = "h = 4"), color = "#D55E00")
+```
+
+\only<2>{\begin{textblock}{7.7}(.5,6.2)\begin{block}{}\fontsize{12}{13}\sf
+\begin{itemize}\tightlist
+\item Forecast accuracy averaged over test sets.
+\item Also known as "evaluation on a rolling forecasting origin"
+\end{itemize}\end{block}\end{textblock}}
+
+
 # ML reconciliation
+
 ## ML reconciliation
 
 \placefig{7}{0}{width=9.cm, height=20cm}{mlflow}
