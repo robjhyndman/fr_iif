@@ -41,9 +41,9 @@ library(kableExtra)
 
 ## The coherent subspace
 
-\begin{textblock}{9}(.2,1.25)\fontsize{13}{13}\sf
+\begin{textblock}{9}(.2,1)\fontsize{13}{13}\sf
 \begin{block}{Coherent subspace}
-$m$-dimensional linear subspace $\mathfrak{s}\subset \mathbb{R}^n$ for which linear constraints hold for all $\bm{y}\in\mathfrak{s}$.
+$m$-dimensional linear subspace $\mathfrak{s}\subset \mathbb{\chi}^n$ for which linear constraints hold for all $\bm{y}\in\mathfrak{s}$.
 \end{block}\vspace*{-0.3cm}
 \begin{block}{Hierarchical time series}
 An $n$-dimensional multivariate time series such that $\bm{y}_t\in\mathfrak{s}\quad\forall t$.
@@ -59,7 +59,7 @@ Let $\hat{\bm{y}}_{t+h|t}$ be vector of \emph{incoherent} initial $h$-step forec
 \end{textblock}}
 \only<3>{\begin{textblock}{7.5}(8.3,6.75)\fontsize{13}{13}\sf
 \begin{alertblock}{Reconciled forecasts}
-Let $\psi$ be a mapping, $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$.  $\tilde{\bm{y}}_{t+h|t}=\psi(\hat{\bm{y}}_{t+h|t})$ ``reconciles'' $\hat{\bm{y}}_{t+h|t}$.
+Let $\psi$ be a mapping, $\psi:\mathbb{\chi}^n\rightarrow\mathfrak{s}$.  $\tilde{\bm{y}}_{t+h|t}=\psi(\hat{\bm{y}}_{t+h|t})$ ``reconciles'' $\hat{\bm{y}}_{t+h|t}$.
 \end{alertblock}
 \end{textblock}}
 
@@ -71,15 +71,14 @@ Let $\psi$ be a mapping, $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$.  $\tilde{\b
 \end{textblock}
 
 ## Coherent probabilistic forecasts
-\begin{textblock}{9.5}(0.2,1.2)\fontsize{13}{15}\sf
+\begin{textblock}{9.5}(0.2,1)\fontsize{13}{15}\sf
 \begin{block}{Coherent probabilistic forecasts}
-Given the triple $(\mathbb{R}^m, \mathscr{F}_{\mathbb{R}^m}, \nu)$, a coherent probability triple $(\mathfrak{s}, \mathscr{F}_{\mathfrak{s}}, \breve{\nu})$  is such that
-\centerline{$\breve{\nu}(s(\mathcal{B})) = \nu(\mathcal{B}) \quad \forall \mathcal{B} \in \mathscr{F}_{\mathbb{R}^m}$}
+A probability triple $(\mathfrak{s}, \mathscr{F}_{\mathfrak{s}}, \breve{\nu})$ is coherent with the bottom probability triple $(\mathbb{\chi}^m, \mathscr{F}_{\mathbb{\chi}^m}, \nu)$, if
+\centerline{$\breve{\nu}(s(\mathcal{B})) = \nu(\mathcal{B}) \quad \forall \mathcal{B} \in \mathscr{F}_{\mathbb{\chi}^m}$}
+i.e., probability of any point not on $\mathfrak{s}$ is zero.
 \end{block}\vspace*{-0.2cm}
 \begin{block}{Probabilistic forecast reconciliation}
-The reconciled probability measure of $\hat{\nu}$ wrt $\psi(.)$ is such that
-\centerline{$\tilde{\nu}(\mathcal{B}) = \hat{\nu}(\psi^{-1}(\mathcal{B})) \qquad \forall \mathcal{B} \in \mathscr{F}_{\mathfrak{s}}$}
-where $\psi^{-1}(\mathcal{B}):=\{{\bm{y}}\in \mathbb{R}^n:\psi({\bm{y}})\in \mathcal{B}\}$ is the pre-image of $\mathcal{B}$, that is the set of all points in $\mathbb{R}^n$ that $\psi(.)$ maps to a point in $\mathcal{B}$.
+Let $(\mathbb{\chi}^n, \mathscr{F}_{\mathbb{\chi}^n}, \hat\nu)$ be the base forecast. Then the reconciled probability distribution $\breve{\nu}$ is a transformation of $\hat{\nu}$ that is coherent on $\mathscr{F}_{\mathfrak{s}}$.
 \end{block}
 \end{textblock}
 \begin{textblock}{7}(9.5,1.2)
@@ -89,6 +88,11 @@ where $\psi^{-1}(\mathcal{B}):=\{{\bm{y}}\in \mathbb{R}^n:\psi({\bm{y}})\in \mat
 \end{textblock}
 \begin{textblock}{7}(9.5,7.5)
 \centerline{$\psi = s \circ g$}
+\end{textblock}
+\begin{textblock}{12.4}(0.2,7.9)
+\begin{block}{}\fontsize{12}{12}\sf
+\citet{coherentprob,CorEtAl2022}
+\end{block}
 \end{textblock}
 
 ## Construction of reconciled distributions
@@ -138,7 +142,7 @@ An elliptical distribution is obtained if the base forecasts are elliptical, unb
 
 \begin{block}{}
 Suppose that $\left(\hat{\bm{y}}^{[1]},\ldots,\hat{\bm{y}}^{[L]}\right)$ is a sample drawn from an incoherent probability measure $\hat{\nu}$. Then $\left(\tilde{\bm{y}}^{[1]},\ldots,\tilde{\bm{y}}^{[L]}\right)$ where $\tilde{\bm{y}}^{[\ell]}:=\psi(\hat{\bm{y}}^{[\ell]})$ for $\ell=1,\ldots,L$, is a sample drawn from the reconciled probability measure $\tilde{\nu}$.
-\end{block}\vspace*{-0.3cm}
+\end{block}\vspace*{-0.4cm}
 
 * Simulate future sample paths for each series, by simulating from each model using a multivariate bootstrap of the residuals (to preserve cross-correlations).
 * Reconcile the sample paths.
