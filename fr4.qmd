@@ -112,7 +112,7 @@ Every collection of time series with linear constraints can be written as
 \end{tikzpicture}
 \end{textblock}
 
-\only<3>{\begin{textblock}{8.5}(8.3,1.9)\fontsize{14}{17}\sf
+\only<3>{\begin{textblock}{8.5}(8.3,1.1)\fontsize{14}{17}\sf
 $$\bm{y}_\tau =
   \begin{bmatrix}
     x_{\tau}^{[4]}  \\[0.2cm]
@@ -141,6 +141,11 @@ $$
   \end{alertblock}
 \end{textblock}}
 
+\only<3->{\begin{textblock}{5}(10.3,7.9)
+\fontsize{11}{12}\sf
+$\tau=$ index of largest temporal aggregation level.
+\end{textblock}}
+
 
 ## Temporal reconciliation: quarterly data
 
@@ -163,7 +168,7 @@ $$
 \end{tikzpicture}
 \end{textblock}
 
-\begin{textblock}{8.5}(8.3,1.9)\fontsize{14}{17}\sf
+\begin{textblock}{8.5}(8.3,1.1)\fontsize{14}{17}\sf
 $$\bm{y}_\tau =
   \begin{bmatrix}
     x_{\tau}^{[4]}  \\[0.2cm]
@@ -194,6 +199,11 @@ $$
       \item[\color{white}\ding{229}] Optimally combine forecasts within the same year.
     \end{itemize}
   \end{alertblock}
+\end{textblock}
+
+\begin{textblock}{5}(10.3,7.9)
+\fontsize{11}{12}\sf
+$\tau=$ index of largest temporal aggregation level.
 \end{textblock}
 
 ## Temporal reconciliation: monthly data
@@ -511,8 +521,8 @@ for(i in seq_along(fc)) {
 
 ## Temporal reconciliation: M3 monthly series
 \fontsize{9}{9}\sf
-
-\hspace*{-0.8cm}
+\tabcolsep=0.15cm
+\centering
 \begin{tabular}{lr@{\hskip 0.2cm}rrrrrrrr@{\hskip 0.2cm}rrrrrr}
 Aggregation & & & \multicolumn{6}{c}{ETS} & & \multicolumn{5}{c}{ARIMA} \\
 \cmidrule{4-9}\cmidrule{11-16}
@@ -709,7 +719,6 @@ $$
 ```{r}
 #| label: bootres
 #| output: asis
-#| cache: false
 boot_plot <- function(cols = c("green","blue","red","black")) {
   cat("\\hspace*{-0.8cm}\\begin{tikzpicture}[scale = 0.9, every node/.style={scale=0.9}]\n")
   cat("\\matrix (e1) [matrix of nodes,ampersand replacement=\\&,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt, font = {\\fontsize{7}{6}\\selectfont}, minimum width=1em, minimum height=1em,anchor=center}, label={[xshift = 0.5em]above:{\\footnotesize$\\widehat{\\textbf{E}}^{[1]}$}}]\n")
@@ -838,7 +847,6 @@ boot_plot()
 #| label: bootres1
 #| output: asis
 #| dependson: bootres
-#| cache: false
 boot_plot(c("red","black","green","blue"))
 ```
 
@@ -878,7 +886,6 @@ boot_plot(c("red","black","green","blue"))
 #| label: bootres2
 #| output: asis
 #| dependson: bootres
-#| cache: false
 boot_plot(c("red","blue","green","blue"))
 ```
 
@@ -911,56 +918,78 @@ boot_plot(c("red","blue","green","blue"))
 
 \begin{textblock}{3}(3.5,1.2)\alert{Bootstrap}\end{textblock}
 
-##  Cross-temporal probabilistic forecast reconciliation
-\vspace*{-0.2cm}
+\only<2>{\begin{textblock}{8}(3.7,4)
+\begin{alertblock}{}
+The ``year'' can start in any quarter, giving overlapping blocks.
+\end{alertblock}
+\end{textblock}}
 
-```{r}
-#| label: bootres3
-#| output: asis
-#| dependson: bootres
-#| cache: false
-boot_plot(c("blue","red","black","black"))
-```
+# Cross-temporal probabilistic reconciliation: Examples
 
-\begin{textblock}{1.9}(12.9,5.3)
-\begin{block}{}\centering
-\textcolor[HTML]{7fb97f}{Year 1}\\
-\textcolor[HTML]{7fbcff}{Year 2}\\
-\textcolor[HTML]{e87f7f}{Year 3}\\
-\textcolor[HTML]{7f7f7f}{Year 4}
-\end{block}
-\end{textblock}
+## Quarterly Australian GDP data
 
-\begin{textblock}{1.9}(12.9,1.6)
-\begin{minipage}{1.9cm}
-  \begin{block}{}\centering
-    \begin{tikzpicture}
-      \tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
-      \tikzstyle[level distance=.3cm]
-      \tikzstyle[sibling distance=12cm]
-      \tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
-      \node{Total}[edge from parent fork down]
-      child {node {X}
-        }
-      child {node {Y}
-        };
-    \end{tikzpicture}
-  \end{block}
-\end{minipage}
-\end{textblock}
+\only<1>{\full{IncomeApproach}}
+\only<2>{\full{ExpenditureApproach}}
+\only<3>{\full{GFCF}}
+\only<4>{\full{HFCE}}
 
-\begin{textblock}{3}(3.5,1.2)\alert{Bootstrap}\end{textblock}
+## Quarterly Australian GDP data
 
+* Quarterly data: 1984:Q4 -- 2018:Q1
 
-## Example: Australian GDP data --- CRPS skill scores
+* 95 series
+
+* Time series cross-validation;  initial training set of 10 years.
+
+* One-quarter increase in each training set
+
+* For each training set, compute temporally aggregated series for $k \in \{1,2,4\}$, and produce forecasts up to $h_1=4$, $h_2=2$, and $h_{4}=1$ steps ahead.
+
+* Automatic ARIMA forecasts for all series.
+
+## Quarterly Australian GDP data --- CRPS skill scores
+\alert{Reconciliation approaches}\fontsize{13}{14}\sf
+
+* Cross-temporal \textbf{\color{newblue}{bottom-up}} and \textbf{\color{newblue}{partly bottom-up}}
+
+  \begin{tabular}{M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}}
+  ct$(shr_{cs}, bu_{te})$ & ct$(wlsv_{te}, bu_{cs})$
+  \end{tabular}
+
+* Optimal forecast reconciliation with \textbf{\color{newblue}{overlapping one-step residuals}}
+
+  \begin{tabular}{M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}}
+  oct$_o(wlsv)$ & oct$_o(bdshr)$
+  \end{tabular}
+
+* Optimal forecast reconciliation with \textbf{\color{newblue}{overlapping and multi-step residuals}}
+
+  \begin{tabular}{M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}}
+  oct$_{oh}(hshr)$ & oct$_{oh}(shr)$
+  \end{tabular}
+
+## Quarterly Australian GDP data --- CRPS skill scores
+
+\centerline{\textcolor{red}{Worse than benchmark}\qquad \textbf{Best}}\vspace*{-0.3cm}
+
 \centering
 \input{tab/AusGDP/sam_crps.tex}
 
-## Example: Australian GDP data
+## Quarterly Australian GDP data: Nemenyi test
 
-\full{figs/AusGDP/ctjb.pdf}
+\placefig{0.5}{1}{width=6.1cm, height = 20cm, trim = 0 300 0 20, clip=true}{figs/AusGDP/ctjb.pdf}
+\placefig{8.5}{1.1}{width=6.1cm, height = 20cm, trim = 0 0 0 370, clip=true}{figs/AusGDP/ctjb.pdf}
 
-## Example: Monthly Australian Tourism Demand
+\only<2>{\begin{textblock}{4}(11.7,2.3)\begin{block}{}
+\fontsize{11}{12}\sf
+\begin{itemize}\tightlist
+\item Mean ranks shown
+\item Sig diff if non-overlapping intervals
+\end{itemize}
+\end{block}\end{textblock}}
+
+
+## Monthly Australian Tourism Demand
 
 \begin{textblock}{6}(0.2,1.2)
 \centering\fontsize{12}{13}\sf
@@ -971,18 +1000,20 @@ boot_plot(c("blue","red","black","black"))
 {\fontsize{11}{12}\sf Holiday, Visiting friends \& relatives, Business, Other}
 \end{textblock}
 
-\begin{textblock}{10}(5.8,1)
+\begin{textblock}{10}(6.1,1)
 \fontsize{11}{14}\sf
 \begin{itemize}
 \item \textbf{Grouped ts}\newline (geographical divisions $\times$ purpose of travel)
 
-\begin{tabular}{c|cccc|c}
+\begin{tabular}{cccccc}
+\toprule
   & \textbf{AUS} & \textbf{States} & \textbf{Zones$^\ast$} & \textbf{Regions} & \textbf{Tot}\\
   \midrule
   \textbf{g.d.} & {\color{newblue}1} & {\color{newblue}7} & {\color{newblue}21} & {\color{newblue}76} & 105 \\
   \textbf{p.o.t.} & {\color{newblue}4} & {\color{newblue}28} & {\color{newblue}84} & {\color{avocado}304} & 420\\
   \midrule
-  \textbf{Tot} & 5 & 35 & 105 & 380 & \textbf{525}\\[0.2cm]
+  \textbf{Tot} & 5 & 35 & 105 & 380 & \textbf{525}\\
+  \bottomrule
 \end{tabular}
 \centerline{{\color{newblue}$n_a = 221$}, {\color{avocado}$n_b = 304$}, and $\textbf{n = 525}$}
 
@@ -1005,37 +1036,35 @@ boot_plot(c("blue","red","black","black"))
 ## Example: Monthly Australian Tourism Demand
 
 * Monthly data: January 1998 to December 2016
+
 * Time series cross-validation; initial training set 10 years.
+
 * One-month increase in each training set
+
 * For each training set, compute temporally aggregated series for $k \in \{1,2,3,4,6,12\}$, and produce forecasts up to $h_2=6$, $h_3=4$, $h_4=3$, $h_6=2$ and $h_{12}=1$ steps ahead.
+
 * Automatic ETS forecasts on log-transformed data
 
-##  The forecasting experiment
+## Example: Australian GDP data --- CRPS skill scores
+\alert{Reconciliation approaches}\fontsize{13}{14}\sf
 
-\alert{Reconciliation approaches}
+* Cross-temporal \textbf{\color{newblue}{bottom-up}} and \textbf{\color{newblue}{partly bottom-up}}
 
-\begin{itemize}
-\item \hyperlink{app:pbu}{Cross-temporal \textbf{\color{newblue}{bottom-up}} and \textbf{\color{newblue}{partly bottom-up}}}
-  \begin{center}
-  \begin{tabular}{M{0.3\linewidth}|M{0.3\linewidth}|M{0.3\linewidth}}
+  \begin{tabular}{M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}}
   ct$(bu)$ & ct$(shr_{cs}, bu_{te})$ & ct$(wlsv_{te}, bu_{cs})$
   \end{tabular}
-  \end{center}
-  \item \hyperlink{app:cov}{Optimal forecast reconciliation with \textbf{\color{newblue}{one-step residuals}}}
-  \begin{center}
-    \begin{tabular}{M{0.2\linewidth}|M{0.2\linewidth}|M{0.2\linewidth}|M{0.2\linewidth}}
+
+* Optimal forecast reconciliation with \textbf{\color{newblue}{one-step residuals}}
+
+    \begin{tabular}{M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}}
     oct$(ols)$ & oct$(struc)$ & oct$(wlsv)$ & oct$(bdshr)$
     \end{tabular}
-  \end{center}
-  \item \hyperlink{app:shr}{Optimal forecast reconciliation with \textbf{\color{newblue}{multi-step residuals}}}
-  \begin{center}
-    \begin{tabular}{M{0.2\linewidth}|M{0.2\linewidth}|M{0.2\linewidth}|M{0.2\linewidth}}
-    oct$_h(hbshr)$ & ct$_h(bshr)$ & oct$_h(hshr)$ & oct$_h(shr)$
+
+* Optimal forecast reconciliation with \textbf{\color{newblue}{multi-step residuals}}
+
+    \begin{tabular}{M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}}
+    oct$_h(hbshr)$ & oct$_h(bshr)$ & oct$_h(hshr)$ & oct$_h(shr)$
     \end{tabular}
-  \end{center}
-\end{itemize}
-
-
 
 ## Example: Australian tourism data -- CRPS skill scores
 \fontsize{12}{13}\sf\vspace*{0.2cm}
@@ -1075,7 +1104,7 @@ oct$_h(shr)$              & \textcolor{red}{1.007}              & \textcolor{red
 ## Thanks!
 
 \placefig{0}{1.2}{trim = 10 45 0 0, clip=TRUE, width=10cm, height=2.5cm}{roman}
-\placefig{2}{1.2}{trim = 20 40 0 0, clip=TRUE, width=10cm, height=2.7cm}{george}
+\placefig{2}{1.2}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{george}
 \placefig{4}{1.2}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm}{hanlin}
 \placefig{6}{1.2}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{earowang}
 \placefig{8}{1.2}{trim = 0 15 0 0, clip=TRUE, width=10cm, height=2.5cm}{alanlee}
@@ -1096,10 +1125,10 @@ oct$_h(shr)$              & \textcolor{red}{1.007}              & \textcolor{red
 \placefig{2}{6.4}{trim = 10 20 0 0, clip=TRUE, width=10cm, height=2.5cm}{galit}
 \placefig{4}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{mahsa}
 \placefig{6}{6.4}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{evan}
-\placefig{8}{6.4}{trim = 5 5 0 0, clip=TRUE, width=10cm, height=2.5cm}{bahman}
+\placefig{8}{6.4}{trim = 5 25 0 0, clip=TRUE, width=10cm, height=2.5cm}{bahman}
 \placefig{10}{6.4}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{pablo}
 \placefig{12}{6.4}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{danielegiro}
-\placefig{14}{6.4}{trim = 0 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{tommy}
+\placefig{14}{6.4}{trim = 0 0 0 30, clip=TRUE, width=10cm, height=2.5cm}{tommy}
 
 ## More information
 \fontsize{18}{20}\sf

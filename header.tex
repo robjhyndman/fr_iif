@@ -1,3 +1,12 @@
+% Packages
+\usepackage{amsmath, bm, amssymb, amsthm, mathrsfs,pifont,accents,mathtools,relsize,makecell}
+%\usepackage{enumitem,calc}
+\usepackage[bb=boondox]{mathalfa}
+\usepackage{url}
+\usepackage{multirow, booktabs, float, textcmds, siunitx}
+\usepackage{bm,booktabs,animate,ragged2e,multicol,microtype,hyperref}
+\usepackage{array,ifthen,colortbl,adjustbox}
+
 % Colors
 \definecolor{shadecolor}{RGB}{225,225,225}
 \definecolor{DarkBrown}{RGB}{80,70,60}
@@ -9,42 +18,25 @@
 \definecolor{newred}{rgb}{0.8,0,0}
 \definecolor{avocado}{HTML}{2B7A0B}
 \definecolor{newblue}{HTML}{0270c0}
-\usepackage{array}
-\usepackage{ifthen}
-\usepackage{colortbl}
-\usepackage{adjustbox}
+%\definecolor{DarkGray}{RGB}{33,33,33}
+%\definecolor{LightGray}{RGB}{150,150,150}
+%\definecolor{LightGray2}{RGB}{200,200,200}
+%\definecolor{Ocean}{RGB}{129,194,234}
+%\definecolor{DarkOrange}{RGB}{255, 152, 0}
+\definecolor{LightOrange}{RGB}{255, 193, 7}
+%\definecolor{DarkGreen}{RGB}{91, 141, 8}
+%\definecolor{LightGreen}{RGB}{122, 188, 12}
+%\definecolor{LightPurple}{RGB}{191, 83, 219}
+%\definecolor{DarkPurple}{RGB}{142, 36, 170}
+%\definecolor{VeryLightGray}{RGB}{249, 249, 249}
+%\definecolor{mybluehl}{HTML}{cbd3ff}
+
 \newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}m{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\arraybackslash}m{#1}}
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 \renewcommand<>\rowcolor[1]{\only#2{\\[-\normalbaselineskip]\beameroriginal\rowcolor{#1}}}
 \renewcommand<>\cellcolor[1]{\only#2{\beameroriginal\cellcolor{#1}}}
-
-\definecolor{newred}{rgb}{0.8,0,0}
-\definecolor{avocado}{HTML}{2B7A0B}
-\definecolor{newblue}{HTML}{0270c0}
-\definecolor{DarkGray}{RGB}{33,33,33}
-\definecolor{LightGray}{RGB}{150,150,150}
-\definecolor{LightGray2}{RGB}{200,200,200}
-\definecolor{Ocean}{RGB}{129,194,234}
-\definecolor{DarkOrange}{RGB}{255, 152, 0}
-\definecolor{LightOrange}{RGB}{255, 193, 7}
-\definecolor{DarkGreen}{RGB}{91, 141, 8}
-\definecolor{LightGreen}{RGB}{122, 188, 12}
-\definecolor{LightPurple}{RGB}{191, 83, 219}
-\definecolor{DarkPurple}{RGB}{142, 36, 170}
-\definecolor{VeryLightGray}{RGB}{249, 249, 249}
-\definecolor{mybluehl}{HTML}{cbd3ff}
-
-
-% Packages
-\usepackage{amsmath, bm, amssymb, amsthm, mathrsfs,pifont,accents,mathtools,relsize,makecell}
-%\usepackage{enumitem,calc}
-\usepackage[bb=boondox]{mathalfa}
-\usepackage{url}
-\usepackage{multirow, booktabs, float, textcmds, siunitx}
-\usepackage{bm,booktabs,animate,ragged2e,multicol,microtype,hyperref}
-\DeclareUnicodeCharacter{03BC}{$\mu$}
 
 % Figures
 \graphicspath{{figs/}{tourism/}{energy/}}
