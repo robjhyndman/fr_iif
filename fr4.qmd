@@ -1152,4 +1152,4 @@ oct$_h(shr)$              & \textcolor{red}{1.007}              & \textcolor{red
 \end{textblock}
 
 
-\nocite{Di_FonGir2022a,temporal-hierarchies}
+\nocite{Di_FonGir2022a,temporal-hierarchies,ctprob}
