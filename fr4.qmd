@@ -284,30 +284,30 @@ $$
 \fontsize{11}{11}\sf
 
 $$
-	\bm{y}_\tau=\begin{bmatrix}
-		x_{\tau}^{[12]}     \\[0.2cm]
-		\bm{x}_{\tau}^{[6]} \\[0.2cm]
-		\bm{x}_{\tau}^{[4]} \\[0.2cm]
-		\bm{x}_{\tau}^{[3]} \\[0.2cm]
-		\bm{x}_\tau^{[2]}   \\[0.2cm]
-		\bm{x}_\tau^{[1]}
-	\end{bmatrix}
-	\qquad
-	\bm{S} = \begin{bmatrix}
-		1                & 1 & 1 & 1 & 1~~~1~~~1~~~1 & 1 & 1 & 1 & 1 \\
-		1                & 1 & 1 & 1 & 1~~~1~~~0~~~0 & 0 & 0 & 0 & 0 \\
-		0                & 0 & 0 & 0 & 0~~~0~~~1~~~1 & 1 & 1 & 1 & 1 \\
-		1                & 1 & 1 & 1 & 0~~~0~~~0~~~0 & 0 & 0 & 0 & 0 \\
-		0                & 0 & 0 & 0 & 1~~~1~~~1~~~1 & 0 & 0 & 0 & 0 \\
-		0                & 0 & 0 & 0 & 0~~~0~~~0~~~0 & 1 & 1 & 1 & 1 \\
-		1                & 1 & 1 & 0 & 0~~~0~~~0~~~0 & 0 & 0 & 0 & 0 \\
-		                 &   &   &   & \vdots        &   &   &   &   \\
-		0                & 0 & 0 & 0 & 0~~~0~~~0~~~0 & 0 & 1 & 1 & 1 \\
-		1                & 1 & 0 & 0 & 0~~~0~~~0~~~0 & 0 & 0 & 0 & 0 \\
-		                 &   &   &   & \vdots        &   &   &   &   \\
-		0                & 0 & 0 & 0 & 0~~~0~~~0~~~0 & 0 & 0 & 1 & 1 \\[0.2cm]
-		\phantom{\vdots} &   &   &   & \bm{I}_{12}   &   &   &   &
-	\end{bmatrix}
+  \bm{y}_\tau=\begin{bmatrix}
+    x_{\tau}^{[12]}     \\[0.2cm]
+    \bm{x}_{\tau}^{[6]} \\[0.2cm]
+    \bm{x}_{\tau}^{[4]} \\[0.2cm]
+    \bm{x}_{\tau}^{[3]} \\[0.2cm]
+    \bm{x}_\tau^{[2]}   \\[0.2cm]
+    \bm{x}_\tau^{[1]}
+  \end{bmatrix}
+  \qquad
+  \bm{S} = \begin{bmatrix}
+    1                & 1 & 1 & 1 & 1~~~1~~~1~~~1 & 1 & 1 & 1 & 1 \\
+    1                & 1 & 1 & 1 & 1~~~1~~~0~~~0 & 0 & 0 & 0 & 0 \\
+    0                & 0 & 0 & 0 & 0~~~0~~~1~~~1 & 1 & 1 & 1 & 1 \\
+    1                & 1 & 1 & 1 & 0~~~0~~~0~~~0 & 0 & 0 & 0 & 0 \\
+    0                & 0 & 0 & 0 & 1~~~1~~~1~~~1 & 0 & 0 & 0 & 0 \\
+    0                & 0 & 0 & 0 & 0~~~0~~~0~~~0 & 1 & 1 & 1 & 1 \\
+    1                & 1 & 1 & 0 & 0~~~0~~~0~~~0 & 0 & 0 & 0 & 0 \\
+                     &   &   &   & \vdots        &   &   &   &   \\
+    0                & 0 & 0 & 0 & 0~~~0~~~0~~~0 & 0 & 1 & 1 & 1 \\
+    1                & 1 & 0 & 0 & 0~~~0~~~0~~~0 & 0 & 0 & 0 & 0 \\
+                     &   &   &   & \vdots        &   &   &   &   \\
+    0                & 0 & 0 & 0 & 0~~~0~~~0~~~0 & 0 & 0 & 1 & 1 \\[0.2cm]
+    \phantom{\vdots} &   &   &   & \bm{I}_{12}   &   &   &   &
+  \end{bmatrix}
 $$
 
 ## Temporal reconciliation
@@ -330,24 +330,24 @@ $$\bm{x}_\tau = \bm{S} \bm{x}_\tau^{[1]}, \qquad \bm{S} = \begin{bmatrix}\bm{A}\
 where
 $$
 \bm{x}_\tau = \begin{bmatrix*}[l]
-		{x_\tau^{[k_p]}}\\
-		{\bm{x}_\tau^{[k_{p-1}]}}\\
-		\quad\vdots\\
-		{\bm{x}_\tau^{[k_1]}}\\
-	\end{bmatrix*}\qquad
-	\bm{x}_\tau^{[k]} = \begin{bmatrix*}[l]
-		x_{M_k(\tau-1)+1}^{[k]}\\
-		x_{M_k(\tau-1)+2}^{[k]}\\
-		\quad\vdots\\
-		x_{M_k\tau}^{[k]}
-	\end{bmatrix*}\qquad
+    {x_\tau^{[k_p]}}\\
+    {\bm{x}_\tau^{[k_{p-1}]}}\\
+    \quad\vdots\\
+    {\bm{x}_\tau^{[k_1]}}\\
+  \end{bmatrix*}\qquad
+  \bm{x}_\tau^{[k]} = \begin{bmatrix*}[l]
+    x_{M_k(\tau-1)+1}^{[k]}\\
+    x_{M_k(\tau-1)+2}^{[k]}\\
+    \quad\vdots\\
+    x_{M_k\tau}^{[k]}
+  \end{bmatrix*}\qquad
 \bm{A} =
-	\begin{bmatrix}
-		\bm{1}'_m                                    \\
-		\bm{I}_{m/k_{p-1}} \otimes \bm{1}'_{k_{p-1}} \\
-		\vdots                                       \\
-		\bm{I}_{m/k_{2}} \otimes \bm{1}'_{k_{2}}     \\
-	\end{bmatrix}
+  \begin{bmatrix}
+    \bm{1}'_m                                    \\
+    \bm{I}_{m/k_{p-1}} \otimes \bm{1}'_{k_{p-1}} \\
+    \vdots                                       \\
+    \bm{I}_{m/k_{2}} \otimes \bm{1}'_{k_{2}}     \\
+  \end{bmatrix}
 $$
 $\tau$ is time index for most aggregated series,
 
@@ -491,9 +491,9 @@ reconciled[[6]]
 # Plot forecasts before and after reconciliation
 par(mfrow=c(2,3))
 for(i in seq_along(fc)) {
-		plot(reconciled[[i]], main=names(aggts)[i])
-		lines(fc[[i]]$mean, col='red')
-	}
+    plot(reconciled[[i]], main=names(aggts)[i])
+    lines(fc[[i]]$mean, col='red')
+  }
 ```
 
 # Temporal reconciliation: Examples
@@ -541,20 +541,20 @@ Monthly          & 18 & &  0.9  & &       0.0 &       -3.7 &    -4.6 &  {\bf  -5
 Weekly A\&E demand data: 7 November 2010 to 7 June 2015.\fontsize{11}{11.5}\sf
 
 \begin{tabular}{l}
-	\toprule
-	Type 1 Departments --- Major A\&E                               \\
-	Type 2 Departments --- Single Specialty                         \\
-	Type 3 Departments --- Other A\&E/Minor Injury Unit             \\
-	Total Attendances                                               \\
-	Type 1 Departments --- Major A\&E $>$ 2 hours                   \\
-	Type 2 Departments --- Single Specialty $>$ 2 hours             \\
-	Type 3 Departments --- Other A\&E/Minor Injury Unit $>$ 2 hours \\
-	Total Attendances $>$ 2 hours                                   \\
-	Emergency Admissions via Type 1 A\&E                            \\
-	Total Emergency Admissions via A\&E                             \\
-	Other Emergency Admissions (i.e not via A\&E)                   \\
-	Total Emergency Admissions                                      \\
-	Number of patients spending $>$ 2 hours from decision to admit to admission
+  \toprule
+  Type 1 Departments --- Major A\&E                               \\
+  Type 2 Departments --- Single Specialty                         \\
+  Type 3 Departments --- Other A\&E/Minor Injury Unit             \\
+  Total Attendances                                               \\
+  Type 1 Departments --- Major A\&E $>$ 2 hours                   \\
+  Type 2 Departments --- Single Specialty $>$ 2 hours             \\
+  Type 3 Departments --- Other A\&E/Minor Injury Unit $>$ 2 hours \\
+  Total Attendances $>$ 2 hours                                   \\
+  Emergency Admissions via Type 1 A\&E                            \\
+  Total Emergency Admissions via A\&E                             \\
+  Other Emergency Admissions (i.e not via A\&E)                   \\
+  Total Emergency Admissions                                      \\
+  Number of patients spending $>$ 2 hours from decision to admit to admission
 \end{tabular}
 
 ## Example: Accident & emergency services demand
@@ -562,9 +562,9 @@ Weekly A\&E demand data: 7 November 2010 to 7 June 2015.\fontsize{11}{11.5}\sf
 \placefig{2.2}{2.2}{height=6.5cm, width=14cm}{AEexample.pdf}
 
 \begin{textblock}{10}(3,1)\fontsize{12}{12}\sf
-	\begin{block}{}\centering
-		Total emergency admissions via A\&E
-	\end{block}
+  \begin{block}{}\centering
+    Total emergency admissions via A\&E
+  \end{block}
 \end{textblock}
 
 ## Example: Accident & emergency services demand
@@ -577,11 +577,11 @@ Test set: last 52 weeks
   \toprule
   Aggr. Level & $h$   & Base & Reconciled & Change  \\
   \midrule
-  Annual & 1     	& 3.4   & 1.9   & $-42.9\%$ \\
-  Weekly & 1--52 	& 2.0   & 1.9   & $-5.0\%$ \\
-  Weekly & 13    	& 2.3   & 1.9   & $-16.2\%$ \\
-  Weekly & 4     	& 1.9   & 1.5   & $-18.6\%$ \\
-  Weekly & 1     	& 1.6   & 1.3   & $-17.2\%$ \\
+  Annual & 1       & 3.4   & 1.9   & $-42.9\%$ \\
+  Weekly & 1--52   & 2.0   & 1.9   & $-5.0\%$ \\
+  Weekly & 13      & 2.3   & 1.9   & $-16.2\%$ \\
+  Weekly & 4       & 1.9   & 1.5   & $-18.6\%$ \\
+  Weekly & 1       & 1.6   & 1.3   & $-17.2\%$ \\
 \end{tabular}
 
 # Cross-temporal forecast reconciliation
@@ -634,15 +634,15 @@ Test set: last 52 weeks
 * $y_{i,t}=$ $i$th element of $\bm{y}_t$, $i=1,\dots,n$.
 * For each $i$, we can expand $y_{i,t}$ to include all temporally aggregated variants:
 $$\bm{x}_{i,\tau} = \begin{bmatrix}
-		{x_{i,\tau}^{[k_p]}} \\
-		\vdots               \\
-		{\bm{x}_{i,\tau}^{[k_1]}}
-	\end{bmatrix}\qquad
+    {x_{i,\tau}^{[k_p]}} \\
+    \vdots               \\
+    {\bm{x}_{i,\tau}^{[k_1]}}
+  \end{bmatrix}\qquad
 \bm{x}_\tau = \begin{bmatrix}
-		\bm{x}_{1,\tau} \\
-		\vdots          \\
-		\bm{x}_{n,\tau}
-	\end{bmatrix}.$$
+    \bm{x}_{1,\tau} \\
+    \vdots          \\
+    \bm{x}_{n,\tau}
+  \end{bmatrix}.$$
 
 ## Cross-temporal forecast reconciliation
 
@@ -656,10 +656,10 @@ $$\bm{x}_{i,\tau} = \begin{bmatrix}
 
 $$\bm{x}_\tau = \bm{S}_{ct} \bm{b}_\tau,\qquad\text{where}\qquad
 \bm{b}_\tau = \begin{bmatrix}
-		{\bm{x}_{1,\tau}^{[1]}} \\
-		\vdots                  \\
-		{\bm{x}_{n,\tau}^{[1]}}
-	\end{bmatrix}.
+    {\bm{x}_{1,\tau}^{[1]}} \\
+    \vdots                  \\
+    {\bm{x}_{n,\tau}^{[1]}}
+  \end{bmatrix}.
 $$
 
 ## Cross-temporal forecast reconciliation
@@ -683,9 +683,9 @@ $$
 
 $$\bm{C}_{ct}\bm{x}_\tau = \bm{0}\qquad\text{where}\qquad
 \bm{C}_{ct} = \begin{bmatrix}
-		(\bm{0}_{(n_a m\times nk^\ast)} ~~ \bm{I}_m \otimes \bm{C}_{cs})\bm{P}' \\
-		\bm{I}_n \otimes \bm{C}_{te}
-	\end{bmatrix}
+    (\bm{0}_{(n_a m\times nk^\ast)} ~~ \bm{I}_m \otimes \bm{C}_{cs})\bm{P}' \\
+    \bm{I}_n \otimes \bm{C}_{te}
+  \end{bmatrix}
 $$
 
 * $k^\ast = \displaystyle\sum_{k \in \mathcal{K}\setminus\{k_1\}} \frac{m}{k}$
@@ -702,9 +702,104 @@ $$
 * Draw residual samples of all series at same time from most temporally aggregated level.
 * Residuals for other levels obtained using the corresponding time indices.
 
-##  Cross-temporal probabilistic forecast reconciliation
 
-\hspace*{-0.7cm}\input{figs/res_boot.tex}
+##  Cross-temporal probabilistic forecast reconciliation
+\vspace*{-0.2cm}
+
+```{r}
+#| label: bootres
+#| output: asis
+#| cache: false
+boot_plot <- function(cols = c("green","blue","red","black")) {
+  cat("\\hspace*{-0.8cm}\\begin{tikzpicture}[scale = 0.9, every node/.style={scale=0.9}]\n")
+  cat("\\matrix (e1) [matrix of nodes,ampersand replacement=\\&,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt, font = {\\fontsize{7}{6}\\selectfont}, minimum width=1em, minimum height=1em,anchor=center}, label={[xshift = 0.5em]above:{\\footnotesize$\\widehat{\\textbf{E}}^{[1]}$}}]\n")
+  cat("{\n")
+  cat("$T$ \\& ")
+  for(j in cols) {
+    for(i in seq(4)) {
+      cat(paste0("\\pgfuseimage{n",j, "} \\& "))
+    }
+  }
+  cat("\\\\\n")
+  cat("$X$ \\& ")
+  for(j in cols) {
+    for(i in seq(4)) {
+      cat(paste0("\\pgfuseimage{n",j, "} \\& "))
+    }
+  }
+  cat("\\\\\n")
+  cat("$Y$ \\& ")
+  for(j in cols) {
+    for(i in seq(4)){
+      cat(paste0("\\pgfuseimage{n",j, "} \\& "))
+    }
+  }
+  cat("\\\\\n")
+  for(i in seq(16)) {
+    cat(paste("\\& ",i))
+  }
+  cat("\\\\\n")
+  cat("};\n")
+  cat("\\draw[decorate,thick, decoration={brace, mirror, amplitude=5pt,raise=-1pt}] (e1-4-2.south west) -- (e1-4-17.south east) node[midway, font = {\\fontsize{7}{6}\\selectfont}, yshift = -1em]{Quarterly, $t = 1,\\dots,16$};\n")
+  cat("\\matrix (ek) [above= 10mm of e1.north east, anchor=south east, matrix of nodes,ampersand replacement=\\&,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt, font = {\\fontsize{7}{6}\\selectfont}, minimum width=1em, minimum height=1em,anchor=center}, label={[xshift = 0.5em]above:{\\footnotesize$\\widehat{\\textbf{E}}^{[2]}$}}]\n")
+  cat("{\n")
+  cat("$T$ \\& ")
+  for(j in cols) {
+    for(i in seq(2)){
+     cat(paste0("\\pgfuseimage{n",j, "} \\& "))
+    }
+  }
+  cat("\\\\\n")
+  cat("$X$ \\& ")
+  for(j in cols) {
+    for(i in seq(2)){
+     cat(paste0("\\pgfuseimage{n",j, "} \\& "))
+    }
+  }
+  cat("\\\\\n")
+  cat("$Y$ \\& ")
+  for(j in cols) {
+    for(i in seq(2)){
+     cat(paste0("\\pgfuseimage{n",j, "} \\& "))
+    }
+  }
+  cat("\\\\\n")
+  for(i in seq(8)) {
+    cat(paste("\\& ",i))
+  }
+  cat("\\\\\n")
+  cat("};\n")
+  cat("\\draw[decorate,thick, decoration={brace, mirror, amplitude=5pt,raise=-1pt}] (ek-4-2.south west) -- (ek-4-9.south east) node[midway, font = {\\fontsize{7}{6}\\selectfont}, yshift = -1em]{Semi-annual, $j = 1,\\dots,8$};\n")
+  cat("\\matrix (em) [above= 10mm of e1.north west, anchor=south west, matrix of nodes,ampersand replacement=\\&,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt, font = {\\fontsize{7}{6}\\selectfont}, minimum width=1em, minimum height=1em,anchor=center}, label={[xshift = 0.5em]above:{\\footnotesize$\\widehat{\\textbf{E}}^{[4]}$}}]\n")
+  cat("{\n")
+  cat("$T$ \\& ")
+  for(j in cols) {
+    cat(paste0("\\pgfuseimage{n",j, "}"))
+    if(j != cols[4]) cat("\\& ")
+  }
+  cat("\\\\\n")
+  cat("$X$ \\& ")
+  for(j in cols) {
+    cat(paste0("\\pgfuseimage{n",j, "}"))
+    if(j != cols[4]) cat("\\& ")
+  }
+  cat("\\\\\n")
+  cat("$Y$ \\& ")
+  for(j in cols) {
+    cat(paste0("\\pgfuseimage{n",j, "}"))
+    if(j != cols[4]) cat("\\& ")
+  }
+  cat("\\\\\n")
+  for(i in seq(4)) {
+    cat(paste("\\& ",i))
+  }
+  cat("\\\\\n")
+  cat("};\n")
+  cat("\\draw[decorate,thick, decoration={brace, mirror, amplitude=5pt,raise=-1pt}] (em-4-2.south west) -- (em-4-5.south east) node[midway, font = {\\fontsize{7}{6}\\selectfont}, yshift = -1em]{Annual, $\\tau = 1,\\dots,4$};\n")
+  cat("\\end{tikzpicture}\n\n")
+}
+boot_plot()
+```
 
 \begin{textblock}{1.9}(12.9,5.3)
 \begin{block}{}\centering
@@ -733,81 +828,278 @@ $$
 \end{minipage}
 \end{textblock}
 
+\begin{textblock}{3}(3.5,1.2)\alert{Data}\end{textblock}
 
 
 ##  Cross-temporal probabilistic forecast reconciliation
-\vspace*{-0.3cm}
+\vspace*{-0.2cm}
 
-\input{figs/ct_boot.tex}
+```{r}
+#| label: bootres1
+#| output: asis
+#| dependson: bootres
+#| cache: false
+boot_plot(c("red","black","green","blue"))
+```
+
+\begin{textblock}{1.9}(12.9,5.3)
+\begin{block}{}\centering
+\textcolor[HTML]{7fb97f}{Year 1}\\
+\textcolor[HTML]{7fbcff}{Year 2}\\
+\textcolor[HTML]{e87f7f}{Year 3}\\
+\textcolor[HTML]{7f7f7f}{Year 4}
+\end{block}
+\end{textblock}
+
+\begin{textblock}{1.9}(12.9,1.6)
+\begin{minipage}{1.9cm}
+  \begin{block}{}\centering
+    \begin{tikzpicture}
+      \tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
+      \tikzstyle[level distance=.3cm]
+      \tikzstyle[sibling distance=12cm]
+      \tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
+      \node{Total}[edge from parent fork down]
+      child {node {X}
+        }
+      child {node {Y}
+        };
+    \end{tikzpicture}
+  \end{block}
+\end{minipage}
+\end{textblock}
+
+\begin{textblock}{3}(3.5,1.2)\alert{Bootstrap}\end{textblock}
+
+##  Cross-temporal probabilistic forecast reconciliation
+\vspace*{-0.2cm}
+
+```{r}
+#| label: bootres2
+#| output: asis
+#| dependson: bootres
+#| cache: false
+boot_plot(c("red","blue","green","blue"))
+```
+
+\begin{textblock}{1.9}(12.9,5.3)
+\begin{block}{}\centering
+\textcolor[HTML]{7fb97f}{Year 1}\\
+\textcolor[HTML]{7fbcff}{Year 2}\\
+\textcolor[HTML]{e87f7f}{Year 3}\\
+\textcolor[HTML]{7f7f7f}{Year 4}
+\end{block}
+\end{textblock}
+
+\begin{textblock}{1.9}(12.9,1.6)
+\begin{minipage}{1.9cm}
+  \begin{block}{}\centering
+    \begin{tikzpicture}
+      \tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
+      \tikzstyle[level distance=.3cm]
+      \tikzstyle[sibling distance=12cm]
+      \tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
+      \node{Total}[edge from parent fork down]
+      child {node {X}
+        }
+      child {node {Y}
+        };
+    \end{tikzpicture}
+  \end{block}
+\end{minipage}
+\end{textblock}
+
+\begin{textblock}{3}(3.5,1.2)\alert{Bootstrap}\end{textblock}
+
+##  Cross-temporal probabilistic forecast reconciliation
+\vspace*{-0.2cm}
+
+```{r}
+#| label: bootres3
+#| output: asis
+#| dependson: bootres
+#| cache: false
+boot_plot(c("blue","red","black","black"))
+```
+
+\begin{textblock}{1.9}(12.9,5.3)
+\begin{block}{}\centering
+\textcolor[HTML]{7fb97f}{Year 1}\\
+\textcolor[HTML]{7fbcff}{Year 2}\\
+\textcolor[HTML]{e87f7f}{Year 3}\\
+\textcolor[HTML]{7f7f7f}{Year 4}
+\end{block}
+\end{textblock}
+
+\begin{textblock}{1.9}(12.9,1.6)
+\begin{minipage}{1.9cm}
+  \begin{block}{}\centering
+    \begin{tikzpicture}
+      \tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
+      \tikzstyle[level distance=.3cm]
+      \tikzstyle[sibling distance=12cm]
+      \tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
+      \node{Total}[edge from parent fork down]
+      child {node {X}
+        }
+      child {node {Y}
+        };
+    \end{tikzpicture}
+  \end{block}
+\end{minipage}
+\end{textblock}
+
+\begin{textblock}{3}(3.5,1.2)\alert{Bootstrap}\end{textblock}
+
 
 ## Example: Australian GDP data --- CRPS skill scores
-\fontsize{9}{10}\sf
+\centering
 \input{tab/AusGDP/sam_crps.tex}
-
-## Example: Australian GDP data
-
-\full{figs/AusGDP/gdptrace14.pdf}
-
-Base (first row) and reconciled (second and third rows) forecasts for Australian GDP at the second iteration of our forecasting experiment for the bootstrap (first column) and Gaussian (second column) approaches. The green represents the 80\% confidence interval. The black line and triangle indicate the observed true values, the red line represent the median value, and the blue line represent the mean value.
 
 ## Example: Australian GDP data
 
 \full{figs/AusGDP/ctjb.pdf}
 
-## Example: Australian tourism data
+## Example: Monthly Australian Tourism Demand
+
+\begin{textblock}{6}(0.2,1.2)
+\centering\fontsize{12}{13}\sf
+\textbf{Geographical division}\\
+\includegraphics[width = 5.8cm]{figs/ausreg2.pdf}\\
+\faTimes\\
+\textbf{Purpose of travel}\\
+{\fontsize{11}{12}\sf Holiday, Visiting friends \& relatives, Business, Other}
+\end{textblock}
+
+\begin{textblock}{10}(5.8,1)
+\fontsize{11}{14}\sf
+\begin{itemize}
+\item \textbf{Grouped ts}\newline (geographical divisions $\times$ purpose of travel)
+
+\begin{tabular}{c|cccc|c}
+  & \textbf{AUS} & \textbf{States} & \textbf{Zones$^\ast$} & \textbf{Regions} & \textbf{Tot}\\
+  \midrule
+  \textbf{g.d.} & {\color{newblue}1} & {\color{newblue}7} & {\color{newblue}21} & {\color{newblue}76} & 105 \\
+  \textbf{p.o.t.} & {\color{newblue}4} & {\color{newblue}28} & {\color{newblue}84} & {\color{avocado}304} & 420\\
+  \midrule
+  \textbf{Tot} & 5 & 35 & 105 & 380 & \textbf{525}\\[0.2cm]
+\end{tabular}
+\centerline{{\color{newblue}$n_a = 221$}, {\color{avocado}$n_b = 304$}, and $\textbf{n = 525}$}
+
+\item \textbf{Temporal framework}, frequencies:\\[0.2cm]
+\begin{multicols}{2}
+  \begin{itemize}\tightlist
+  \item Monthly
+  \item Bi-Monthly
+  \item Quarterly
+  \end{itemize}
+  \begin{itemize}\tightlist
+  \item Four-Monthly
+  \item Semi-Annual
+  \item Annual
+  \end{itemize}
+\end{multicols}
+\end{itemize}
+\end{textblock}
+
+## Example: Monthly Australian Tourism Demand
 
 * Monthly data: January 1998 to December 2016
-* 7 states, 35 zones, 380 regions. 525 unique series
 * Time series cross-validation; initial training set 10 years.
+* One-month increase in each training set
+* For each training set, compute temporally aggregated series for $k \in \{1,2,3,4,6,12\}$, and produce forecasts up to $h_2=6$, $h_3=4$, $h_4=3$, $h_6=2$ and $h_{12}=1$ steps ahead.
+* Automatic ETS forecasts on log-transformed data
 
-### Methods
+##  The forecasting experiment
+
+\alert{Reconciliation approaches}
 
 \begin{itemize}
-  \item[\textbf{oct}$(\;\cdot\;)$] optimal cross-temporal reconciliation for $ols$, $struc$, $wlsv$ and $bdshr$ approach. When necessary, in-sample residuals were used;
-  \item[\textbf{oct}$_{h}(\;\cdot\;)$] optimal cross-temporal reconciliation with multi-step residuals: $shr=$ \textit{Global shrinkage}, $hshr=$ \textit{High frequency shrinkage}, $bshr=$ \textit{bottom time series shrinkage}, $hbshr=$ \textit{High frequency bottom time series shrinkage}.
+\item \hyperlink{app:pbu}{Cross-temporal \textbf{\color{newblue}{bottom-up}} and \textbf{\color{newblue}{partly bottom-up}}}
+  \begin{center}
+  \begin{tabular}{M{0.3\linewidth}|M{0.3\linewidth}|M{0.3\linewidth}}
+  ct$(bu)$ & ct$(shr_{cs}, bu_{te})$ & ct$(wlsv_{te}, bu_{cs})$
+  \end{tabular}
+  \end{center}
+  \item \hyperlink{app:cov}{Optimal forecast reconciliation with \textbf{\color{newblue}{one-step residuals}}}
+  \begin{center}
+    \begin{tabular}{M{0.2\linewidth}|M{0.2\linewidth}|M{0.2\linewidth}|M{0.2\linewidth}}
+    oct$(ols)$ & oct$(struc)$ & oct$(wlsv)$ & oct$(bdshr)$
+    \end{tabular}
+  \end{center}
+  \item \hyperlink{app:shr}{Optimal forecast reconciliation with \textbf{\color{newblue}{multi-step residuals}}}
+  \begin{center}
+    \begin{tabular}{M{0.2\linewidth}|M{0.2\linewidth}|M{0.2\linewidth}|M{0.2\linewidth}}
+    oct$_h(hbshr)$ & ct$_h(bshr)$ & oct$_h(hshr)$ & oct$_h(shr)$
+    \end{tabular}
+  \end{center}
 \end{itemize}
 
+
+
 ## Example: Australian tourism data -- CRPS skill scores
+\fontsize{12}{13}\sf\vspace*{0.2cm}
+
+\centerline{\textcolor{red}{Worse than benchmark}\qquad \textbf{Best}}
 
 \centering
-\fontsize{9}{10}\selectfont
-\input{tab/VN525/sam_crps_more.tex}
+\footnotesize
+\begin{tabular}[t]{lrr}
+& \textbf{$\forall k \in \{12,6,4,3,2,1\}$} & \textbf{$k = 1$}\\
+\midrule
+base                      & \cellcolor{LightOrange!30} {1.000}  & \cellcolor{LightOrange!30} {1.000} \\
+ct$(bu)$                  & \textcolor{red}{1.321}              & \textcolor{red}{1.077} \\
+ct$(shr_{cs}, bu_{te})$   & \textcolor{red}{1.057}              & {0.976} \\
+ct$(wlsv_{te}, bu_{cs})$  & \textcolor{red}{1.062}              & {0.976}\\
+oct$(ols)$                & {0.989}                             & {0.982}\\
+oct$(struc)$              & {0.982}                             & {0.970}\\
+oct$(wlsv)$               & {0.987}                             & {0.952} \\
+oct$(bdshr)$              & {0.975}                             & {\textbf{0.949}} \\
+oct$_h(hbshr)$            & {0.989}                             & {0.982} \\
+oct$_h(bshr)$             & {0.994}                             & {0.988}\\
+oct$_h(hshr)$             & {\textbf{0.969}}                    & {0.953}\\
+oct$_h(shr)$              & \textcolor{red}{1.007}              & \textcolor{red}{1.000}
+\end{tabular}
 
+## MCB Nemenyi test
 
-## Example: Australian tourism data
+\placefig{0}{1.2}{width=16cm, height=200cm, trim = 0 520 0 30, clip=TRUE}{figs/VN525/ctjb_more.pdf}
 
-\full{figs/VN525/ctjb_more.pdf}
-
-Comparison with the Best" (MCB) Nemenyi test at different temporal aggregation for the non-parametric bootstrap approach. In each panel, the Friedman test is reported in the lower right corner. The mean rank of each approach is shown to the right of its name. Statistical differences in performance were indicated if the intervals of two forecast reconciliation procedures did not overlap. Thus, approaches that did not overlap with the blue interval were considered significantly worse than the best, and vice versa.
+\begin{textblock}{15}(0.2,7)
+\begin{itemize}\tightlist
+\item mean ranks shown
+\item significant differences if non-overlapping intervals
+\end{itemize}
+\end{textblock}
 
 ## Thanks!
 
-\placefig{0}{1.4}{trim = 10 45 0 0, clip=TRUE, width=10cm, height=2.5cm}{roman}
-\placefig{2}{1.4}{trim = 20 20 0 0, clip=TRUE, width=10cm, height=2.7cm}{george}
-\placefig{4}{1.4}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm}{hanlin}
-\placefig{6}{1.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{earowang}
-\placefig{8}{1.4}{trim = 0 15 0 0, clip=TRUE, width=10cm, height=2.5cm}{alanlee}
-\placefig{10}{1.4}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{mitch}
-\placefig{12}{1.4}{trim = 15 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{shanika}
-\placefig{14}{1.4}{trim = 40 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{tas}
+\placefig{0}{1.2}{trim = 10 45 0 0, clip=TRUE, width=10cm, height=2.5cm}{roman}
+\placefig{2}{1.2}{trim = 20 40 0 0, clip=TRUE, width=10cm, height=2.7cm}{george}
+\placefig{4}{1.2}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm}{hanlin}
+\placefig{6}{1.2}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{earowang}
+\placefig{8}{1.2}{trim = 0 15 0 0, clip=TRUE, width=10cm, height=2.5cm}{alanlee}
+\placefig{10}{1.2}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{mitch}
+\placefig{12}{1.2}{trim = 15 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{shanika}
+\placefig{14}{1.2}{trim = 40 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{tas}
 
-\placefig{0}{3.9}{trim = 30 10 30 0, clip=TRUE, width=10cm, height=2.5cm}{puwasala}
-\placefig{2}{3.9}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm}{fotios}
-\placefig{4}{3.9}{trim = 100 30 50 20, clip=TRUE, width=10cm, height=2.5cm}{nikos}
-\placefig{6}{3.9}{trim = 50 30 0 0, clip=TRUE, width=10cm, height=2.5cm}{souhaib}
-\placefig{8}{3.9}{trim = 110 40 50 0, clip=TRUE, width=10cm, height=2.5cm}{james}
-\placefig{10}{3.9}{trim = 40 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{mahdi}
-\placefig{12}{3.9}{trim = 50 50 0 0, clip=TRUE, width=10cm, height=2.5cm}{christoph}
-\placefig{14}{3.9}{trim = 50 50 0 20, clip=TRUE, width=10cm, height=2.5cm}{fin}
+\placefig{0}{3.8}{trim = 30 10 30 0, clip=TRUE, width=10cm, height=2.5cm}{puwasala}
+\placefig{2}{3.8}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm}{fotios}
+\placefig{4}{3.8}{trim = 100 30 50 20, clip=TRUE, width=10cm, height=2.5cm}{nikos}
+\placefig{6}{3.8}{trim = 50 30 0 0, clip=TRUE, width=10cm, height=2.5cm}{souhaib}
+\placefig{8}{3.8}{trim = 110 40 50 0, clip=TRUE, width=10cm, height=2.5cm}{james}
+\placefig{10}{3.8}{trim = 40 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{mahdi}
+\placefig{12}{3.8}{trim = 50 50 0 0, clip=TRUE, width=10cm, height=2.5cm}{christoph}
+\placefig{14}{3.8}{trim = 50 50 0 20, clip=TRUE, width=10cm, height=2.5cm}{fin}
 
 \placefig{0}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{berwin}
 \placefig{2}{6.4}{trim = 10 20 0 0, clip=TRUE, width=10cm, height=2.5cm}{galit}
 \placefig{4}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{mahsa}
-\placefig{6}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{florian}
-\placefig{8}{6.4}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{evan}
-\placefig{10}{6.4}{trim = 5 5 0 0, clip=TRUE, width=10cm, height=2.5cm}{vassilis}
-\placefig{12}{6.4}{trim = 90 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{carla}
-\placefig{14}{6.4}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{pablo}
+\placefig{6}{6.4}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{evan}
+\placefig{8}{6.4}{trim = 5 5 0 0, clip=TRUE, width=10cm, height=2.5cm}{bahman}
+\placefig{10}{6.4}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{pablo}
+\placefig{12}{6.4}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{danielegiro}
+\placefig{14}{6.4}{trim = 0 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{tommy}
 
 ## More information
 \fontsize{18}{20}\sf
@@ -827,7 +1119,7 @@ Comparison with the Best" (MCB) Nemenyi test at different temporal aggregation f
 \begin{textblock}{6.2}(0,8.8)\pgfsetfillopacity{0.65}
 \begin{beamercolorbox}[wd=4.7cm]{block body}
 \fontsize{6}{6}\sf\color[RGB]{72,45,34}\href{https://www.flaticon.com/free-icons/presentation}{Presentation icon created by orvipixel - Flaticon}
-	\end{beamercolorbox}
+  \end{beamercolorbox}
 \end{textblock}
 
 

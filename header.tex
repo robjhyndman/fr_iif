@@ -6,6 +6,37 @@
 \setbeamercolor{block title}{fg=white,bg=DarkBrown}
 \setbeamercolor{frametitle}{bg=DarkBrown,fg=white}
 
+\definecolor{newred}{rgb}{0.8,0,0}
+\definecolor{avocado}{HTML}{2B7A0B}
+\definecolor{newblue}{HTML}{0270c0}
+\usepackage{array}
+\usepackage{ifthen}
+\usepackage{colortbl}
+\usepackage{adjustbox}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}m{#1}}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\renewcommand<>\rowcolor[1]{\only#2{\\[-\normalbaselineskip]\beameroriginal\rowcolor{#1}}}
+\renewcommand<>\cellcolor[1]{\only#2{\beameroriginal\cellcolor{#1}}}
+
+\definecolor{newred}{rgb}{0.8,0,0}
+\definecolor{avocado}{HTML}{2B7A0B}
+\definecolor{newblue}{HTML}{0270c0}
+\definecolor{DarkGray}{RGB}{33,33,33}
+\definecolor{LightGray}{RGB}{150,150,150}
+\definecolor{LightGray2}{RGB}{200,200,200}
+\definecolor{Ocean}{RGB}{129,194,234}
+\definecolor{DarkOrange}{RGB}{255, 152, 0}
+\definecolor{LightOrange}{RGB}{255, 193, 7}
+\definecolor{DarkGreen}{RGB}{91, 141, 8}
+\definecolor{LightGreen}{RGB}{122, 188, 12}
+\definecolor{LightPurple}{RGB}{191, 83, 219}
+\definecolor{DarkPurple}{RGB}{142, 36, 170}
+\definecolor{VeryLightGray}{RGB}{249, 249, 249}
+\definecolor{mybluehl}{HTML}{cbd3ff}
+
+
 % Packages
 \usepackage{amsmath, bm, amssymb, amsthm, mathrsfs,pifont,accents,mathtools,relsize,makecell}
 %\usepackage{enumitem,calc}
@@ -99,7 +130,6 @@
 \pgfdeclareimage[height=0.65cm]{nblue}{figs/boot/nblue.pdf}
 \pgfdeclareimage[height=0.65cm]{nred}{figs/boot/nred.pdf}
 \pgfdeclareimage[height=0.65cm]{nblack}{figs/boot/nblack.pdf}
-
 
 % My definitions
 
