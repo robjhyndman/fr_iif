@@ -18,6 +18,7 @@ include-in-header: header.tex
 cite-method: biblatex
 bibliography: hts.bib
 biblio-title: References
+highlight-style: tango
 keep-tex: true
 execute:
   echo: false

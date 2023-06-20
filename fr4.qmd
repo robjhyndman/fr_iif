@@ -19,6 +19,7 @@ cite-method: biblatex
 bibliography: hts.bib
 biblio-title: References
 keep-tex: true
+highlight-style: tango
 execute:
   echo: false
   message: false
