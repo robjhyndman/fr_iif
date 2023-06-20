@@ -69,7 +69,7 @@ source("setup.R")
 \end{block}
 
 ## PBS sales
-\placefig{0}{1.2}{width=16cm, height=200cm}{pills}
+\placefig{0}{1}{width=16cm, height=200cm}{pills}
 
 ## PBS sales
 \alert{ATC drug classification}\fontsize{11}{11}\sffamily
@@ -220,10 +220,10 @@ for (i in seq_along(aligned_plots)) {
 }
 ```
 
-\only<1>{\placefig{0.3}{1.7}{width=15.5cm}{tourism1}}
-\only<2>{\placefig{0.3}{1.7}{width=15.5cm}{tourism2}}
-\only<3>{\placefig{0.3}{1.7}{width=15.5cm}{tourism3}}
-\only<4>{\placefig{0.3}{1.7}{width=15.5cm}{tourism4}}
+\only<1>{\placefig{0.1}{1.4}{width=15.8cm}{tourism1}}
+\only<2>{\placefig{0.1}{1.4}{width=15.8cm}{tourism2}}
+\only<3>{\placefig{0.1}{1.4}{width=15.8cm}{tourism3}}
+\only<4>{\placefig{0.1}{1.4}{width=15.8cm}{tourism4}}
 
 ## Hierarchical time series
 \vspace*{-0.2cm}
@@ -518,10 +518,10 @@ crop::dev.off.crop()
 system("pdfcrop figs/pyramid.pdf figs/pyramid.pdf")
 ```
 
-\placefig{0.3}{1.5}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism1}
-\placefig{0.3}{4.}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism2}
-\placefig{0.3}{6.5}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism4}
-\placefig{6}{1.4}{width=7.8cm, height=7.8cm}{pyramid}
+\placefig{0.3}{1.1}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism1}
+\placefig{0.3}{3.7}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism2}
+\placefig{0.3}{6.3}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism4}
+\placefig{6}{1.2}{width=7.8cm, height=7.8cm}{pyramid}
 
 ## Top-down forecasting
 
@@ -629,6 +629,8 @@ i.e., forecasts $\tilde{\bm{y}}_{T+h|T}$ are unbiased iff base forecasts $\hat{\
 * $\bS\bG\bS = \bS$ for bottom-up method
 * $\bS\bG\bS \ne \bS$ for any top-down or middle-out method.
 
+\vspace*{10cm}
+
 ## Properties of single-level methods
 
 \vspace*{0.2cm}\begin{block}{}
@@ -646,11 +648,13 @@ where $\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_T]$
 * $\bm{W}_h$ is hard to estimate for $h>1$.
 * This suggests we should choose $\bm{G}$ to minimise $\bm{V}_h$.
 
+\vspace*{10cm}
+
 # Linear forecast reconciliation
 
 ## Early history of forecast reconciliation
 
-\begin{textblock}{15.4}(0.3,1.5)
+\begin{textblock}{15.4}(0.3,1.2)
 \begin{block}{History}\fontsize{12}{13}\sf
 \begin{multicols}{2}
 \begin{description}[0000:]\parskip=0cm\itemsep=0.05cm
@@ -684,7 +688,7 @@ gspapers <- bind_rows(
       0, 2, 2, 1, 0, 1, 2, 1, 1, 1, # 1990s
       1, 5, 4, 3, 5, 8, 14, 14, 39, 38, # 2000s
       19, 17, 24, 36, 43, 38, 44, 71, 72, 112, # 2010s
-      121,147,192
+      121,139,196
     ),
     search = "Hierarchical forecasting"
   ),
@@ -695,7 +699,7 @@ gspapers <- bind_rows(
       0, 0, 0, 0, 2, 2, 1, 1, 3, 1, # 1990s
       2, 3, 1, 3, 2, 3, 2, 0, 3, 1, # 2000s
       4, 4, 4, 6, 4, 6, 11, 15, 24, 35, # 2010s
-      55,93,46
+      55,103,93
     ),
     search = "Forecast reconciliation"
   )
@@ -940,15 +944,42 @@ fc |>
   autoplot(filter(tourism_agg, year(month) > 2012), level = NULL)
 ```
 
+## Performance evaluation
+
+\vspace*{0.2cm}\begin{block}{}
+\centerline{$\text{MASE} = \text{mean}(|q_{j}|)$}
+$$
+  q_{j} = \frac{e_{j}\phantom{^2}}
+ {\displaystyle\frac{1}{T-m}\sum_{t=m+1}^T |y_{t}-y_{t-m}|}
+$$
+\end{block}
+
+* $y_t=$ observation for period $t$
+* $e_{j}=$ forecast error for forecast horizon $j$
+* $T=$ size of training set
+* $m = 12$
+
+## Performance evaluation
+
+\vspace*{0.2cm}\begin{block}{}
+\centerline{$\text{RMSSE} = \sqrt{\text{mean}(q_{j}^2)}$}
+$$
+  q^2_{j} = \frac{ e^2_{j}}
+ {\displaystyle\frac{1}{T-m}\sum_{t=m+1}^T (y_{t}-y_{t-m})^2}
+$$
+\end{block}
+
+* $y_t=$ observation for period $t$
+* $e_{j}=$ forecast error for forecast horizon $j$
+* $T=$ size of training set
+* $m = 12$
+
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
 
 ```{r fcaccuracy, dependson='fctourismcomb', echo=TRUE}
 fc |>
-  accuracy(
-    data = tourism_agg,
-    measures = list(rmsse = RMSSE)
-  )
+  accuracy(tourism_agg, measures = list(mase = MASE, rmsse = RMSSE))
 ```
 
 ## Example: Australian tourism
@@ -956,9 +987,7 @@ fc |>
 
 ```{r fcaccuracy2, dependson='fctourismcomb', echo=TRUE}
 fc |>
-  accuracy(tourism_agg,
-    measures = list(mase = MASE, rmsse = RMSSE)
-  ) |>
+  accuracy(tourism_agg, measures = list(mase = MASE, rmsse = RMSSE)) |>
   group_by(.model) |>
   summarise(mase = mean(mase), rmsse = sqrt(mean(rmsse^2))) |>
   arrange(rmsse)

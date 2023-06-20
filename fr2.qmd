@@ -611,7 +611,7 @@ and unbiased estimates must lie on $\mathfrak{s}$.
 
 ## Mean square error bounds
 
-\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\begin{textblock}{6.4}(9,-0.1)\begin{block}{}
 \citet{htsgeometry}
 \end{block}\end{textblock}
 
@@ -627,7 +627,7 @@ Let $\|\bm{u}\|_{\bm{\Psi}} = \bm{u}'\bm{\Psi}\bm{u}$. Then
 
 ## Mean square error bounds
 
-\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\begin{textblock}{6.4}(9,-0.1)\begin{block}{}
 \citet{wickramasuriya2021properties}
 \end{block}\end{textblock}
 
@@ -646,7 +646,7 @@ Let $\|\bm{u}\|_{\bm{\Psi}} = \bm{u}'\bm{\Psi}\bm{u}$. Then
 
 ## Mean square error bounds
 
-\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\begin{textblock}{6.4}(9,-0.1)\begin{block}{}
 \citet{wickramasuriya2021properties}
 \end{block}\end{textblock}
 \vspace*{0.2cm}\begin{block}{}\vspace*{-0.6cm}
@@ -682,7 +682,7 @@ If $\bS\bG$ is a projection, then the trace of $\bm{V}_h = \text{Var}(\tilde{\bm
 ## A game theoretic perspective
 \fontsize{14}{16}\sf
 
-\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\begin{textblock}{6.4}(9,-0.1)\begin{block}{}
 \citet{Van_ErvCug2015}
 \end{block}\end{textblock}
 
@@ -704,7 +704,7 @@ where $\ell$ is a loss function, and $\mathfrak{s}$ is the coherent subspace.
 
 ## Biased reconciliation
 
-\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\begin{textblock}{6.4}(9,-0.1)\begin{block}{}
 \citet{Ben_TaiEtAl2019}
 \end{block}\end{textblock}
 
@@ -762,7 +762,7 @@ $$
 
 ## Immutable forecasts
 
-\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\begin{textblock}{6.4}(9,-0.1)\begin{block}{}
 \citet{ZhaEtAl2022}
 \end{block}\end{textblock}
 $\displaystyle \hat{\bm{y}}_{t+h|t} = \begin{bmatrix}\hat{\bm{a}}_{t+h|t} \\ \hat{\bm{v}}_{t+h|t} \\ \hat{\bm{u}}_{t+h|t}\end{bmatrix} = \begin{bmatrix} \bm{A}_1 & \bm{A}_2 \\ \bm{I}_{n_b-k} & \bm{O} \\ \bm{O} & \bm{I}_k \end{bmatrix} \begin{bmatrix}\hat{\bm{v}}_{t+h|t} \\ \hat{\bm{u}}_{t+h|t}\end{bmatrix}$\vspace*{-0.5cm}
@@ -777,7 +777,7 @@ and $\bm{W}_{\bm{v}}$ contains elements of $\bm{W}_h$ corresponding to $\hat{\bm
 
 ## Immutable forecasts
 
-\begin{textblock}{6.4}(9,0.)\begin{block}{}
+\begin{textblock}{6.4}(9,-0.1)\begin{block}{}
 \citet{ZhaEtAl2022}
 \end{block}\end{textblock}
 $\displaystyle \hat{\bm{y}}_{t+h|t} = \begin{bmatrix}\hat{\bm{a}}_{t+h|t} \\ \hat{\bm{v}}_{t+h|t} \\ \hat{\bm{u}}_{t+h|t}\end{bmatrix} = \begin{bmatrix} \bm{A}_1 & \bm{A}_2 \\ \bm{I}_{n_b-k} & \bm{O} \\ \bm{O} & \bm{I}_k \end{bmatrix} \begin{bmatrix}\hat{\bm{v}}_{t+h|t} \\ \hat{\bm{u}}_{t+h|t}\end{bmatrix}$\vspace*{-0.5cm}
@@ -1000,9 +1000,6 @@ tourism_agg <- tourism |>
   aggregate_key(state/zone/region, visitors = sum(visitors))
 tourism_stretch <- tourism_agg |>
   stretch_tsibble(.init = 48, .step=20*12)#.step = 1)
-```
-
-```{r tourismagg2, echo=FALSE}
 tourism_stretch
 ```
 

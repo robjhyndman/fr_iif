@@ -90,7 +90,7 @@ Let $(\mathbb{\chi}^n, \mathscr{F}_{\mathbb{\chi}^n}, \hat\nu)$ be the base fore
 \begin{textblock}{7}(9.5,7.5)
 \centerline{$\psi = s \circ g$}
 \end{textblock}
-\begin{textblock}{12.4}(0.2,7.9)
+\begin{textblock}{13.2}(0.2,7.9)
 \begin{block}{}\fontsize{12}{12}\sf
 \citet{coherentprob,CorEtAl2022}
 \end{block}
