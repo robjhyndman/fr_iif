@@ -788,6 +788,98 @@ Suppose $\hat{\bm{u}}_{t+h|t}$ are fixed and let $\hat{\bm{w}}_{t+h|t} = \begin{
 $$\text{such that}\qquad \bm{A}_3 \bm{v} \ge \begin{bmatrix}-\bm{A}_2\hat{\bm{u}}_{t+h|t}\\ \bm{0}\end{bmatrix}$$
 \end{block}
 
+## Reconciliation and regularization
+
+@Mishchenko2019:\newline Optimize all forecasts with an incoherence penalty
+$$
+\text{min}_{\hat{\bm{y}}_{t}} \sum_{t=1}^T \|\bm{y}_t - \hat{\bm{y}}_t\|_2 + \lambda \sum_{t=1}^T \|\hat{\bm{y}}_t - \bm{S}_t \hat{\bm{b}}_t\|_2
+$$\pause
+
+
+@Shiratori2020:\newline Optimize bottom level forecasts with an incoherence penalty
+$$
+\text{min}_{\hat{\bm{b}}_{t}} \sum_{t=1}^T \|\hat{\bm{b}}_t - \bm{b}_t\|_2 + \sum_{t=1}^T \bm{\Lambda} \|\bm{a}_t - \bm{A}_t \hat{\bm{b}}_t\|_2
+$$
+
+# In-built coherence
+
+## In-built coherence
+
+**Two-step approach**: compute base forecasts $\hat{\bm{y}}_h$, and then reconcile them to produce $\tilde{\bm{y}}_h$.
+
+**One-step approaches:** compute coherent $\tilde{\bm{y}}_h$ directly.
+
+  * @lhf: linear regression models
+  * @PenvanDal2017: state space models
+  * @villegas2018supply: state space models
+
+## In-built coherence using linear models
+\fontsize{13}{14}\sf
+Suppose $\hat{y}_{t,i} = \hat{\bm{\beta}}_{i}' \bm{x}_{t,i}$
+with $\bm{x}_{t,i}= (1, x_{t,1,i},\dots,x_{t,p,i})$&nbsp; & &nbsp;\rlap{$\hat{\bm{y}}_i = (\hat{y}_{1,i}, \dots, \hat{y}_{T,i})$.}
+\pause
+\begin{align*}
+\textcolor{blue}{\begin{pmatrix}
+  \hat{\bm{y}}_1\\
+  \hat{\bm{y}}_2\\
+  \vdots\\
+  \hat{\bm{y}}_n
+  \end{pmatrix}} &=
+  \textcolor{red}{\begin{pmatrix}
+  \bm{X}_1 & 0        & \dots  & 0\\
+  0        & \bm{X}_2 & \ddots & \vdots \\
+  \vdots   & \ddots   & \ddots & 0\\
+  0        & \dots    & 0      & \bm{X}_n
+  \end{pmatrix}}
+  \begin{pmatrix}
+  \hat{\bm{\beta}}_1\\
+  \hat{\bm{\beta}}_2\\
+  \vdots\\
+  \hat{\bm{\beta}}_n
+\end{pmatrix},
+&&\quad
+  \bm{X}_i = \begin{pmatrix}
+  1 & x_{1,i,1} & x_{1,i,2} & \dots & x_{1,i,p}\\
+  1 & x_{2,i,1} & x_{2,i,2} & \dots & x_{2,i,p}\\
+  \vdots & \vdots & \vdots & & \vdots \\
+  1 & x_{T,i,1} & x_{T,i,2} & \dots & x_{T,i,p}
+\end{pmatrix}
+\end{align*}\pause
+$\hat{\bm{B}} = (\textcolor{red}{\bm{X}}'\textcolor{red}{\bm{X}})^{-1} \textcolor{red}{\bm{X}}'\textcolor{blue}{\bm{Y}}$
+\pause\qquad
+$\hat{\bm{y}}_{t+h} = \bm{X}_{t+h}^* \hat{\bm{B}}$
+\pause\qquad
+$\bm{X}^*_{t+h} =\text{diag}(\bm{x}_{t+h,i}', \dots, \bm{x}_{t+h,n}')$
+\pause
+\begin{alertblock}{}\vspace*{-0.8cm}
+\begin{align*}
+\tilde{\bm{y}}_{t+h} & = \bm{S}(\bm{S}'\bm{W}_h\bm{S})^{-1}\bm{S}'\bm{W}_h
+                            \hat{\bm{y}}_{t+h}
+                         = \bm{S}(\bm{S}'\bm{W}_h\bm{S})^{-1}\bm{S}'\bm{W}_h
+                            \bm{X}_{t+h}^* (\textcolor{red}{\bm{X}}'\textcolor{red}{\bm{X}})^{-1} \textcolor{red}{\bm{X}}'\textcolor{blue}{\bm{Y}}
+\\
+\bm{V}_h &= \sigma^2\bm{S}(\bm{S}'\bm{W}_h\bm{S})^{-1}\bm{S}'\bm{W}_h\big[1 + \bm{X}_{T+h}^*(\textcolor{red}{\bm{X}}'\textcolor{red}{\bm{X}})^{-1}(\bm{X}_{T+h}^*)'\big] \bm{W}_h\bm{S}'(\bm{S}'\bm{W}_h\bm{S})^{-1}\bm{S}'
+\end{align*}
+\end{alertblock}
+\only<4->{\begin{alertblock}{}
+Reference: \citet{lhf}
+\end{alertblock}}
+
+\vspace*{10cm}
+
+## In-built coherence using state space models
+
+@PenvanDal2017 propose the state space model
+\begin{align*}
+\bm{y}_t &= \bm{S}\bm{\mu}_t + \bm{Z}_t\bm{\beta} + \bm{\varepsilon}_t, && \bm{\varepsilon}_t \sim N(\bm{0}, \bm{\Sigma}_{\bm{\varepsilon}}),\\
+\bm{\mu}_t &= \bm{\mu}_{t-1} + \bm{\eta}_t, && \bm{\eta}_t \sim N(\bm{0}, \bm{\Sigma}_{\bm{\eta}}).
+\end{align*}
+
+* Coherent forecasts arise naturally using the Kalman filter
+* Covariance matrices difficult to estimate except for small hierarchies.
+* Requires the same model for all series
+* A related approach proposed by @villegas2018supply
+
 # Time series cross-validation
 
 ## Time series cross-validation
@@ -892,8 +984,111 @@ tscv_plot(.init = 8, .step = 1, h = 4) +
 \item Also known as "evaluation on a rolling forecasting origin"
 \end{itemize}\end{block}\end{textblock}}
 
+## Example: Australian tourism
+\fontsize{10}{11}\sf
 
-# ML reconciliation
+```{r tourismdata0}
+tourism
+```
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r tourismdata, echo=TRUE}
+tourism_agg <- tourism |>
+  aggregate_key(state/zone/region, visitors = sum(visitors))
+tourism_stretch <- tourism_agg |>
+  stretch_tsibble(.init = 48, .step=20*12)#.step = 1)
+```
+
+```{r tourismagg2, echo=FALSE}
+tourism_stretch
+```
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r tourismmodels, echo=TRUE}
+fit <- tourism_stretch |>
+  model(
+    ets = ETS(visitors),
+    arima = ARIMA(visitors)
+  ) |>
+  mutate(comb = (ets+arima)/2)
+```
+
+```{r tourismmodels1, echo=FALSE}
+fit
+```
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r fctourism, echo=TRUE}
+fc <- fit |>
+  reconcile(
+    ols = min_trace(comb, method = "ols"),
+    wlsv = min_trace(comb, method = "wls_var"),
+    wlss = min_trace(comb, method = "wls_struct"),
+    mint_s = min_trace(comb, method = "mint_shrink"),
+  ) |>
+  forecast(h = "2 years")
+```
+
+```{r fctourism1, echo=FALSE}
+fc
+```
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r fcaccuracy2, dependson='fctourismcomb', echo=TRUE}
+fc |>
+  accuracy(tourism_agg, measures = list(mase = MASE, rmsse = RMSSE)) |>
+  group_by(.model) |>
+  summarise(mase = mean(mase), rmsse = sqrt(mean(rmsse^2))) |>
+  arrange(rmsse)
+```
+
+\only<2>{\begin{textblock}{7}(7,5)
+\begin{block}{}\fontsize{13}{14}\sf
+\begin{itemize}\tightlist
+\item Combining improves forecast accuracy.
+\item Reconciling improves further.
+\item MinT-Shrink is almost always the best reconciliation method.
+\end{itemize}
+\end{block}
+\end{textblock}}
+
+## Example: Australian tourism
+\fontsize{8}{7}\sf
+
+```{r fcaccuracy3, dependson='fctourismcomb', echo=FALSE}
+fc |>
+  accuracy(tourism_agg,
+    measures = list(mase = MASE, rmsse = RMSSE)
+  ) |>
+  mutate(
+    level = case_when(
+      is_aggregated(state) ~ "National",
+      is_aggregated(zone) ~ "State",
+      is_aggregated(region) ~ "Zone",
+      TRUE ~ "Region"
+    ),
+    level = factor(level, levels = c("National", "State", "Zone", "Region"))
+  ) |>
+  group_by(.model, level) |>
+  summarise(mase = mean(mase), rmsse = sqrt(mean(rmsse^2))) |>
+  arrange(level, rmsse) |> print(n=200)
+```
+
+\only<2>{\begin{textblock}{7}(7,2)
+\begin{block}{}\fontsize{13}{14}\sf
+\begin{itemize}\tightlist
+\item MinT-Shrink is almost always the best reconciliation method.
+\end{itemize}
+\end{block}
+\end{textblock}}
 
 ## ML reconciliation
 
@@ -951,100 +1146,9 @@ Spiliotis et al. (ASC, 2021)\nocite{hfrml}
 \end{itemize}\end{block}
 \end{textblock}
 
-## ML and regularization
-
-@Mishchenko2019:\newline Optimize all forecasts with an incoherence penalty
-$$
-\text{min}_{\hat{\bm{y}}_{t}} \sum_{t=1}^T \|\bm{y}_t - \hat{\bm{y}}_t\|_2 + \lambda \sum_{t=1}^T \|\hat{\bm{y}}_t - \bm{S}_t \hat{\bm{b}}_t\|_2
-$$\pause
-
-
-@Shiratori2020:\newline Optimize bottom level forecasts with an incoherence penalty
-$$
-\text{min}_{\hat{\bm{b}}_{t}} \sum_{t=1}^T \|\hat{\bm{b}}_t - \bm{b}_t\|_2 + \sum_{t=1}^T \bm{\Lambda} \|\bm{a}_t - \bm{A}_t \hat{\bm{b}}_t\|_2
-$$
 
 
 
-
-# In-built coherence
-
-## In-built coherence
-
-**Two-step approach**: compute base forecasts $\hat{\bm{y}}_h$, and then reconcile them to produce $\tilde{\bm{y}}_h$.
-
-**One-step approaches:** compute coherent $\tilde{\bm{y}}_h$ directly.
-
-  * @lhf: linear regression models
-  * @PenvanDal2017: state space models
-  * @villegas2018supply: state space models
-
-## In-built coherence using linear models
-\fontsize{13}{14}\sf
-Suppose $\hat{y}_{t,i} = \hat{\bm{\beta}}_{i}' \bm{x}_{t,i}$
-with $\bm{x}_{t,i}= (1, x_{t,1,i},\dots,x_{t,p,i})$&nbsp; & &nbsp;\rlap{$\hat{\bm{y}}_i = (\hat{y}_{1,i}, \dots, \hat{y}_{T,i})$.}
-\pause
-\begin{align*}
-\textcolor{blue}{\begin{pmatrix}
-  \hat{\bm{y}}_1\\
-  \hat{\bm{y}}_2\\
-  \vdots\\
-  \hat{\bm{y}}_n
-  \end{pmatrix}} &=
-  \textcolor{red}{\begin{pmatrix}
-  \bm{X}_1 & 0        & \dots  & 0\\
-  0        & \bm{X}_2 & \ddots & \vdots \\
-  \vdots   & \ddots   & \ddots & 0\\
-  0        & \dots    & 0      & \bm{X}_n
-  \end{pmatrix}}
-  \begin{pmatrix}
-  \hat{\bm{\beta}}_1\\
-  \hat{\bm{\beta}}_2\\
-  \vdots\\
-  \hat{\bm{\beta}}_n
-\end{pmatrix},
-&&\quad
-  \bm{X}_i = \begin{pmatrix}
-  1 & x_{1,i,1} & x_{1,i,2} & \dots & x_{1,i,p}\\
-  1 & x_{2,i,1} & x_{2,i,2} & \dots & x_{2,i,p}\\
-  \vdots & \vdots & \vdots & & \vdots \\
-  1 & x_{T,i,1} & x_{T,i,2} & \dots & x_{T,i,p}
-\end{pmatrix}
-\end{align*}\pause
-$\hat{\bm{B}} = (\textcolor{red}{\bm{X}}'\textcolor{red}{\bm{X}})^{-1} \textcolor{red}{\bm{X}}'\textcolor{blue}{\bm{Y}}$
-\pause\qquad
-$\hat{\bm{y}}_{t+h} = \bm{X}_{t+h}^* \hat{\bm{B}}$
-\pause\qquad
-$\bm{X}^*_{t+h} =\text{diag}(\bm{x}_{t+h,i}', \dots, \bm{x}_{t+h,n}')$
-\pause
-\begin{alertblock}{}\vspace*{-0.8cm}
-\begin{align*}
-\tilde{\bm{y}}_{t+h} & = \bm{S}(\bm{S}'\bm{W}_h\bm{S})^{-1}\bm{S}'\bm{W}_h
-                            \hat{\bm{y}}_{t+h}
-                         = \bm{S}(\bm{S}'\bm{W}_h\bm{S})^{-1}\bm{S}'\bm{W}_h
-                            \bm{X}_{t+h}^* (\textcolor{red}{\bm{X}}'\textcolor{red}{\bm{X}})^{-1} \textcolor{red}{\bm{X}}'\textcolor{blue}{\bm{Y}}
-\\
-\bm{V}_h &= \sigma^2\bm{S}(\bm{S}'\bm{W}_h\bm{S})^{-1}\bm{S}'\bm{W}_h\big[1 + \bm{X}_{T+h}^*(\textcolor{red}{\bm{X}}'\textcolor{red}{\bm{X}})^{-1}(\bm{X}_{T+h}^*)'\big] \bm{W}_h\bm{S}'(\bm{S}'\bm{W}_h\bm{S})^{-1}\bm{S}'
-\end{align*}
-\end{alertblock}
-\only<4->{\begin{alertblock}{}
-Reference: \citet{lhf}
-\end{alertblock}}
-
-\vspace*{10cm}
-
-## In-built coherence using state space models
-
-@PenvanDal2017 propose the state space model
-\begin{align*}
-\bm{y}_t &= \bm{S}\bm{\mu}_t + \bm{Z}_t\bm{\beta} + \bm{\varepsilon}_t, && \bm{\varepsilon}_t \sim N(\bm{0}, \bm{\Sigma}_{\bm{\varepsilon}}),\\
-\bm{\mu}_t &= \bm{\mu}_{t-1} + \bm{\eta}_t, && \bm{\eta}_t \sim N(\bm{0}, \bm{\Sigma}_{\bm{\eta}}).
-\end{align*}
-
-* Coherent forecasts arise naturally using the Kalman filter
-* Covariance matrices difficult to estimate except for small hierarchies.
-* Requires the same model for all series
-* A related approach proposed by @villegas2018supply
 
 
 \nocite{htsgeometry, nonnegmint, Di_FonGir2022b, Van_ErvCug2015, lhf}

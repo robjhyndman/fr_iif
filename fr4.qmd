@@ -1101,6 +1101,34 @@ oct$_h(shr)$              & \textcolor{red}{1.007}              & \textcolor{red
 \end{itemize}
 \end{textblock}
 
+# Software
+
+## Software
+\fontsize{11}{12}\sf\vspace*{0.3cm}
+
+\hspace*{-0.6cm}\begin{tabular}{llP{1.7cm}cP{1.7cm}c}
+\toprule
+Package                                                                      & Language  & Cross-sectional  & Temporal    & Cross-temporal  & Probabilistic\\
+\midrule
+\texttt{\href{https://pkg.earo.me/hts/}{hts}}
+    & R         & \checkmark       &             &                 & \\
+\texttt{\href{http://pkg.robjhyndman.com/thief/}{thief}}
+    & R         &                  & \checkmark  &                 & \\
+\texttt{\href{https://fable.tidyverts.org}{fable}}
+    & R         & \checkmark       &             &                 & \checkmark\\
+\texttt{\href{https://danigiro.github.io/FoReco/}{FoReco}}
+    & R         & \checkmark       & \checkmark  & \checkmark      & \checkmark\\
+\texttt{\href{https://angelpone.github.io/pyhts/}{pyhts}}
+    & Python    & \checkmark       & \checkmark  &                 & \\
+\texttt{\href{https://nixtla.github.io/hierarchicalforecast/}{hierarchicalforecast}}
+    & Python    & \checkmark       &             &                 & \checkmark \\
+\bottomrule
+\end{tabular}
+
+* `hts`, `thief`, and `FoReco` use `ts` objects
+* `fable` uses `tsibble` objects
+* `fable` has plans to implement temporal and cross-temporal reconciliation
+
 ## Thanks!
 
 \placefig{0}{1.2}{trim = 10 45 0 0, clip=TRUE, width=10cm, height=2.5cm}{roman}

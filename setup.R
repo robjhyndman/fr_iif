@@ -50,3 +50,68 @@ glm_summary <- function(
       na.print = "NA", ...
     )
 }
+
+# Monthly hierarchical tourism data (state/zone/region)
+# Read csv file of monthly data
+OvernightTrips_Region <- readr::read_csv("tourism/OvernightTrips_2017.csv")[, -(1:3)] |>
+  # Replace outlier from Adelaide Hills
+  mutate(
+    `Adelaide Hills` = case_when(
+      `Adelaide Hills` > 80 ~ 10,
+      TRUE ~ `Adelaide Hills`
+    )
+  )
+# Convert to tsibble
+tourism <- hts::hts(
+  ts(OvernightTrips_Region, start = 1998, frequency = 12),
+  list(7, c(6, 5, 4, 4, 3, 3, 2), c(2, 2, 1, 4, 4, 1, 3, 1, 3, 6, 7, 3, 4, 3, 2, 3, 3, 4, 2, 3, 1, 1, 1, 2, 2, 3, 4))
+) |>
+  as_tsibble() |>
+  rename(
+    state = "Level 1",
+    zone = "Level 2",
+    region = "Level 3",
+    month = index,
+    visitors = value
+  ) |>
+  mutate(
+    state = recode(state,
+                   A = "NSW",
+                   B = "VIC",
+                   C = "QLD",
+                   D = "SA",
+                   E = "WA",
+                   F = "TAS",
+                   G = "NT"
+    ),
+    zone = recode(zone,
+                  AA = "Metro NSW",
+                  AB = "North Coast NSW",
+                  AC = "South Coast NSW",
+                  AD = "South NSW",
+                  AE = "North NSW",
+                  AF = "ACT",
+                  BA = "Metro VIC",
+                  BB = "West Coast VIC",
+                  BC = "East Coast VIC",
+                  BC = "North East VIC",
+                  BD = "North West VIC",
+                  CA = "Metro QLD",
+                  CB = "Central Coast QLD",
+                  CC = "North Coast QLD",
+                  CD = "Inland QLD",
+                  DA = "Metro SA",
+                  DB = "South Coast SA",
+                  DC = "Inland SA",
+                  DD = "West Coast SA",
+                  EA = "West Coast WA",
+                  EB = "North WA",
+                  EC = "South WA",
+                  FA = "South TAS",
+                  FB = "North East TAS",
+                  FC = "North West TAS",
+                  GA = "North Coast NT",
+                  GB = "Central NT"
+    )
+  ) |>
+  select(month, everything())

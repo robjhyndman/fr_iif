@@ -191,7 +191,7 @@ for(i in seq_along(slices)) {
 #| include: false
 # Generate future sample paths ready to be plotted
 set.seed(2020 - 08 - 25)
-
+tourism <- tsibble::tourism
 # Total Australian tourism numbers
 aus_tourism <- tourism |>
   summarise(Trips = sum(Trips))
