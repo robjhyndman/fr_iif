@@ -2,7 +2,7 @@
 title: Forecast reconciliation
 subtitle: 1. Hierarchical time series & forecast reconciliation
 author: Rob J Hyndman
-pdf-engine: pdflatex
+pdf-engine: latexmk
 fig-width: 9
 fig-height: 4.5
 format:
