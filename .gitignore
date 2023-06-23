@@ -15,6 +15,7 @@ figs/pinball*
 .Rproj.user
 .Ruserdata
 Rplots.pdf
+*.rds
 
 **/*_cache/*
 **/cache/*

@@ -988,84 +988,141 @@ tscv_plot(.init = 8, .step = 1, h = 4) +
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
 
-```{r tourismdata0}
+```{r}
+#| label: tourismdata0
+#| echo: true
 tourism
 ```
 
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
 
-```{r tourismdata, echo=TRUE}
+```{r}
+#| label: tourismdata
+#| echo: true
 tourism_agg <- tourism |>
   aggregate_key(state/zone/region, visitors = sum(visitors))
 tourism_stretch <- tourism_agg |>
-  stretch_tsibble(.init = 48, .step=20*12)#.step = 1)
+  stretch_tsibble(.init = 48, .step = 1)
 tourism_stretch
 ```
 
-## Example: Australian tourism
-\fontsize{10}{11}\sf
 
-```{r tourismmodels, echo=TRUE}
-fit <- tourism_stretch |>
-  model(
-    ets = ETS(visitors),
-    arima = ARIMA(visitors)
-  ) |>
-  mutate(comb = (ets+arima)/2)
+```{r}
+#| label: readrds1
+#| include: false
+#| eval: false
+# Following results from tourismmodels.R
+# Too slow to even load the results from rds files
+# Objects below stored as fit.rds, fc.rds and acc.rds
 ```
 
-```{r tourismmodels1, echo=FALSE}
+
+## Example: Australian tourism
+\fontsize{8}{9}\sf
+
+```{r}
+#| label: tourismmodels
+#| eval: false
+#| echo: true
+fit <- tourism_stretch |>
+  model(ets = ETS(visitors))
 fit
 ```
 
+```
+# A mable: 21,230 x 5
+# Key:     .id, state, zone, region [21,230]
+     .id state  zone            region                   ets
+   <int> <chr*> <chr*>          <chr*>               <model>
+ 1     1 NSW    ACT             Canberra        <ETS(A,N,N)>
+ 2     1 NSW    ACT             <aggregated>    <ETS(A,N,N)>
+ 3     1 NSW    Metro NSW       Central Coast   <ETS(A,N,A)>
+ 4     1 NSW    Metro NSW       Sydney          <ETS(A,N,N)>
+ 5     1 NSW    Metro NSW       <aggregated>    <ETS(M,N,M)>
+ 6     1 NSW    North Coast NSW Hunter          <ETS(A,N,N)>
+ 7     1 NSW    North Coast NSW North Coast NSW <ETS(M,N,M)>
+ 8     1 NSW    North Coast NSW <aggregated>    <ETS(M,N,M)>
+ 9     1 NSW    North NSW       Blue Mountains  <ETS(M,N,N)>
+10     1 NSW    North NSW       Central NSW     <ETS(A,N,N)>
+# i 21,220 more rows
+# i Use `print(n = ...)` to see more rows
+```
+
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
 
-```{r fctourism, echo=TRUE}
+```{r}
+#| label: fctourism
+#| echo: true
+#| eval: false
 fc <- fit |>
   reconcile(
-    ols = min_trace(comb, method = "ols"),
-    wlsv = min_trace(comb, method = "wls_var"),
-    wlss = min_trace(comb, method = "wls_struct"),
-    mint_s = min_trace(comb, method = "mint_shrink"),
+    ols = min_trace(ets, method = "ols"),
+    wlsv = min_trace(ets, method = "wls_var"),
+    wlss = min_trace(ets, method = "wls_struct"),
+    mint_s = min_trace(ets, method = "mint_shrink"),
   ) |>
   forecast(h = "2 years")
-```
-
-```{r fctourism1, echo=FALSE}
 fc
 ```
 
+```
+# A fable: 2,547,600 x 9 [1M]
+# Key:     .id, state, zone, region, .model [106,150]
+     .id state  zone   region   .model    month     visitors .mean     h
+   <int> <chr*> <chr*> <chr*>   <chr>     <mth>       <dist> <dbl> <int>
+ 1     1 NSW    ACT    Canberra ets    2002 Jan N(169, 1553)  169.     1
+ 2     1 NSW    ACT    Canberra ets    2002 Feb N(169, 1553)  169.     2
+ 3     1 NSW    ACT    Canberra ets    2002 Mar N(169, 1553)  169.     3
+ 4     1 NSW    ACT    Canberra ets    2002 Apr N(169, 1553)  169.     4
+ 5     1 NSW    ACT    Canberra ets    2002 May N(169, 1553)  169.     5
+ 6     1 NSW    ACT    Canberra ets    2002 Jun N(169, 1553)  169.     6
+ 7     1 NSW    ACT    Canberra ets    2002 Jul N(169, 1553)  169.     7
+ 8     1 NSW    ACT    Canberra ets    2002 Aug N(169, 1553)  169.     8
+ 9     1 NSW    ACT    Canberra ets    2002 Sep N(169, 1553)  169.     9
+10     1 NSW    ACT    Canberra ets    2002 Oct N(169, 1553)  169.    10
+# i 2,547,590 more rows
+# i Use `print(n = ...)` to see more rows
+```
+
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
 
-```{r fcaccuracy2, dependson='fctourismcomb', echo=TRUE}
-fc |>
-  accuracy(tourism_agg, measures = list(mase = MASE, rmsse = RMSSE)) |>
-  group_by(.model) |>
-  summarise(mase = mean(mase), rmsse = sqrt(mean(rmsse^2))) |>
-  arrange(rmsse)
+```{r}
+#| label: fcaccuracy2
+#| echo: false
+acc <- readRDS("acc.rds") |> 
+  mutate(
+      .model = case_match(.model, 
+        "mint_s" ~ "MinTrace",
+        .default = toupper(.model)
+      )
+    ) |> 
+  filter(.model != "ARIMA", .model != "COMB") |> 
+  rename(MASE = mase, RMSSE = rmsse)
+acc |> 
+  group_by(.model, h) |> 
+  summarise(MASE = mean(MASE), RMSSE = sqrt(mean(RMSSE^2))) |> 
+  pivot_longer(MASE:RMSSE, names_to = "Measure", values_to = "value") |> 
+  ggplot(aes(x=h, y=value, col=.model)) +
+  geom_line() +
+  facet_grid(Measure ~ .)
 ```
 
-\only<2>{\begin{textblock}{7}(7,5)
-\begin{block}{}\fontsize{13}{14}\sf
-\begin{itemize}\tightlist
-\item Combining improves forecast accuracy.
-\item Reconciling improves further.
-\item MinT-Shrink is almost always the best reconciliation method.
-\end{itemize}
-\end{block}
-\end{textblock}}
-
 ## Example: Australian tourism
-\fontsize{8}{7}\sf
 
-```{r fcaccuracy3, dependson='fctourismcomb', echo=FALSE}
-fc |>
-  accuracy(tourism_agg,
-    measures = list(mase = MASE, rmsse = RMSSE)
-  ) |>
+```{r}
+#| label: fcaccuracy3
+#| echo: false
+# Overall accuracy
+acc1 <- acc |> 
+  group_by(.model) |> 
+  summarise(MASE = mean(MASE), RMSSE = sqrt(mean(RMSSE^2))) |> 
+  arrange(RMSSE) |> 
+  mutate(level = "Overall")
+# Accuracy by level
+acc2 <- acc |> 
   mutate(
     level = case_when(
       is_aggregated(state) ~ "National",
@@ -1076,17 +1133,73 @@ fc |>
     level = factor(level, levels = c("National", "State", "Zone", "Region"))
   ) |>
   group_by(.model, level) |>
-  summarise(mase = mean(mase), rmsse = sqrt(mean(rmsse^2))) |>
-  arrange(level, rmsse) |> print(n=200)
+  summarise(MASE = mean(MASE), RMSSE = sqrt(mean(RMSSE^2))) |> 
+  arrange(RMSSE)
+# Combine tables
+acc <- bind_rows(acc1,acc2) |> 
+  mutate(level = factor(level, 
+    levels = c("Overall", "National", "State", "Zone", "Region"))
+  )
+# Function to generate nice table
+acc_table <- function(x, file) {
+  x <- x |> 
+    arrange(.model)
+  best1 <- which.min(x$MASE)
+  best2 <- which.min(x$RMSSE)
+  col <- seq_len(nrow(x))
+  x$MASE <- sprintf("%.3f",x$MASE) |> 
+    kableExtra::cell_spec(bold = col == best1,
+                          format = 'latex')
+  x$RMSSE <- sprintf("%.3f",x$RMSSE) |> 
+    kableExtra::cell_spec(bold = col == best2,
+                          format = 'latex')
+  x |> 
+    select(-level) |> 
+    knitr::kable(
+      format="latex", 
+      escape = FALSE,
+      booktabs=TRUE, 
+      digits=3,
+      col.names = c("Model","MASE","RMSSE"),
+      bottomrule = "", toprule=""
+    ) |> 
+    readr::write_file(file = file)
+}
+for(i in unique(acc$level)) {
+  acc |> 
+    filter(level == i) |> 
+    acc_table(paste0(i,".tex"))
+}
 ```
 
-\only<2>{\begin{textblock}{7}(7,2)
-\begin{block}{}\fontsize{13}{14}\sf
-\begin{itemize}\tightlist
-\item MinT-Shrink is almost always the best reconciliation method.
-\end{itemize}
+\fontsize{9}{9}\sf
+\begin{textblock}{7.15}(0.5,1.2)
+\begin{alertblock}{\fontsize{11}{11}\sf\centering Overall}\centering
+\input Overall.tex
+\end{alertblock}
+\end{textblock}
+\begin{textblock}{7.15}(8.35,1.2)
+\begin{block}{\fontsize{11}{11}\sf\centering National}\centering
+\input National.tex
 \end{block}
-\end{textblock}}
+\end{textblock}
+\begin{textblock}{4.5}(.5,5)
+\begin{block}{\fontsize{11}{11}\sf\centering State}\centering
+\input State.tex
+\end{block}
+\end{textblock}
+\begin{textblock}{4.5}(5.75,5)
+\begin{block}{\fontsize{11}{11}\sf\centering Zone}\centering
+\input Zone.tex
+\end{block}
+\end{textblock}
+\begin{textblock}{4.5}(11,5)
+\begin{block}{\fontsize{11}{11}\sf\centering Region}\centering
+\input Region.tex
+\end{block}
+\end{textblock}
+
+
 
 ## ML reconciliation
 
