@@ -69,7 +69,11 @@
 \end{beamercolorbox}
 \end{textblock}}
 
-%\renewenvironment{Shaded}{\color{black}\begin{snugshade}\color{black}}{\end{snugshade}\columnbreak}
+% Redefine shaded environment if it exists (for R plots)
+\ifcsname Shaded\endcsname
+  \definecolor{shadecolor}{RGB}{225,225,225}
+  \renewenvironment{Shaded}{\fontsize{10}{10}\sf\vspace*{0.14cm}\begin{snugshade}}{\end{snugshade}}
+\fi
 
 % Tikz plots
 

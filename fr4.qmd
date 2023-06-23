@@ -937,13 +937,9 @@ The ``year'' can start in any quarter, giving overlapping blocks.
 ## Quarterly Australian GDP data
 
 * Quarterly data: 1984:Q4 -- 2018:Q1
-
 * 95 series
-
 * Time series cross-validation;  initial training set of 10 years.
-
 * One-quarter increase in each training set
-
 * For each training set, compute temporally aggregated series for $k \in \{1,2,4\}$, and produce forecasts up to $h_1=4$, $h_2=2$, and $h_{4}=1$ steps ahead.
 
 * Automatic ARIMA forecasts for all series.

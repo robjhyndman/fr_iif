@@ -1,6 +1,6 @@
 %% This is the Monash beamer theme
 %% Created for Monash Business School
-%% Updated by Rob J Hyndman. 16 April 2023
+%% Updated by Rob J Hyndman. 23 June 2023
 
 \RequirePackage{beamerthememetropolis}
 % Alter the color theme by setting eg 'colortheme: monashblue' in the YAML header
@@ -52,7 +52,7 @@
     \hskip-4ex%
     \hbox to4ex{%
       \hfil%
-      \color{LightGrey}\raisebox{.2ex}{\insertenumlabel}%
+      \color{white}\raisebox{.2ex}{\insertenumlabel}%
       \hfil}%
   }}%
 }
@@ -75,7 +75,7 @@
 \setlength{\TPHorizModule}{1cm}
 \setlength{\TPVertModule}{1cm}
 \def\placefig#1#2#3#4{\begin{textblock}{.1}(#1,#2)\rlap{\includegraphics[#3]{#4}}\end{textblock}}
-\def\full#1{\vspace*{0.25cm}\centerline{\includegraphics[width=15cm,height=7.5cm,keepaspectratio=true]{#1}}}
+\def\full#1{\vspace*{0.15cm}\centerline{\includegraphics[width=15.8cm,height=7.9cm,keepaspectratio=true]{#1}}}
 
 % Monash title page
 % One can alter the font size by setting eg 'titlefontsize: 20pt' in the YAML header
@@ -102,13 +102,6 @@
 \setbeamertemplate{section in toc}[square]
 \setbeamerfont{section number projected}{size=\large}
 \setbeamertemplate{section in toc shaded}[default][50]
-
-
-% Redefine shaded environment if it exists (for R plots)
-\ifcsname Shaded\endcsname
-  \definecolor{shadecolor}{RGB}{225,225,225}
-  \renewenvironment{Shaded}{\color{black}\begin{snugshade}\color{black}}{\end{snugshade}}
-\fi
 
 \setbeamertemplate{footline}{%
 \hfill\textcolor[rgb]{0.7,0.7,0.7}{\fbox{\insertframenumber{}}}}
