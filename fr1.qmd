@@ -682,24 +682,24 @@ where $\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_T]$
 # Google scholar won't let this be automated as repeated calls using rvest generates a 429 error.
 gspapers <- bind_rows(
   tibble(
-    year = 1980:2022,
+    year = 1980:2023,
     count = c(
       1, 0, 0, 1, 3, 2, 0, 1, 2, 2, # 1980s
       0, 2, 2, 1, 0, 1, 2, 1, 1, 1, # 1990s
       1, 5, 4, 3, 5, 8, 14, 14, 39, 38, # 2000s
-      19, 17, 24, 36, 43, 38, 44, 71, 72, 112, # 2010s
-      121,139,196
+      19, 17, 24, 36, 43, 38, 44, 71, 72, 113, # 2010s
+      118,156,176,198
     ),
     search = "Hierarchical forecasting"
   ),
   tibble(
-    year = 1980:2022,
+    year = 1980:2023,
     count = c(
       0, 0, 0, 0, 0, 0, 1, 0, 1, 0, # 1980s
       0, 0, 0, 0, 2, 2, 1, 1, 3, 1, # 1990s
       2, 3, 1, 3, 2, 3, 2, 0, 3, 1, # 2000s
       4, 4, 4, 6, 4, 6, 11, 15, 24, 35, # 2010s
-      55,103,93
+      49,100,114,122
     ),
     search = "Forecast reconciliation"
   )
@@ -732,7 +732,7 @@ gspapers |>
 library(pdftools)
 library(stringr)
 isf <- tibble(
-  year = 1990:2022,
+  year = 1990:2023,
   hierarch = NA,
   reconcil = NA
 )
@@ -833,7 +833,7 @@ These approximate MinT by assuming $\bm{W}_h = k_h \bm{W}_1$.
 
 ## OLS is not as bad as you might think
 
-* If all base forecasts come from the same model, then forecast errors are coherent.
+* If all base forecasts come from the same linear model, then forecast errors are coherent.
 * So $\hat{\bm{y}}_{T+h|T} = \bm{S}\hat{\bm{b}}_{T+h|T} + \bm{S}\hat{\bm{\varepsilon}}_{T+h}$ and
 $$
   \bm{W}_h = \var(\bm{y}_{T+h} - \hat{\bm{y}}_{T+h|T}) = \bm{S}\bm{\Sigma}_h\bm{S}'
@@ -1425,5 +1425,9 @@ Again, the calculations can be done in such a way that we never store any of the
 \end{alertblock}
 \end{textblock}}
 \only<2>{\placefig{15}{6.7}{width=1cm}{smiley}}
+
+## Fast computation: sparse matrices
+
+
 
 \nocite{hierarchical, fasthts, mint}
