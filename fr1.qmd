@@ -1454,10 +1454,10 @@ Again, the calculations can be done in such a way that we never store any of the
 
 ## Fast computation: sparse matrix algebra
 
-Proposed independently by @hierarchical and @di2011simultaneous.
+Proposed independently by @hierarchical and Di&nbsp;Fonzo & Marini (2011).
 
 * $\bm{S}$, $\bm{C}$ and $\bm{W}$ are usually sparse matrices.
-* Lanczos algorithm [extended by @paige1982algorithm] iteratively solves systems of sparse linear equations.
+* Lanczos algorithm (extended by Paige and Saunders, 1982) iteratively solves systems of sparse linear equations.
 * 2 million series reconciled in 20 seconds on an old laptop.
 
 \nocite{hierarchical, fasthts, mint}
