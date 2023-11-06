@@ -1,5 +1,8 @@
 project:
   title: "forecast_reconciliation_iif"
-
 execute:
+  echo: false
+  message: false
+  warning: false
+  cache: true
   freeze: true

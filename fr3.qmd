@@ -1,6 +1,5 @@
 ---
 title: Forecast reconciliation
-subtitle: 3. Probabilistic forecast reconciliation
 author: Rob J Hyndman
 pdf-engine: latexmk
 fig-width: 9
@@ -33,6 +32,38 @@ source("setup.R")
 library(knitr)
 library(kableExtra)
 ```
+
+##
+
+\placefig{-0.01}{-0.01}{width=1.01\paperwidth,height=1.01\paperheight}{figs/stones.png}
+\placefig{0.5}{2.5}{width=4cm}{monash_bw}
+\placefig{14.6}{.2}{width=1.2cm}{iif_logo}
+\begin{textblock}{10.5}(.5,0.3)
+\fontsize{28}{40}\selectfont\bfseries\sffamily\textcolor[RGB]{204,89,0}{Forecast reconciliation}
+\end{textblock}
+\begin{textblock}{7.5}(.5,1.8)
+\fontsize{13}{13}\selectfont\sffamily\textcolor[RGB]{80,70,60}{\bfseries Rob J Hyndman}
+\end{textblock}
+\begin{textblock}{8.5}(.4,3.5)
+\begin{block}{}\fontsize{13}{14}\sf
+\begin{enumerate}\itemsep=0cm\parskip=0cm
+\item {Hierarchical time series and forecast reconciliation} {\footnotesize (Nov 6/7)}
+\item Perspectives on forecast reconciliation {\footnotesize (Nov 9/10)}
+\item \textbf{Probabilistic forecast reconciliation} {\footnotesize (Nov 13/14)}
+\item Temporal and cross-temporal forecast reconciliation {\footnotesize (Nov 16/17)}
+\end{enumerate}
+\end{block}
+\end{textblock}
+\begin{textblock}{4.2}(11.6,8.3)\pgfsetfillopacity{0.75}
+\begin{beamercolorbox}[wd=4.3cm,ht=0.35cm,dp=0.2cm]{block body}
+\fontsize{10}{10}\sf\color[RGB]{80,70,60}~~\texttt{\href{https://robjhyndman.com/fr2023}{robjhyndman.com/fr2023}}
+\end{beamercolorbox}
+\end{textblock}
+\begin{textblock}{6.2}(0,8.8)\pgfsetfillopacity{0.65}
+\begin{beamercolorbox}[wd=4.7cm]{block body}
+\fontsize{6}{6}\sf\color[RGB]{72,45,34}~Photo by \href{https://unsplash.com/@edvardr?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText}{Edvard Alexander Rølvaag} on \href{https://unsplash.com/s/photos/hierarchy?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText}{Unsplash}
+\end{beamercolorbox}
+\end{textblock}
 
 ## Outline
 

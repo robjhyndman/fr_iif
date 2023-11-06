@@ -1,6 +1,5 @@
 ---
 title: Forecast reconciliation
-subtitle: 2. Perspectives on forecast reconciliation
 author: Rob J Hyndman
 pdf-engine: latexmk
 fig-width: 9
@@ -31,6 +30,38 @@ execute:
 #| cache: false
 source("setup.R")
 ```
+
+##
+
+\placefig{-0.01}{-0.01}{width=1.01\paperwidth,height=1.01\paperheight}{figs/stones.png}
+\placefig{0.5}{2.5}{width=4cm}{monash_bw}
+\placefig{14.6}{.2}{width=1.2cm}{iif_logo}
+\begin{textblock}{10.5}(.5,0.3)
+\fontsize{28}{40}\selectfont\bfseries\sffamily\textcolor[RGB]{204,89,0}{Forecast reconciliation}
+\end{textblock}
+\begin{textblock}{7.5}(.5,1.8)
+\fontsize{13}{13}\selectfont\sffamily\textcolor[RGB]{80,70,60}{\bfseries Rob J Hyndman}
+\end{textblock}
+\begin{textblock}{8.5}(.4,3.5)
+\begin{block}{}\fontsize{13}{14}\sf
+\begin{enumerate}\itemsep=0cm\parskip=0cm
+\item {Hierarchical time series and forecast reconciliation} {\footnotesize (Nov 6/7)}
+\item \textbf{Perspectives on forecast reconciliation} {\footnotesize (Nov 9/10)}
+\item Probabilistic forecast reconciliation {\footnotesize (Nov 13/14)}
+\item Temporal and cross-temporal forecast reconciliation {\footnotesize (Nov 16/17)}
+\end{enumerate}
+\end{block}
+\end{textblock}
+\begin{textblock}{4.2}(11.6,8.3)\pgfsetfillopacity{0.75}
+\begin{beamercolorbox}[wd=4.3cm,ht=0.35cm,dp=0.2cm]{block body}
+\fontsize{10}{10}\sf\color[RGB]{80,70,60}~~\texttt{\href{https://robjhyndman.com/fr2023}{robjhyndman.com/fr2023}}
+\end{beamercolorbox}
+\end{textblock}
+\begin{textblock}{6.2}(0,8.8)\pgfsetfillopacity{0.65}
+\begin{beamercolorbox}[wd=4.7cm]{block body}
+\fontsize{6}{6}\sf\color[RGB]{72,45,34}~Photo by \href{https://unsplash.com/@edvardr?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText}{Edvard Alexander Rølvaag} on \href{https://unsplash.com/s/photos/hierarchy?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText}{Unsplash}
+\end{beamercolorbox}
+\end{textblock}
 
 ## Outline
 
@@ -1092,19 +1123,19 @@ fc
 ```{r}
 #| label: fcaccuracy2
 #| echo: false
-acc <- readRDS("acc.rds") |> 
+acc <- readRDS("acc.rds") |>
   mutate(
-      .model = case_match(.model, 
+      .model = case_match(.model,
         "mint_s" ~ "MinTrace",
         .default = toupper(.model)
       )
-    ) |> 
-  filter(.model != "ARIMA", .model != "COMB") |> 
+    ) |>
+  filter(.model != "ARIMA", .model != "COMB") |>
   rename(MASE = mase, RMSSE = rmsse)
-acc |> 
-  group_by(.model, h) |> 
-  summarise(MASE = mean(MASE), RMSSE = sqrt(mean(RMSSE^2))) |> 
-  pivot_longer(MASE:RMSSE, names_to = "Measure", values_to = "value") |> 
+acc |>
+  group_by(.model, h) |>
+  summarise(MASE = mean(MASE), RMSSE = sqrt(mean(RMSSE^2))) |>
+  pivot_longer(MASE:RMSSE, names_to = "Measure", values_to = "value") |>
   ggplot(aes(x=h, y=value, col=.model)) +
   geom_line() +
   facet_grid(Measure ~ .)
@@ -1116,13 +1147,13 @@ acc |>
 #| label: fcaccuracy3
 #| echo: false
 # Overall accuracy
-acc1 <- acc |> 
-  group_by(.model) |> 
-  summarise(MASE = mean(MASE), RMSSE = sqrt(mean(RMSSE^2))) |> 
-  arrange(RMSSE) |> 
+acc1 <- acc |>
+  group_by(.model) |>
+  summarise(MASE = mean(MASE), RMSSE = sqrt(mean(RMSSE^2))) |>
+  arrange(RMSSE) |>
   mutate(level = "Overall")
 # Accuracy by level
-acc2 <- acc |> 
+acc2 <- acc |>
   mutate(
     level = case_when(
       is_aggregated(state) ~ "National",
@@ -1133,41 +1164,41 @@ acc2 <- acc |>
     level = factor(level, levels = c("National", "State", "Zone", "Region"))
   ) |>
   group_by(.model, level) |>
-  summarise(MASE = mean(MASE), RMSSE = sqrt(mean(RMSSE^2))) |> 
+  summarise(MASE = mean(MASE), RMSSE = sqrt(mean(RMSSE^2))) |>
   arrange(RMSSE)
 # Combine tables
-acc <- bind_rows(acc1,acc2) |> 
-  mutate(level = factor(level, 
+acc <- bind_rows(acc1,acc2) |>
+  mutate(level = factor(level,
     levels = c("Overall", "National", "State", "Zone", "Region"))
   )
 # Function to generate nice table
 acc_table <- function(x, file) {
-  x <- x |> 
+  x <- x |>
     arrange(.model)
   best1 <- which.min(x$MASE)
   best2 <- which.min(x$RMSSE)
   col <- seq_len(nrow(x))
-  x$MASE <- sprintf("%.3f",x$MASE) |> 
+  x$MASE <- sprintf("%.3f",x$MASE) |>
     kableExtra::cell_spec(bold = col == best1,
                           format = 'latex')
-  x$RMSSE <- sprintf("%.3f",x$RMSSE) |> 
+  x$RMSSE <- sprintf("%.3f",x$RMSSE) |>
     kableExtra::cell_spec(bold = col == best2,
                           format = 'latex')
-  x |> 
-    select(-level) |> 
+  x |>
+    select(-level) |>
     knitr::kable(
-      format="latex", 
+      format="latex",
       escape = FALSE,
-      booktabs=TRUE, 
+      booktabs=TRUE,
       digits=3,
       col.names = c("Model","MASE","RMSSE"),
       bottomrule = "", toprule=""
-    ) |> 
+    ) |>
     readr::write_file(file = file)
 }
 for(i in unique(acc$level)) {
-  acc |> 
-    filter(level == i) |> 
+  acc |>
+    filter(level == i) |>
     acc_table(paste0(i,".tex"))
 }
 ```
