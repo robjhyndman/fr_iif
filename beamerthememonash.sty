@@ -1,6 +1,6 @@
 %% This is the Monash beamer theme
 %% Created for Monash Business School
-%% Updated by Rob J Hyndman. 23 June 2023
+%% Updated by Rob J Hyndman. 16 April 2023
 
 \RequirePackage{beamerthememetropolis}
 % Alter the color theme by setting eg 'colortheme: monashblue' in the YAML header
@@ -52,7 +52,7 @@
     \hskip-4ex%
     \hbox to4ex{%
       \hfil%
-      \color{white}\raisebox{.2ex}{\insertenumlabel}%
+      \color{LightGrey}\raisebox{.2ex}{\insertenumlabel}%
       \hfil}%
   }}%
 }
@@ -75,7 +75,7 @@
 \setlength{\TPHorizModule}{1cm}
 \setlength{\TPVertModule}{1cm}
 \def\placefig#1#2#3#4{\begin{textblock}{.1}(#1,#2)\rlap{\includegraphics[#3]{#4}}\end{textblock}}
-\def\full#1{\vspace*{0.15cm}\centerline{\includegraphics[width=15.8cm,height=7.9cm,keepaspectratio=true]{#1}}}
+\def\full#1{\vspace*{0.25cm}\centerline{\includegraphics[width=15cm,height=7.5cm,keepaspectratio=true]{#1}}}
 
 % Monash title page
 % One can alter the font size by setting eg 'titlefontsize: 20pt' in the YAML header
@@ -103,5 +103,53 @@
 \setbeamerfont{section number projected}{size=\large}
 \setbeamertemplate{section in toc shaded}[default][50]
 
+
+% Redefine shaded environment if it exists (for R plots)
+\ifcsname Shaded\endcsname
+  \definecolor{shadecolor}{RGB}{225,225,225}
+  \renewenvironment{Shaded}{\color{black}\begin{snugshade}\color{black}}{\end{snugshade}}
+\fi
+
 \setbeamertemplate{footline}{%
 \hfill\textcolor[rgb]{0.7,0.7,0.7}{\fbox{\insertframenumber{}}}}
+
+% BIBLIOGRAPHIES
+
+\usepackage[style=authoryear,bibencoding=utf8,minnames=1,maxnames=3, maxbibnames=99,natbib=true,dashed=false,terseinits=true,giveninits=true,uniquename=false,uniquelist=false,labeldate=true,doi=false, isbn=false, natbib=true,backend=biber]{biblatex}
+
+% Fix metropolis biblatex settings
+
+\setbeamerfont{bibliography entry title}{size=,series=}
+\setbeamerfont{bibliography entry author}{size=}
+\setbeamerfont{bibliography entry location}{size=}
+\setbeamerfont{bibliography entry note}{size=}
+
+% Preferred format
+\DeclareFieldFormat{url}{\url{#1}}
+\DeclareFieldFormat[article]{pages}{#1}
+\DeclareFieldFormat[inproceedings]{pages}{\lowercase{pp.}#1}
+\DeclareFieldFormat[incollection]{pages}{\lowercase{pp.}#1}
+\DeclareFieldFormat[article]{volume}{\mkbibbold{#1}}
+\DeclareFieldFormat[article]{number}{\mkbibparens{#1}}
+\DeclareFieldFormat[article]{title}{\MakeCapital{#1}}
+\DeclareFieldFormat[article]{url}{}
+\DeclareFieldFormat[Techreport]{Url}{}
+\DeclareFieldFormat[book]{url}{}
+\DeclareFieldFormat[inbook]{url}{}
+\DeclareFieldFormat[incollection]{url}{}
+\DeclareFieldFormat[inproceedings]{url}{}
+\DeclareFieldFormat[inproceedings]{title}{#1}
+\DeclareFieldFormat{shorthandwidth}{#1}
+%\DeclareFieldFormat{extrayear}{}
+% No dot before number of articles
+\usepackage{xpatch}
+\xpatchbibmacro{volume+number+eid}{\setunit*{\adddot}}{}{}{}
+% Remove In: for an article.
+\renewbibmacro{in:}{%
+  \ifentrytype{article}{}{%
+  \printtext{\bibstring{in}\intitlepunct}}}
+
+\AtEveryBibitem{\clearfield{month}}
+\AtEveryCitekey{\clearfield{month}}
+\AtBeginBibliography{\fontsize{12}{12}\sf}
+\setbeamertemplate{frametitle continuation}{}
