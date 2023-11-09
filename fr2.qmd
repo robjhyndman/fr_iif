@@ -246,7 +246,7 @@ Assuming $\bm{C}$ is full rank, the optimal (MinT) solution is
 \centerline{where\qquad $\bm{M} = \bm{I} - \bm{W}_h\bm{C}'(\bm{C}\bm{W}_h\bm{C}')^{-1}\bm{C}$}
 \end{block}\vspace*{-0.3cm}
 
-* Originally proved by Byron (1978) for reconciling data.
+* Originally derived by Byron (1978) for reconciling data.
 * Re-discovered by @mint for reconciling forecasts.
 * Leads to more efficient reconciliation than using
 $$\bm{M} = \bm{S}(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$$
