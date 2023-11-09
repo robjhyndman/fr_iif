@@ -1212,34 +1212,34 @@ acc_table <- function(x, file) {
 for(i in unique(acc$level)) {
   acc |>
     filter(level == i) |>
-    acc_table(paste0(i,".tex"))
+    acc_table(paste0("tables/",i,".tex"))
 }
 ```
 
 \fontsize{9}{9}\sf
 \begin{textblock}{7.15}(0.5,1.2)
 \begin{alertblock}{\fontsize{11}{11}\sf\centering Overall}\centering
-\input Overall.tex
+\input tables/Overall.tex
 \end{alertblock}
 \end{textblock}
 \begin{textblock}{7.15}(8.35,1.2)
 \begin{block}{\fontsize{11}{11}\sf\centering National}\centering
-\input National.tex
+\input tables/National.tex
 \end{block}
 \end{textblock}
 \begin{textblock}{4.5}(.5,5)
 \begin{block}{\fontsize{11}{11}\sf\centering State}\centering
-\input State.tex
+\input tables/State.tex
 \end{block}
 \end{textblock}
 \begin{textblock}{4.5}(5.75,5)
 \begin{block}{\fontsize{11}{11}\sf\centering Zone}\centering
-\input Zone.tex
+\input tables/Zone.tex
 \end{block}
 \end{textblock}
 \begin{textblock}{4.5}(11,5)
 \begin{block}{\fontsize{11}{11}\sf\centering Region}\centering
-\input Region.tex
+\input tables/Region.tex
 \end{block}
 \end{textblock}
 
