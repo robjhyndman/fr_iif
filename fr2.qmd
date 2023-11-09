@@ -67,17 +67,32 @@ source("setup.R")
 
 \vspace*{0.7cm}\tableofcontents
 
+# Recap
+## Recap
+
+\placefig{0.3}{1.1}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism1}
+\placefig{0.3}{3.7}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism2}
+\placefig{0.3}{6.3}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism4}
+
+\begin{textblock}{8.5}(6.3,1.1)
+\begin{itemize}\tightlist
+\item We want to forecast many time series that are related due to aggregation (or linear) constraints.
+\item Forecast reconciliation involves forecasting all series, and then adjusting the forecasts to impose the constraints.
+\item The optimal ($L_2$) solution is known as "Minimum Trace" reconciliation.
+\end{itemize}
+\end{textblock}
+
 # Time series reconciliation
 
 ## Time series reconciliation
 \fontsize{13}{15}\sf
 
-* @Stone1942: reconciling national economic accounts (disaggregated into production, income, outlay, capital transactions, etc.)
-* @Byron1978: extended Stone's work using more computationally efficient methods.
+* Stone, Champernowne & Meade (1942): reconciling national economic accounts (disaggregated into production, income, outlay, capital transactions, etc.)
+* Byron (1978): extended Stone's work using more computationally efficient methods.
 * 1984: Stone wins Nobel Prize in Economics.
-* Same approach used for reconciling seasonally adjusted data.
-* @chow1971best: Temporal reconciliation of monthly or quarterly estimates to sum to annual estimates.
-* @Di_Fonzo1990: Cross-temporal reconciliation of time series data.
+* Dagum & Cholette (2006): Same approach used for reconciling seasonally adjusted data.
+* Chow & Lin (1971): Temporal reconciliation of monthly or quarterly estimates to sum to annual estimates.
+* Di Fonzo (1990): Cross-temporal reconciliation of time series data.
 
 # Reconciliation via constraints
 
@@ -225,16 +240,16 @@ $$
 
 ## Zero-constraint representation
 
-Assuming $\bm{C}$ is full rank
+Assuming $\bm{C}$ is full rank, the optimal (MinT) solution is
 \begin{block}{}
 \centerline{$\tilde{\bm{y}}_{T+h|T} = \bm{M}\hat{\bm{y}}_{T+h|T}$}
 \centerline{where\qquad $\bm{M} = \bm{I} - \bm{W}_h\bm{C}'(\bm{C}\bm{W}_h\bm{C}')^{-1}\bm{C}$}
 \end{block}\vspace*{-0.3cm}
 
-* Originally proved by @Byron1978 for reconciling data.
+* Originally proved by Byron (1978) for reconciling data.
 * Re-discovered by @mint for reconciling forecasts.
-* $\bm{M} = \bm{S}\bm{G}$ (the MinT solution)
-* Leads to more efficient reconciliation than using $\bm{G}$.
+* Leads to more efficient reconciliation than using
+$$\bm{M} = \bm{S}(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$$
 
 ## Zero-constraint representation
 
@@ -748,11 +763,9 @@ $$
 * $\bm{Y} = [\bm{y}_{T_1+h}, \dots, \bm{y}_{T}]'$
 * $\hat{\bm{Y}} = [\hat{\bm{y}}_{T_1+h|T_1}, \dots, \hat{\bm{y}}_{T|T-h}]'$
 * $\lambda$ is a regularization parameter
-
-When $\lambda=0$:\qquad  $\hat{\bm{G}} = \bm{B}'\hat{\bm{Y}}(\hat{\bm{Y}}'\hat{\bm{Y}})^{-1}$
+* When $\lambda=0$:\qquad  $\hat{\bm{G}} = \bm{B}'\hat{\bm{Y}}(\hat{\bm{Y}}'\hat{\bm{Y}})^{-1}$
 where $\bm{B} = [\bm{b}_{T_1+h}, \dots, \bm{b}_{T}]'$.
-
-Reference: @Ben_TaiEtAl2019
+* Theory assumes series are stationary.
 
 ## MinT expressed as a regression
 
