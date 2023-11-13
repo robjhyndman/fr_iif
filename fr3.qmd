@@ -69,6 +69,23 @@ library(kableExtra)
 
 \vspace*{0.7cm}\tableofcontents
 
+# Recap
+## Recap
+
+\placefig{0.3}{1.1}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism1}
+\placefig{0.3}{3.7}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism2}
+\placefig{0.3}{6.3}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism4}
+
+\begin{textblock}{9.5}(5.3,1.1)\fontsize{13}{13}\sf
+\begin{itemize}\tightlist
+\item We want to forecast many time series that are related due to aggregation (or linear) constraints.
+\item Forecast reconciliation involves forecasting all series, and then adjusting the forecasts to impose the constraints.
+\item The optimal ($L_2$) solution is known as ``Minimum Trace'' reconciliation.
+\item It is a linear projection, and we can derive many properties using the theory of projections.
+\item There are many extensions to this basic idea, to get reconciled point forecasts.
+\end{itemize}
+\end{textblock}
+
 # Definition of probabilistic coherence
 
 ## The coherent subspace
@@ -103,15 +120,16 @@ Let $\psi$ be a mapping, $\psi:\mathbb{\chi}^n\rightarrow\mathfrak{s}$.  $\tilde
 \end{textblock}
 
 ## Coherent probabilistic forecasts
-\begin{textblock}{9.5}(0.2,1)\fontsize{13}{15}\sf
+\begin{textblock}{9.5}(0.2,1)\fontsize{13}{14}\sf
 \begin{block}{Coherent probabilistic forecasts}
 A probability triple $(\mathfrak{s}, \mathscr{F}_{\mathfrak{s}}, \breve{\nu})$ is coherent with the bottom probability triple $(\mathbb{\chi}^m, \mathscr{F}_{\mathbb{\chi}^m}, \nu)$, if
 \centerline{$\breve{\nu}(s(\mathcal{B})) = \nu(\mathcal{B}) \quad \forall \mathcal{B} \in \mathscr{F}_{\mathbb{\chi}^m}$}
-i.e., probability of any point not on $\mathfrak{s}$ is zero.
 \end{block}\vspace*{-0.2cm}
-\begin{block}{Probabilistic forecast reconciliation}
-Let $(\mathbb{\chi}^n, \mathscr{F}_{\mathbb{\chi}^n}, \hat\nu)$ be the base forecast. Then the reconciled probability distribution $\breve{\nu}$ is a transformation of $\hat{\nu}$ that is coherent on $\mathscr{F}_{\mathfrak{s}}$.
-\end{block}
+\begin{itemize}\tightlist
+\item Random draws from coherent distribution must lie on $\mathfrak{s}$.
+\item The probability of points not on $\mathfrak{s}$ is zero.
+\item The reconciled distribution is a transformation of the base forecast distribution that is coherent on $\mathfrak{s}$.
+\end{itemize}
 \end{textblock}
 \begin{textblock}{7}(9.5,1.2)
 \resizebox{\textwidth}{!}{
@@ -129,7 +147,10 @@ Let $(\mathbb{\chi}^n, \mathscr{F}_{\mathbb{\chi}^n}, \hat\nu)$ be the base fore
 
 ## Construction of reconciled distributions
 
-\vspace*{0.1cm}\begin{block}{Reconciled density of bottom-level}
+\begin{alertblock}{}
+\centerline{$\tilde{\bm{y}} = \bm{S}\bm{G}\hat{\bm{y}} = \bm{S}\hat{\bm{b}}$}
+\end{alertblock}\vspace*{-0.1cm}
+\begin{block}{Reconciled density of bottom-level}
 Density of bottom-level series under reconciled distribution is
 \centerline{$\tilde{f}_{\bm{b}}(\bm{b})=|\bG^*|\mathop{\mathlarger\int} \hat{f}(\bG^{-}\bm{b}+\bG_\perp \bm{a})d\bm{a}$}
 \vspace*{-0.4cm}\begin{itemize}\tightlist
@@ -173,10 +194,10 @@ An elliptical distribution is obtained if the base forecasts are elliptical, unb
 ## Simulation from a reconciled distribution
 
 \begin{block}{}
-Suppose that $\left(\hat{\bm{y}}^{[1]},\ldots,\hat{\bm{y}}^{[L]}\right)$ is a sample drawn from an incoherent probability measure $\hat{\nu}$. Then $\left(\tilde{\bm{y}}^{[1]},\ldots,\tilde{\bm{y}}^{[L]}\right)$ where $\tilde{\bm{y}}^{[\ell]}:=\psi(\hat{\bm{y}}^{[\ell]})$ for $\ell=1,\ldots,L$, is a sample drawn from the reconciled probability measure $\tilde{\nu}$.
+Suppose that $\left(\hat{\bm{y}}^{[1]},\ldots,\hat{\bm{y}}^{[L]}\right)$ is a sample drawn from an incoherent probability distribution. Then $\left(\tilde{\bm{y}}^{[1]},\ldots,\tilde{\bm{y}}^{[L]}\right)$ where $\tilde{\bm{y}}^{[\ell]}:=\psi(\hat{\bm{y}}^{[\ell]})$ for $\ell=1,\ldots,L$, is a sample drawn from the reconciled probability distribution.
 \end{block}\vspace*{-0.4cm}
 
-* Simulate future sample paths for each series, by simulating from each model using a multivariate bootstrap of the residuals (to preserve cross-correlations).
+* Simulate future sample paths for each series, by simulating from each model using a multivariate bootstrap of the residuals (to preserve \rlap{cross-correlations).}
 * Reconcile the sample paths.
 * The reconciled sample paths are a sample from the reconciled distribution.
 
@@ -216,7 +237,6 @@ for(i in seq_along(slices)) {
 \centerline{
 \animategraphics[loop,autoplay,width=15.5cm]{10}{figs/sim_bootstrap_}{1}{20}
 }
-
 
 ```{r}
 #| label: setup_tourism_example
@@ -425,7 +445,7 @@ $}
 \animategraphics[loop,autoplay,width=7.4cm]{10}{figs/pinball_}{1}{36} -->
 \end{textblock}
 
-# Emergency Services Demand
+# Example: Emergency Services Demand
 
 ## Wales Health Board Areas
 
@@ -874,6 +894,7 @@ $$
 
 * $G_j(x)=$ forecast distribution for forecast horizon $j$
 * $F_j(x)=$ true distribution for same period
+* Scaled CRPS: relative to CRPS from Naïve forecasts.
 
 ```{r}
 #| label: results
@@ -1040,26 +1061,26 @@ kbl(crps1, booktabs = TRUE, escape = FALSE, align = "llrrrr") |>
 ## Evaluating probabilistic forecasts
 \vspace*{0.2cm}
 
-### Continuous Rank Probability Score (univariate forecsts)
-
+\begin{block}{Continuous Rank Probability Score (univariate forecasts)}
 Forecast distribution $F_t$ and observation $y_t$.
-
-\centerline{$\text{CRPS}(F_t,y_t)~  = \int_{0}^1 S_{p,t}(p,y_t) dp ~  = ~\text{E}_F|Y-y_t|-\frac{1}{2}\text{E}_F|Y-Y^*|$}
-
- * $Y$ and $Y^*$ are iid draws from $F_t$.
- * Optimal when $F_t$ is truth (i.e., it is a proper score)
-
+\centerline{$\text{CRPS}(F_t,y_t)~  = \int_{0}^1 S_{p,t}(p,y_t) dp ~  = ~\text{E}_F|Y-y_t|-\frac{1}{2}\text{E}_F|Y-Y^*|$}\vspace*{-0.37cm}
+\begin{itemize}\tightlist
+\item $Y$ and $Y^*$ are iid draws from $F_t$.
+\item Optimal when $F_t$ is truth (i.e., it is a proper score)
+\end{itemize}
+\end{block}
 \pause
-
-### Energy score (multivariate forecasts)
-
- * $\text{ES}(F_t,\bm{y}_t) = \E_{F} ||{\bm{Y}}-\bm{y}_t|| -\frac{1}{2}\E_{F}||\bm{Y}-\bm{Y}^*||$
-
+\begin{block}{Energy score (multivariate forecasts)}
+\begin{itemize}
+\item $\text{ES}(F_t,\bm{y}_t) = \E_{F} ||{\bm{Y}}-\bm{y}_t|| -\frac{1}{2}\E_{F}||\bm{Y}-\bm{Y}^*||$
+\end{itemize}
+\end{block}
 \pause
-
-### Log score (multivariate forecasts)
-
- * $\text{LS}(F_t, \bm{y}_t) = -\log f(\bm{y}_t)$
+\begin{block}{Log score (multivariate forecasts)}
+\begin{itemize}
+\item $\text{LS}(F_t, \bm{y}_t) = -\log f(\bm{y}_t)$
+\end{itemize}
+\end{block}
 
 ## Evaluating probabilistic forecasts
 
@@ -1068,16 +1089,17 @@ Forecast distribution $F_t$ and observation $y_t$.
 optimized when true forecast distribution is used.
 \end{alertblock}\pause\vspace*{-0.1cm}
 
-\begin{block}{}\centering\fontsize{11}{11}\sf
-\begin{tabular}{llp{4.4cm}}
-    \bfseries Scoring Rule &
-    \bfseries Coherent v Incoherent &
-    \bfseries Coherent v Coherent\\
-    \midrule
-    Log Score & Not proper & $\bullet$ Ordering preserved\par\hspace*{0.3cm} if compared using\par\hspace*{0.3cm} bottom-level only\\
-    Energy Score & Proper & $\bullet$ Full hierarchy\par\hspace*{0.3cm} should be used. \par $\bullet$ Rankings may\par\hspace*{0.3cm} change otherwise.
-\end{tabular}
-\end{block}
+\alert{Comparing coherent vs incoherent}
+
+* Log score is not proper
+* Energy score is proper
+
+\pause\alert{Comparing coherent vs coherent}
+
+* Both Energy score and Log score are proper
+* Ordering preserved if compared using bottom-level only
+* Full hierarchy should be used.
+* Rankings may change otherwise.
 
 ## Score optimal reconciliation
 
@@ -1092,14 +1114,14 @@ Algorithm proposed by Panagiotelis et al (2020) for optimizing $\bm{G}$ using st
 ## Example: Australian electricity generation
 
 \hspace*{-0.8cm}\begin{minipage}{15.6cm}
-\begin{block}{Daily time series from \url{opennem.org.au}}\fontsize{11}{11}\sf
+\begin{block}{Daily time series from \url{opennem.org.au}}\fontsize{10}{11}\sf\hspace*{-0.2cm}
 \begin{tikzpicture}
 \tikzstyle{every node}=[rectangle, rounded corners=2pt,draw,inner sep=1pt,fill=red!15]
 \tikzstyle[level distance=.1cm]
 \tikzstyle[sibling distance=7cm]
 \tikzstyle{level 1}=[sibling distance=8.2cm,set style={{every node}+=[fill=blue!15]}]
 \tikzstyle{level 2}=[sibling distance=16.5mm,font=\footnotesize,set style={{every node}+=[fill=green!15]}]
-\tikzstyle{level 3}=[sibling distance=10mm,font=\footnotesize,set style={{every node}+=[fill=yellow]}]
+\tikzstyle{level 3}=[sibling distance=11mm,font=\footnotesize,set style={{every node}+=[fill=yellow]}]
 \node{Total generation}[edge from parent fork down]
  child {node {Renewable}
    child {node[xshift=0.2cm] {Batteries}
@@ -1254,5 +1276,4 @@ Base forecasts are obtained by jointly bootstrapping residuals.
 \end{block}
 \end{textblock}
 
-
-\nocite{smartmeterhts,coherentprob,fem}
+\nocite{smartmeterhts,coherentprob,fem,JeoEtAl2019}
