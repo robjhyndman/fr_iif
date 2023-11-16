@@ -92,9 +92,9 @@
 @article{CorEtAl2022,
   author  = {Corani, Giorgio and Azzimonti, Dario and Rubattu, Nicolo},
   title   = {Probabilistic reconciliation of count time series},
-  year    = {2023},
+  year    = {2024},
   journal = {International Journal of Forecasting},
-  note    = {to appear}
+  note    = {forthcoming}
 }
 
 @article{corona2021optimal,
@@ -108,11 +108,13 @@
   publisher = {Statistics Sweden (SCB)}
 }
 
-@unpublished{ctprob,
-  author = {Daniele Girolimetto and George Athanasopoulos and Tommaso Di~Fonzo and Rob J Hyndman},
-  year   = 2023,
-  title  = {Cross-temporal probabilistic forecast reconciliation},
-  url    = {robjhyndman.com/publications/ctprob.html}
+@article{ctprob,
+  author  = {Daniele Girolimetto and George Athanasopoulos and Tommaso Di~Fonzo and Rob J Hyndman},
+  year    = 2024,
+  title   = {Cross-temporal probabilistic forecast reconciliation},
+  url     = {http://robjhyndman.com/publications/ctprob.html},
+  journal = {International J Forecasting},
+  note    = {forthcoming}
 }
 
 @article{Di_FonGir2022a,
@@ -136,7 +138,7 @@
   publisher = {Elsevier B.V.},
   title     = {Forecast combination-based forecast reconciliation: Insights and extensions},
   doi       = {10.1016/j.ijforecast.2022.07.001},
-  year      = {2022}
+  year      = {2024}
 }
 
 @article{Di_Fonzo1990,
@@ -201,6 +203,15 @@
   year      = {2020}
 }
 
+@unpublished{hfreview,
+  author  = {George Athanasopoulos and Rob J Hyndman and Nikolaos Kourentzes and Anastasios Panagiotelis},
+  year    = 2024,
+  title   = {Forecast reconciliation: a review},
+  url     = {http://robjhyndman.com/publications/hfreview.html},
+  journal = {International J Forecasting},
+  note    = {forthcoming}
+}
+
 @article{hfrml,
   year    = 2021,
   journal = {Applied Soft Computing},
@@ -248,7 +259,6 @@
   volume    = {294},
   year      = {2021}
 }
-
 @article{HPT21,
   author  = {Hollyman, Ross and Petropoulos, Fotios and Tipping, Michael E.},
   title   = {Understanding forecast reconciliation},
@@ -259,6 +269,7 @@
   pages   = {149-160},
   doi     = {10.1016/j.ejor.2021.01.01}
 }
+
 @article{htsgeometry,
   author  = {Anastasios Panagiotelis and Puwasala Gamakumara and George Athanasopoulos and Rob J Hyndman},
   year    = 2021,
@@ -268,6 +279,22 @@
   number  = 1,
   pages   = {343-359},
   url     = {robjhyndman.com/publications/hierarchical-geometry}
+}
+
+@article{JeoEtAl2019,
+  abstract  = {New methods are proposed for adjusting probabilistic forecasts to ensure coherence with the aggregation constraints inherent in temporal hierarchies. The different approaches nested within this framework include methods that exploit information at all levels of the hierarchy as well as a novel method based on cross-validation. The methods are evaluated using real data from two wind farms in Crete and electric load in Boston. For these applications, optimal decisions related to grid operations and bidding strategies are based on coherent probabilistic forecasts of energy power. Empirical evidence is also presented showing that probabilistic forecast reconciliation improves the accuracy of the probabilistic forecasts.},
+  author    = {Jeon, Jooyoung and Panagiotelis, Anastasios and Petropoulos, Fotios},
+  doi       = {10.1016/j.ejor.2019.05.020},
+  issn      = {03772217},
+  journal   = {European Journal of Operational Research},
+  keywords  = {Aggregation,Cross-validation,Forecasting,Renewable energy generation,Temporal hierarchies},
+  number    = {2},
+  pages     = {364--379},
+  publisher = {Elsevier B.V.},
+  title     = {{Probabilistic forecast reconciliation with applications to wind power and electric load}},
+  doi       = {10.1016/j.ejor.2019.05.020},
+  volume    = {279},
+  year      = {2019}
 }
 
 @article{lhf,
@@ -320,7 +347,6 @@
   year   = {2017},
   url    = {https://arxiv.org/abs/1711.04738}
 }
-
 @article{paige1982algorithm,
   title     = {Algorithm 583: {LSQR}: Sparse linear equations and least squares problems},
   author    = {Paige, Christopher C and Saunders, Michael A},
@@ -347,6 +373,7 @@
   volume          = {263},
   year            = {2017}
 }
+
 @inproceedings{probhts,
   title     = {Coherent probabilistic forecasts for hierarchical time series},
   author    = {Souhaib {Ben~Taieb} and James W Taylor and Rob J Hyndman},
@@ -355,6 +382,7 @@
   volume    = {70},
   pages     = {3348-3357}
 }
+
 
 @article{Shiratori2020,
   title   = {Prediction of hierarchical time series using structured
@@ -369,6 +397,7 @@
   url     = {http://dx.doi.org/10.1371/journal.pone.0242099}
 }
 
+
 @article{smartmeterhts,
   title   = {Hierarchical Probabilistic Forecasting of Electricity Demand with Smart Meter Data},
   author  = {Souhaib {Ben Taieb} and James W Taylor and Rob J Hyndman},
@@ -379,7 +408,6 @@
   pages   = {27-43},
   url     = {robjhyndman.com/publications/hpf-electricity/}
 }
-
 
 @article{Stone1942,
   title   = {The precision of national income estimates},
@@ -403,6 +431,7 @@
   number  = 2,
   pages   = {693-710}
 }
+
 
 @article{temporal-hierarchies,
   title   = {Forecasting with temporal hierarchies},
@@ -468,21 +497,4 @@
   number  = {2},
   pages   = {650--660},
   year    = {2023}
-}
-
-
-@article{JeoEtAl2019,
-  abstract  = {New methods are proposed for adjusting probabilistic forecasts to ensure coherence with the aggregation constraints inherent in temporal hierarchies. The different approaches nested within this framework include methods that exploit information at all levels of the hierarchy as well as a novel method based on cross-validation. The methods are evaluated using real data from two wind farms in Crete and electric load in Boston. For these applications, optimal decisions related to grid operations and bidding strategies are based on coherent probabilistic forecasts of energy power. Empirical evidence is also presented showing that probabilistic forecast reconciliation improves the accuracy of the probabilistic forecasts.},
-  author    = {Jeon, Jooyoung and Panagiotelis, Anastasios and Petropoulos, Fotios},
-  doi       = {10.1016/j.ejor.2019.05.020},
-  issn      = {03772217},
-  journal   = {European Journal of Operational Research},
-  keywords  = {Aggregation,Cross-validation,Forecasting,Renewable energy generation,Temporal hierarchies},
-  number    = {2},
-  pages     = {364--379},
-  publisher = {Elsevier B.V.},
-  title     = {{Probabilistic forecast reconciliation with applications to wind power and electric load}},
-  doi       = {10.1016/j.ejor.2019.05.020},
-  volume    = {279},
-  year      = {2019}
 }

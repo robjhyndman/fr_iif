@@ -62,6 +62,22 @@ source("setup.R")
 \end{beamercolorbox}
 \end{textblock}
 
+# Recap
+## Recap
+
+\placefig{0.3}{1.1}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism1}
+\placefig{0.3}{3.7}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism2}
+\placefig{0.3}{6.3}{height=2.5cm, width=10cm, trim=0 0 180 0, clip=TRUE}{tourism4}
+
+\begin{textblock}{9.5}(5.3,1.1)\fontsize{13}{13}\sf
+\begin{itemize}\tightlist
+\item We want to forecast many time series that are related due to aggregation (or linear) constraints.
+\item Forecast reconciliation involves forecasting all series, and then adjusting the forecasts to impose the constraints.
+\item The optimal solution is known as ``Minimum Trace'' reconciliation. This gives optimal (MSE) point forecasts, and optimal probabilistic forecasts when the forecast distributions are normal.
+\item We can reconcile bootstrapped sample paths if we don't want to use a normal distribution.
+\end{itemize}
+\end{textblock}
+
 ## Notation reminder
 
 \begin{textblock}{8.5}(0.3,1.4)
@@ -538,6 +554,11 @@ for(i in seq_along(fc)) {
   }
 ```
 
+\begin{textblock}{14}(0.3,8.5)
+Blue: reconciled. Red: unreconciled.
+\end{textblock}
+
+
 # Temporal reconciliation: Examples
 
 ## Temporal reconciliation: M3 monthly series
@@ -972,7 +993,6 @@ The ``year'' can start in any quarter, giving overlapping blocks.
 * Time series cross-validation;  initial training set of 10 years.
 * One-quarter increase in each training set
 * For each training set, compute temporally aggregated series for $k \in \{1,2,4\}$, and produce forecasts up to $h_1=4$, $h_2=2$, and $h_{4}=1$ steps ahead.
-
 * Automatic ARIMA forecasts for all series.
 
 ## Quarterly Australian GDP data --- CRPS skill scores
@@ -1156,6 +1176,21 @@ Package                                                                      & L
 * `hts`, `thief`, and `FoReco` use `ts` objects
 * `fable` uses `tsibble` objects
 * `fable` has plans to implement temporal and cross-temporal reconciliation
+* `FoReco` has plans to improve efficiency and add more methods.
+
+## Special issue of the IJF
+
+\placefig{0}{1.1}{height=8.3cm, width=20cm}{IJFcover}
+
+\begin{textblock}{8}(7, 1.2)
+\begin{itemize}\tightlist
+\item Special issue on \textbf{Innovations in Hierarchical Forecasting}
+\item Coming in 2024
+\item Includes review article by Athanasopoulos, Hyndman, Kourentzes \& Panagiotelis
+\item Preprint link at \href{https://robjhyndman.com/fr2023}{robjhyndman.com/fr2023}
+\end{itemize}
+\end{textblock}
+
 
 ## Thanks!
 
