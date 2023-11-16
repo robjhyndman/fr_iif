@@ -148,7 +148,7 @@ A probability triple $(\mathfrak{s}, \mathscr{F}_{\mathfrak{s}}, \breve{\nu})$ i
 ## Construction of reconciled distributions
 
 \begin{alertblock}{}
-\centerline{$\tilde{\bm{y}} = \bm{S}\bm{G}\hat{\bm{y}} = \bm{S}\hat{\bm{b}}$}
+\centerline{$\tilde{\bm{y}} = \bm{S}\bm{G}\hat{\bm{y}} = \bm{S}\tilde{\bm{b}}$}
 \end{alertblock}\vspace*{-0.1cm}
 \begin{block}{Reconciled density of bottom-level}
 Density of bottom-level series under reconciled distribution is
